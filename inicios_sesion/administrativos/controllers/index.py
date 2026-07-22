@@ -5,7 +5,7 @@ import sqlite3
 # 'views' es la carpeta y 'base' puede ser un layout común o None
 render = web.template.render('inicios_sesion/views', base=None)
 
-class Inicio:
+class InicioAdministrativos:
     def obtenerDatosInicio(self):
         """Método auxiliar para consultar la base de datos"""
         conn = None

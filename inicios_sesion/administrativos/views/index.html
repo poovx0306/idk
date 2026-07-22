@@ -1,1 +1,270 @@
-<h1>Inicio Portal Administrativo</h1>
+$def with ()
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONAAP - Iniciar Sesión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #ffffff;
+        }
+
+        /* --- Panel Izquierdo (Guinda) --- */
+        .left-panel {
+            flex: 1;
+            background-color: #731331;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-badge {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .left-content {
+            margin-top: auto;
+            margin-bottom: auto;
+            z-index: 2;
+        }
+
+        .left-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .left-content p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        /* Forma decorativa inferior */
+        .decorative-circle {
+            position: absolute;
+            bottom: -180px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 480px;
+            height: 480px;
+            background-color: #590d23;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* --- Panel Derecho (Formulario) --- */
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .login-card h2 {
+            font-size: 1.75rem;
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        /* Selector de Roles */
+        .role-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            background-color: #f1f5f9;
+            color: #475569;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .role-btn.active {
+            background-color: #731331;
+            color: #ffffff;
+        }
+
+        /* Campos del Formulario */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: #475569;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1e293b;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #731331;
+            background-color: #ffffff;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            font-size: 0.8rem;
+            color: #0d9488;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 4px;
+            margin-bottom: 24px;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #731331;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #590d23;
+        }
+
+        /* Adaptación Responsiva */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+            .left-panel {
+                min-height: 250px;
+                padding: 30px;
+            }
+            .left-content h1 {
+                font-size: 2.5rem;
+            }
+            .decorative-circle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Panel Izquierdo Decorativo -->
+    <div class="left-panel">
+        <div class="brand-badge">C</div>
+        <div class="left-content">
+            <h1>CONAAP</h1>
+            <p>Plataforma de apoyo a la inclusión educativa</p>
+        </div>
+        <div class="decorative-circle"></div>
+    </div>
+
+    <!-- Panel Derecho de Autenticación -->
+    <div class="right-panel">
+        <div class="login-card">
+            <h2>Iniciar sesión</h2>
+            <p class="subtitle">Elige tu rol para continuar</p>
+
+            <form action="/inicio" method="POST" id="loginForm">
+                <!-- Campo oculto para registrar el rol seleccionado -->
+                <input type="hidden" name="rol" id="selectedRol" value="docente">
+
+                <!-- Botones para Selección de Rol -->
+                <div class="role-selector">
+                    <button type="button" class="role-btn active" onclick="setRole(this, 'docente')">Soy docente</button>
+                    <button type="button" class="role-btn" onclick="setRole(this, 'padre')">Soy padre o tutor</button>
+                    <button type="button" class="role-btn" onclick="setRole(this, 'administrativo')">Soy administrativo</button>
+                </div>
+
+                <!-- Correo -->
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="nombre@conafe.gob.mx" required>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+
+                <button type="submit" class="btn-submit">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script para cambiar dinámicamente el estado activo del rol -->
+    <script>
+        function setRole(button, roleValue) {
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            document.getElementById('selectedRol').value = roleValue;
+        }
+    </script>
+</body>
+</html>

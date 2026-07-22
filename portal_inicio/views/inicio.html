@@ -1,116 +1,18 @@
-$def with (datos)
+$def with (mensaje)
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CONAAP - Crecer Juntos</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <style type="text/tailwindcss">
-    @theme {
-      --color-brand: #7A1C37;
-      --color-brand-dark: #501223;
-      --color-teal-light: #E8F6F5;
-      --color-teal-accent: #20B2AA;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>CONAAP - Inicio</title>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
-
-  <!-- Navbar -->
-  <header class="bg-white border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 rounded-full bg-brand text-white flex items-center justify-center font-bold">C</div>
-        <span class="font-bold text-xl tracking-wide text-brand">CONAAP</span>
-      </div>
-      <nav class="flex items-center space-x-6 text-sm font-medium text-gray-600">
-        <a href="/" class="text-teal-accent font-bold">Inicio</a>
-        <a href="#" class="hover:text-brand">Cómo funciona</a>
-        <a href="#" class="hover:text-brand">Recursos</a>
-        <a href="#" class="border border-teal-accent text-teal-accent px-4 py-2 rounded-lg hover:bg-teal-light">Iniciar sesión</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <main class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-    <div>
-      <span class="inline-block bg-teal-light text-teal-accent text-xs font-semibold px-3 py-1 rounded-full mb-4">
-        Inclusión educativa · CONAFE Hidalgo
-      </span>
-      <h1 class="text-5xl font-extrabold text-gray-900 leading-tight mb-4">
-        Crecer Juntos
-      </h1>
-      <h2 class="text-xl font-bold text-gray-800 mb-4">
-        Detección temprana del autismo y acompañamiento para las familias
-      </h2>
-      <p class="text-gray-500 mb-8 max-w-lg">
-        Responde un cuestionario breve y sencillo, sin tecnicismos médicos, y conoce cómo evoluciona el desarrollo de tu hija o hijo.
-      </p>
-
-      <div class="flex flex-wrap gap-4 mb-6">
-        <a href="#" class="bg-brand text-white px-6 py-3 rounded-lg font-medium hover:bg-brand-dark transition">
-          &rsaquo; Comenzar cuestionario
-        </a>
-        <a href="#" class="border border-teal-accent text-teal-accent px-6 py-3 rounded-lg font-medium hover:bg-teal-light transition">
-          Cómo funciona
-        </a>
-      </div>
-
-      <div class="flex gap-3 text-xs text-teal-accent font-medium">
-        <span class="bg-teal-light px-3 py-1.5 rounded-md">Gratuito</span>
-        <span class="bg-teal-light px-3 py-1.5 rounded-md">Anónimo</span>
-        <span class="bg-teal-light px-3 py-1.5 rounded-md">5 minutos</span>
-      </div>
-    </div>
-
-    <!-- Banner derecho -->
-    <div class="bg-brand rounded-3xl p-8 flex justify-center items-center shadow-xl">
-      <div class="bg-white rounded-2xl p-6 shadow-md w-full max-w-md flex gap-4 items-center">
-        <div class="bg-slate-800 p-3 rounded-2xl flex flex-col gap-2">
-          <div class="w-5 h-5 rounded-full bg-red-900/40"></div>
-          <div class="w-5 h-5 rounded-full bg-amber-400"></div>
-          <div class="w-5 h-5 rounded-full bg-emerald-900/40"></div>
-        </div>
-        <div class="flex-1">
-          <span class="text-xs text-gray-400 font-medium">Tu resultado</span>
-          <h3 class="text-lg font-bold text-amber-500">Atención requerida</h3>
-          <span class="inline-block bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded font-medium my-1">
-            Requiere seguimiento
-          </span>
-          <button class="mt-3 w-full bg-brand text-white text-xs py-2 px-3 rounded-lg font-medium hover:bg-brand-dark">
-            📄 Descargar reporte PDF
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Tarjetas cargadas desde Python/BD -->
-  <section class="max-w-7xl mx-auto px-6 pb-12 w-full grid grid-cols-1 md:grid-cols-3 gap-6">
-    $if datos:
-        $for item in datos:
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                <h4 class="font-bold text-gray-800 mb-2">$item['titulo']</h4>
-                <p class="text-sm text-gray-500">$item['descripcion']</p>
-            </div>
-    $else:
-        <!-- Tarjetas por defecto mientras configuras la BD -->
-        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 class="font-bold text-gray-800 mb-2">Detección temprana</h4>
-            <p class="text-sm text-gray-500">Cuestionario con semáforo de riesgo que orienta a las familias.</p>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 class="font-bold text-gray-800 mb-2">Estrategias para el aula</h4>
-            <p class="text-sm text-gray-500">Actividades y protocolos de crisis listos para los docentes.</p>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 class="font-bold text-gray-800 mb-2">Acompañamiento</h4>
-            <p class="text-sm text-gray-500">Reportes en PDF que conectan a las familias con especialistas.</p>
-        </div>
-  </section>
+<body>
+    <h1>CONAAP - Crecer Juntos</h1>
+    <p>Detección temprana del autismo y acompañamiento para las familias.</p>
+    <hr>
+    <!-- Mensaje que vendrá desde Python -->
+    <h3>Mensaje del servidor:</h3>
+    <p>$mensaje</p>
 
 </body>
 </html>

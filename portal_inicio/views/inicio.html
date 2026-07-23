@@ -40,21 +40,23 @@ $def with (mensaje)
 
     <!-- 1. NAV BAR (Encabezado con Logo CONAFE) -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-2">
-        <div class="container">
-            <!-- Logo CONAFE más grande y sin texto adicional -->
-            <a class="navbar-brand py-0" href="#">
-                <img src="/static/images/conafe.jpg" alt="CONAFE" height="65" class="d-inline-block align-middle">
-            </a>
+    <div class="container d-flex justify-content-between align-items-center">
+        
+        <!-- Logo de CONAFE -->
+        <a class="navbar-brand py-0" href="/">
+            <img src="/static/images/conafe.jpg" alt="CONAFE" height="65" class="d-inline-block align-middle">
+        </a>
 
-            <!-- Enlaces a la derecha -->
-            <div class="d-flex align-items-center gap-4">
-                <a href="#" class="nav-link text-turquesa fw-bold">Inicio</a>
-                <a href="#" class="nav-link text-secondary">Cómo funciona</a>
-                <a href="#" class="nav-link text-secondary">Recursos</a>
-                <a href="#" class="btn btn-outline-turquesa px-3">Iniciar sesión</a>
-            </div>
+        <!-- Menú de navegación principal -->
+        <div class="d-flex align-items-center gap-4">
+            <a href="/inicio" class="nav-link text-turquesa fw-bold">Inicio</a>
+            
+            <!-- Botón de Iniciar sesión / Portal Docente -->
+            <a href="/docente/inicio" class="btn btn-outline-turquesa px-3">Iniciar sesión</a>
         </div>
-    </nav>
+
+    </div>
+</nav>
 
     <!-- 2.(Sección Principal) -->
     <div class="container py-5">

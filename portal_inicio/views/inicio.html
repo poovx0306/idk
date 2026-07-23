@@ -4,15 +4,163 @@ $def with (mensaje)
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>CONAAP - Inicio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONAAP - Crecer Juntos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Definimos los dos colores clave de la maqueta */
+        .btn-guinda {
+            background-color: #7A1C37;
+            color: white;
+            border: none;
+        }
+        .btn-guinda:hover {
+            background-color: #501223;
+            color: white;
+        }
+        .text-turquesa {
+            color: #20B2AA;
+        }
+        .btn-outline-turquesa {
+            color: #20B2AA;
+            border-color: #20B2AA;
+        }
+        .btn-outline-turquesa:hover {
+            background-color: #E8F6F5;
+            color: #20B2AA;
+        }
+        .badge-turquesa {
+            background-color: #E8F6F5;
+            color: #20B2AA;
+        }
+    </style>
 </head>
-<body>
-    <h1>CONAAP - Crecer Juntos</h1>
-    <p>Detección temprana del autismo y acompañamiento para las familias.</p>
-    <hr>
-    <!-- Mensaje que vendrá desde Python -->
-    <h3>Mensaje del servidor:</h3>
-    <p>$mensaje</p>
+<body class="bg-light">
+
+    <!-- 1. NAV BAR (Encabezado con Logo CONAFE) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-2">
+        <div class="container">
+            <!-- Logo CONAFE más grande y sin texto adicional -->
+            <a class="navbar-brand py-0" href="#">
+                <img src="/static/images/conafe.jpg" alt="CONAFE" height="65" class="d-inline-block align-middle">
+            </a>
+
+            <!-- Enlaces a la derecha -->
+            <div class="d-flex align-items-center gap-4">
+                <a href="#" class="nav-link text-turquesa fw-bold">Inicio</a>
+                <a href="#" class="nav-link text-secondary">Cómo funciona</a>
+                <a href="#" class="nav-link text-secondary">Recursos</a>
+                <a href="#" class="btn btn-outline-turquesa px-3">Iniciar sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2.(Sección Principal) -->
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            
+            <!-- Columna Izquierda: Textos y Botones -->
+            <div class="col-lg-6">
+                <span class="badge badge-turquesa px-3 py-2 rounded-pill mb-3">
+                    Inclusión educativa · CONAFE Hidalgo
+                </span>
+                
+                <h1 class="display-4 fw-bold text-dark">Crecer Juntos</h1>
+                <h5 class="fw-bold text-secondary mb-3">
+                    Detección temprana del autismo y acompañamiento para las familias
+                </h5>
+                <p class="text-muted mb-4">
+                    Responde un cuestionario breve y sencillo, sin tecnicismos médicos, y conoce cómo evoluciona el desarrollo de tu hija o hijo. Recibe orientación y un reporte para compartir con especialistas.
+                </p>
+
+                <!-- Botones principales -->
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    <a href="#" class="btn btn-guinda px-4 py-2 rounded-3">
+                        &rsaquo; Comenzar cuestionario
+                    </a>
+                    <a href="#" class="btn btn-outline-turquesa px-4 py-2 rounded-3">
+                        Cómo funciona
+                    </a>
+                </div>
+
+                <!-- Etiquetas pequeñas -->
+                <div class="d-flex gap-2">
+                    <span class="badge badge-turquesa px-3 py-2">Gratuito</span>
+                    <span class="badge badge-turquesa px-3 py-2">Anónimo</span>
+                    <span class="badge badge-turquesa px-3 py-2">5 minutos</span>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Tarjeta / Ilustración -->
+            <div class="col-lg-6">
+                <div class="p-5 rounded-4 shadow" style="background-color: #7A1C37;">
+                    <div class="bg-white p-4 rounded-4 shadow-sm d-flex align-items-center gap-3">
+                        <!-- Semáforo simulación -->
+                        <div class="bg-dark p-2 rounded-4 d-flex flex-column gap-2">
+                            <div class="rounded-circle bg-danger opacity-25" style="width: 20px; height: 20px;"></div>
+                            <div class="rounded-circle bg-warning" style="width: 20px; height: 20px;"></div>
+                            <div class="rounded-circle bg-success opacity-25" style="width: 20px; height: 20px;"></div>
+                        </div>
+                        <!-- Texto del resultado -->
+                        <div>
+                            <small class="text-muted d-block">Tu resultado</small>
+                            <h5 class="fw-bold text-warning mb-1">Atención requerida</h5>
+                            <span class="badge bg-warning-subtle text-warning-emphasis mb-2">Requiere seguimiento</span>
+                            <button class="btn btn-guinda btn-sm w-100 mt-2">
+                                📄 Descargar reporte PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 3. TARJETAS INFERIORES -->
+    <div class="container pb-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-3 rounded-4">
+                    <div class="card-body">
+                        <div class="fs-3 mb-2">🛡️</div>
+                        <h5 class="card-title fw-bold">Detección temprana</h5>
+                        <p class="card-text text-muted small">
+                            Cuestionario con semáforo de riesgo que orienta a las familias, sin diagnósticos médicos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-3 rounded-4">
+                    <div class="card-body">
+                        <div class="fs-3 mb-2">📋</div>
+                        <h5 class="card-title fw-bold">Estrategias para el aula</h5>
+                        <p class="card-text text-muted small">
+                            Actividades y protocolos de crisis listos para los docentes de CONAFE.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-3 rounded-4">
+                    <div class="card-body">
+                        <div class="fs-3 mb-2">❤️</div>
+                        <h5 class="card-title fw-bold">Acompañamiento</h5>
+                        <p class="card-text text-muted small">
+                            Reportes en PDF que conectan a las familias con los especialistas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. FOOTER -->
+    <footer class="bg-white border-top py-3 text-center text-muted small">
+        CONAAP · Crecer Juntos · Consejo Nacional de Fomento Educativo — Hidalgo
+    </footer>
 
 </body>
 </html>

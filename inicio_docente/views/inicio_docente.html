@@ -10,9 +10,20 @@ $def with (nombre_docente, total_estrategias, total_alumnos, total_actividades)
     body { font-family: Arial, Helvetica, sans-serif; background: #f1f5f9; }
     .layout { display: flex; min-height: 100vh; }
     .sidebar { width: 260px; background: #ffffff; border-right: 1px solid #e2e8f0; padding: 24px 0; display: flex; flex-direction: column; }
-    .logo { display: flex; align-items: center; gap: 10px; padding: 0 24px 24px; }
-    .logo-badge { width: 32px; height: 32px; border-radius: 9px; background: #7e1232; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .logo span { font-size: 16px; font-weight: bold; color: #1e293b; }
+    
+    .logo { 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      padding: 10px 20px 24px 20px; 
+    }
+    .logo img { 
+      max-width: 100%; 
+      height: auto; 
+      max-height: 70px; 
+      object-fit: contain; 
+    }
+
     .nav-item { padding: 11px 24px; font-size: 14px; color: #1e293b; text-decoration: none; display: block; }
     .nav-item.active { margin: 2px 12px; padding: 11px 12px; font-weight: 600; color: #0f766e; background: #f0fdfa; border-radius: 10px; }
     .sidebar-footer { margin-top: auto; border-top: 1px solid #e2e8f0; padding: 18px 24px 0; }
@@ -47,10 +58,10 @@ $def with (nombre_docente, total_estrategias, total_alumnos, total_actividades)
 <body>
   <div class="layout">
     <aside class="sidebar">
-    <div class="logo">
-      <img src="/static/logo_conafe.png" alt="CONAFE" style="height: 32px;">
-      <span>CONAAP</span>
-    </div>
+      <div class="logo">
+        <img src="/static/logo_conafe.png" alt="CONAFE">
+      </div>
+      
       <a href="/docente/inicio" class="nav-item active">Inicio</a>
       <a href="#" class="nav-item">Estrategias</a>
       <a href="#" class="nav-item">Actividades</a>

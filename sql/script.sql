@@ -1,6 +1,3 @@
--- Base de datos CONAAP
--- SQLite no usa CREATE DATABASE, el archivo .db ya es la base de datos.
--- Este script solo crea las tablas.
 
 CREATE TABLE IF NOT EXISTS portal_inicio_sesion (
     correo TEXT PRIMARY KEY,
@@ -78,10 +75,6 @@ CREATE TABLE IF NOT EXISTS consulta (
     PRIMARY KEY (id_docente, id_estrategia)
 );
 
--- Esta tabla NO estaba en el diagrama ER aprobado; la agrego solo para que
--- el stat de "actividades asignadas hoy" del panel del docente tenga de donde
--- sacar datos. Si no la quieren usar, se puede quitar junto con esa parte
--- de inicio_docente.py.
 CREATE TABLE IF NOT EXISTS actividad_asignada (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     id_docente INTEGER REFERENCES docente(id_docente),
@@ -90,11 +83,6 @@ CREATE TABLE IF NOT EXISTS actividad_asignada (
     fecha_asignacion TEXT
 );
 
--- ============================================================
--- Datos de prueba (para poder ver el panel del docente con
--- números reales en vez de en cero). Bórralos cuando ya tengan
--- datos reales cargados.
--- ============================================================
 
 INSERT INTO administrador (correo, contrasena) VALUES ('admin@conafe.gob.mx', '1234');
 

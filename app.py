@@ -7,15 +7,15 @@ from deteccion_temprana.controllers.deteccion import DeteccionTemprana
 urls = (
     '/', 'Inicio',
     '/inicio', 'Inicio',
-    
+
     '/docente/inicio', 'InicioDocente',
-    
+
     '/login/docente', 'LoginDocente',
-    
+
     '/deteccion-temprana', 'DeteccionTemprana',
     '/estrategias-didacticas', 'EstrategiasDidacticas'
 )
 app = web.application(urls, globals())
 
-if __name__ == "__main__":
+if __name__=="__main__":
     app.run()

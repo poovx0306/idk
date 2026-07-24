@@ -2,11 +2,11 @@ import web
 import sqlite3
 import hashlib
 
-render = web.template.render('inicios_sesion/administrativos/views')
+render = web.template.render('inicios_sesion/docentes/views')
 
 
-class LoginAdministrativos:
-    """Inicio de sesion del personal administrativo y psicopedagogico."""
+class LoginDocentes:
+    """Inicio de sesion de los educadores comunitarios de CONAFE."""
 
     def encriptar(self, contrasena):
         """Convierte la contrasena a un hash SHA-256.
@@ -21,7 +21,7 @@ class LoginAdministrativos:
             conexion = sqlite3.connect('sql/conaap.db')
             cursor = conexion.cursor()
 
-            query = "SELECT id_usuario, nombre FROM usuario WHERE correo = ? AND contrasena = ? AND rol = 'administrativo'"
+            query = "SELECT id_usuario, nombre FROM usuario WHERE correo = ? AND contrasena = ? AND rol = 'docente'"
             cursor.execute(query, (correo, self.encriptar(contrasena)))
             fila = cursor.fetchone()
 
@@ -62,6 +62,6 @@ class LoginAdministrativos:
         sesion = web.config._session
         sesion.id_usuario = usuario['id_usuario']
         sesion.nombre = usuario['nombre']
-        sesion.rol = 'administrativo'
+        sesion.rol = 'docente'
 
-        raise web.seeother('/estrategias-didacticas')
+        raise web.seeother('/docente/inicio')

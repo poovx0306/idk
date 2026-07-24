@@ -13,9 +13,10 @@ class InicioDocente:
         conexion.row_factory = sqlite3.Row
         cursor = conexion.cursor()
 
-        cursor.execute("SELECT nombre FROM docente WHERE id_docente = ?", (id_docente,))
+        cursor.execute("SELECT nombre, correo FROM docente WHERE id_docente = ?", (id_docente,))
         docente = cursor.fetchone()
         nombre_docente = docente["nombre"] if docente else "Docente"
+        correo_docente = docente["correo"] if docente else "sin-correo@conafe.gob.mx"
 
         cursor.execute("SELECT COUNT(*) FROM estrategias_didacticas")
         total_estrategias = cursor.fetchone()[0]
@@ -31,4 +32,7 @@ class InicioDocente:
 
         conexion.close()
 
-        return render.inicio_docente(nombre_docente, total_estrategias, total_alumnos, total_actividades)
+        return render.inicio_docente(
+            id_docente, nombre_docente, correo_docente,
+            total_estrategias, total_alumnos, total_actividades
+        )

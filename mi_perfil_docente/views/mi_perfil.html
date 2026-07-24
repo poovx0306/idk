@@ -1,0 +1,98 @@
+$def with (id_docente, nombre_docente, clave_docente, correo_docente, miembro_desde)
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CONAAP - Mi perfil</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; background: #f1f5f9; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #fff; border-right: 1px solid #e2e8f0; padding: 24px 0; display: flex; flex-direction: column; }
+    .logo { display: flex; justify-content: center; align-items: center; padding: 10px 20px 24px 20px; }
+    .logo img { max-width: 100%; height: auto; max-height: 70px; object-fit: contain; }
+    .nav-item { padding: 11px 24px; font-size: 14px; color: #1e293b; text-decoration: none; display: block; }
+    .nav-item.active { margin: 2px 12px; padding: 11px 12px; font-weight: 600; color: #0f766e; background: #f0fdfa; border-radius: 10px; }
+    .sidebar-footer { margin-top: auto; border-top: 1px solid #e2e8f0; padding: 18px 24px 0; }
+    .sidebar-footer a { font-size: 13px; color: #64748b; text-decoration: none; }
+    .content { flex: 1; }
+    .header { background: #fff; padding: 24px 36px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
+    .header h1 { font-size: 20px; color: #1e293b; }
+    .header p { font-size: 13px; color: #64748b; margin-top: 2px; }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; background: #7e1232; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .main { padding: 28px 36px; }
+
+    .info-card { background: #fff; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 26px; flex-wrap: wrap; }
+    .field { flex: 1; min-width: 180px; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 14px; }
+    .field-label { font-size: 11px; color: #94a3b8; }
+    .field-value { font-size: 14.5px; color: #1e293b; font-weight: 600; margin-top: 2px; }
+    .edit-btn { background: #0f766e; color: #fff; border: none; font-size: 14px; font-weight: 600; padding: 13px 24px; border-radius: 12px; cursor: pointer; text-decoration: none; }
+
+    .section-label { font-size: 12px; font-weight: bold; color: #64748b; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .settings { display: grid; grid-template-columns: repeat(2, minmax(0, 340px)); gap: 20px; }
+    .setting-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px; }
+    .setting-ico { width: 42px; height: 42px; border-radius: 12px; background: #f0fdfa; color: #0f766e; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 16px; }
+    .setting-title { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 14px; }
+    .badge { display: inline-block; background: #f0fdfa; color: #0f766e; padding: 5px 12px; border-radius: 20px; font-size: 12.5px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="/static/logo_conafe.png" alt="CONAFE">
+      </div>
+      <a href="/docente/inicio?id=$id_docente" class="nav-item">Inicio</a>
+      <a href="/estrategias-didacticas" class="nav-item">Estrategias</a>
+      <a href="#" class="nav-item">Actividades</a>
+      <a href="/mi-perfil?id=$id_docente" class="nav-item active">Mi perfil</a>
+      <div class="sidebar-footer">
+        <a href="/logout">Cerrar sesión</a>
+      </div>
+    </aside>
+
+    <div class="content">
+      <header class="header">
+        <div>
+          <h1>Mi perfil</h1>
+          <p>Tu información y actividad como docente</p>
+        </div>
+        <div class="avatar">$nombre_docente[0]</div>
+      </header>
+
+      <main class="main">
+        <div class="info-card">
+          <div class="field">
+            <div class="field-label">Nombre</div>
+            <div class="field-value">$nombre_docente</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Clave docente</div>
+            <div class="field-value">$clave_docente</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Miembro desde</div>
+            <div class="field-value">$miembro_desde</div>
+          </div>
+          <a href="#" class="edit-btn">Editar perfil</a>
+        </div>
+
+        <div class="section-label">AJUSTES</div>
+        <div class="settings">
+          <div class="setting-card">
+            <div class="setting-ico">&#128276;</div>
+            <div class="setting-title">Notificaciones</div>
+            <span class="badge">Alertas activas</span>
+          </div>
+          <div class="setting-card">
+            <div class="setting-ico">&#10067;</div>
+            <div class="setting-title">Ayuda y soporte</div>
+            <span class="badge">Centro de ayuda</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

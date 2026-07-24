@@ -2,6 +2,7 @@ import web
 
 from portal_inicio.controllers.inicio import Inicio
 from inicio_docente.controllers.inicio_docente import InicioDocente
+from deteccion_temprana.controllers.deteccion import DeteccionTemprana
 
 urls = (
     '/', 'Inicio',

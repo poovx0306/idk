@@ -1,0 +1,5 @@
+-- database: ./conaap.db
+
+-- Presione el botón ▷ en la esquina superior derecha de la ventana para ejecutar todo el archivo.
+
+SELECT * FROM docente;

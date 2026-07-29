@@ -1,16 +1,10 @@
-<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS usuario (
-    id_usuario  INTEGER PRIMARY KEY AUTOINCREMENT,
-    correo      TEXT NOT NULL UNIQUE,
-    contrasena  TEXT NOT NULL,
-    rol         TEXT NOT NULL,
-    nombre      TEXT NOT NULL
-=======
-
-CREATE TABLE IF NOT EXISTS portal_inicio_sesion (
-    correo TEXT PRIMARY KEY,
-    contrasena TEXT NOT NULL
->>>>>>> origin/main
+    id_usuario     INTEGER PRIMARY KEY AUTOINCREMENT,
+    correo         TEXT NOT NULL UNIQUE,
+    contrasena     TEXT NOT NULL,
+    rol            TEXT NOT NULL,
+    nombre         TEXT NOT NULL,
+    id_referencia  INTEGER
 );
 
 
@@ -53,6 +47,12 @@ CREATE TABLE IF NOT EXISTS estrategias_didacticas (
     id_docente2    INTEGER NOT NULL REFERENCES docente(id_docente)
 );
 
+CREATE TABLE IF NOT EXISTS actividad_asignada (
+    id_actividad_asignada  INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_docente             INTEGER NOT NULL REFERENCES docente(id_docente),
+    id_estrategia          INTEGER REFERENCES estrategias_didacticas(id_estrategia),
+    fecha_asignacion       TEXT NOT NULL DEFAULT (DATE('now'))
+);
 
 CREATE TABLE IF NOT EXISTS padres (
     id_padres  INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,20 +60,11 @@ CREATE TABLE IF NOT EXISTS padres (
     telefono   TEXT NOT NULL
 );
 
-<<<<<<< HEAD
 
 CREATE TABLE IF NOT EXISTS portal_inicio_sesion (
     correo      TEXT PRIMARY KEY,
     contrasena  TEXT NOT NULL,
     id_padres   INTEGER NOT NULL REFERENCES padres(id_padres)
-=======
-CREATE TABLE IF NOT EXISTS actividad_asignada (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_docente INTEGER REFERENCES docente(id_docente),
-    id_infante INTEGER REFERENCES infante(id_infante),
-    descripcion TEXT,
-    fecha_asignacion TEXT
->>>>>>> origin/main
 );
 
 

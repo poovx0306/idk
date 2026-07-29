@@ -2,9 +2,9 @@ import web
 
 
 class CerrarSesion:
-    """Cierra la sesion activa y regresa al inicio de sesion."""
+    """Cierra la sesion activa y regresa al portal de inicio."""
 
     def GET(self):
         sesion = web.config._session
         sesion.kill()
-        raise web.seeother('/login/docente')
+        raise web.seeother('/')

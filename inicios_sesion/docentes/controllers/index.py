@@ -15,13 +15,17 @@ class LoginDocentes:
         return hashlib.sha256(contrasena.encode('utf-8')).hexdigest()
 
     def buscarUsuario(self, correo, contrasena):
-        """Consulta al usuario por su correo y su contrasena encriptada"""
+        """Consulta al usuario por su correo y su contrasena encriptada.
+        El rol viaja dentro de la consulta, asi una persona no puede
+        entrar por una pantalla que no le corresponde.
+        """
         conexion = None
         try:
             conexion = sqlite3.connect('sql/conaap.db')
             cursor = conexion.cursor()
 
-            query = "SELECT id_usuario, nombre FROM usuario WHERE correo = ? AND contrasena = ? AND rol = 'docente'"
+            query = ("SELECT id_usuario, nombre, id_referencia FROM usuario "
+                     "WHERE correo = ? AND contrasena = ? AND rol = 'docente'")
             cursor.execute(query, (correo, self.encriptar(contrasena)))
             fila = cursor.fetchone()
 
@@ -30,14 +34,15 @@ class LoginDocentes:
 
             return {
                 'id_usuario': fila[0],
-                'nombre': fila[1]
+                'nombre': fila[1],
+                'id_referencia': fila[2]
             }
 
         except sqlite3.Error as error:
-            print(f"ERROR 100: {error.args}")
+            print("ERROR 100: %s" % (error.args,))
             return None
         except Exception as error:
-            print(f"ERROR 101: {error.args}")
+            print("ERROR 101: %s" % (error.args,))
             return None
         finally:
             if conexion:
@@ -50,12 +55,16 @@ class LoginDocentes:
     def POST(self):
         """Manejador de la peticion HTTP POST: valida el inicio de sesion"""
         datos = web.input(correo="", contrasena="")
+        correo = datos.correo.strip().lower()
+        contrasena = datos.contrasena
 
-        if datos.correo == "" or datos.contrasena == "":
+        if correo == "" or contrasena == "":
             return render.index("Captura tu correo y tu contrasena.")
 
-        usuario = self.buscarUsuario(datos.correo, datos.contrasena)
+        usuario = self.buscarUsuario(correo, contrasena)
 
+        # Mensaje generico a proposito: no se le dice al atacante
+        # si fallo el correo o si fallo la contrasena.
         if usuario is None:
             return render.index("El correo o la contrasena no son correctos.")
 
@@ -63,5 +72,7 @@ class LoginDocentes:
         sesion.id_usuario = usuario['id_usuario']
         sesion.nombre = usuario['nombre']
         sesion.rol = 'docente'
+        sesion.id_referencia = usuario['id_referencia']
 
-        raise web.seeother('/docente/inicio')
+        destino = '/docente/inicio?id=%s' % (usuario['id_referencia'] or 1)
+        raise web.HTTPError('303 See Other', {'Location': destino})

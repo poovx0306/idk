@@ -5,168 +5,331 @@ $def with ()
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado del Cuestionario - CONAFE</title>
+    <title>CONAFE - Resultado de la Evaluación</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
             --verde-conafe: #0f766e;
-            --amarillo-alerta: #f59e0b;
+            --verde-claro: #e6f4f1;
+            --bg-pagina: #f1f5f9;
         }
+
         body {
-            background-color: #f0f4f8;
+            background-color: var(--bg-pagina);
             font-family: system-ui, -apple-system, sans-serif;
             min-height: 100vh;
-        }
-        /* Contenedor Semáforo Visual */
-        .semaforo-box {
-            background-color: #212529;
-            border-radius: 28px;
-            width: 140px;
-            padding: 24px 16px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            margin: 0;
+        }
+
+        /* Navbar superior */
+        .navbar-custom {
+            background-color: white;
+            padding: 1rem 4rem;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-        }
-        .luz {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            opacity: 0.25;
-            transition: all 0.3s ease;
-        }
-        .luz.roja { background-color: #ef4444; }
-        .luz.amarilla { background-color: #f59e0b; }
-        .luz.verde { background-color: #10b981; }
-
-        /* Activar la luz correspondiente según la alerta */
-        .luz.activa {
-            opacity: 1;
-            box-shadow: 0 0 20px currentColor;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .badge-alerta {
-            background-color: #e6f4f1;
+        .logo-img {
+            max-height: 48px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link-custom {
+            text-decoration: none;
+            color: #475569;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-link-custom.active {
             color: var(--verde-conafe);
             font-weight: 600;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
         }
-        .btn-verde {
+
+        .btn-iniciar-sesion {
+            border: 1.5px solid var(--verde-conafe);
+            color: var(--verde-conafe);
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .card-resultado {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 850px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        /* Semáforo basado en imagen */
+        .semaforo-img-container {
+            width: 140px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .semaforo-img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+        }
+
+        /* Información de texto */
+        .badge-alerta {
+            background-color: var(--verde-claro);
+            color: var(--verde-conafe);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+        }
+
+        .titulo-resultado {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .titulo-resultado.amarillo { color: #f59e0b; }
+        .titulo-resultado.rojo { color: #dc2626; }
+        .titulo-resultado.verde { color: var(--verde-conafe); }
+
+        .descripcion-text {
+            color: #64748b;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 1.8rem;
+        }
+
+        .subtitulo-pasos {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .lista-pasos {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        .lista-pasos li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: #334155;
+            margin-bottom: 0.75rem;
+        }
+
+        .lista-pasos i {
+            color: var(--verde-conafe);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .acciones-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .btn-pdf {
             background-color: var(--verde-conafe);
             color: white;
             border: none;
-        }
-        .btn-verde:hover {
-            background-color: #0b5751;
-            color: white;
-        }
-        .btn-outline-verde {
-            border: 2px solid var(--verde-conafe);
-            color: var(--verde-conafe);
-            background: transparent;
-        }
-        .btn-outline-verde:hover {
-            background-color: var(--verde-conafe);
-            color: white;
+            border-radius: 10px;
+            padding: 10px 22px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            cursor: pointer;
         }
 
-        /* Formato especial para cuando se imprima/descargue como PDF */
+        .btn-inicio {
+            border: 1.5px solid var(--verde-conafe);
+            color: var(--verde-conafe);
+            background: white;
+            border-radius: 10px;
+            padding: 10px 22px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .nota-medica {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
         @media print {
-            .no-imprimir {
+            @page {
+                size: portrait;
+                margin: 0.8cm;
+            }
+
+            body {
+                background: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .navbar-custom, .acciones-box {
                 display: none !important;
             }
-            body {
-                background-color: white !important;
+
+            .main-container {
+                padding: 0 !important;
+                margin: 0 !important;
+                display: block !important;
             }
-            .card {
+
+            .card-resultado {
                 box-shadow: none !important;
-                border: none !important;
+                border: 1px solid #e2e8f0 !important;
+                padding: 2rem !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
+                page-break-inside: avoid;
+            }
+
+            .semaforo-img {
+                max-height: 250px !important;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- NAV SUPERIOR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 no-imprimir">
-    <div class="container">
-        <a class="navbar-brand" href="/">
-            <img src="/static/images/conafe.jpg" alt="Logo CONAFE" style="max-height: 45px;">
-        </a>
-        <div class="ms-auto d-flex gap-3 align-items-center">
-            <a href="/" class="nav-link text-success fw-bold">Inicio</a>
-            <a href="/docente/inicio" class="btn btn-outline-success rounded-3 px-3">Iniciar sesión</a>
+    <!-- Header Navbar -->
+    <nav class="navbar-custom">
+        <div>
+            <!-- Reemplazo por la imagen institucional -->
+            <a href="/">
+                <img src="/static/images/conafe.jpg" alt="CONAFE" class="logo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x50?text=CONAFE';">
+            </a>
         </div>
-    </div>
-</nav>
+        <div class="nav-links">
+            <a href="/" class="nav-link-custom active">Inicio</a>
+            <a href="#" class="nav-link-custom">Cómo funciona</a>
+            <a href="#" class="nav-link-custom">Recursos</a>
+            <a href="/login/padre" class="btn-iniciar-sesion">Iniciar sesión</a>
+        </div>
+    </nav>
 
-<!-- CONTENIDO PRINCIPAL -->
-<div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="card border-0 shadow-sm rounded-5 p-4 p-md-5 bg-white" style="max-width: 900px; width: 100%;">
-        <div class="row align-items-center g-4">
+    <!-- Contenido Principal -->
+    <div class="main-container">
+        <div class="card-resultado">
             
-            <!-- Columna del Semáforo -->
-            <div class="col-md-4 d-flex justify-content-center">
-                <div class="semaforo-box">
-                    <div class="luz roja"></div>
-                    <!-- Luz amarilla activa de ejemplo -->
-                    <div class="luz amarilla activa"></div> 
-                    <div class="luz verde"></div>
-                </div>
+            <!-- Semáforo por Imagen Dinámica -->
+            <div class="semaforo-img-container">
+                <img id="img-semaforo" src="/static/images/semaforo-amarillo.svg" alt="Estatus del Semáforo" class="semaforo-img">
             </div>
 
-            <!-- Columna de Información -->
-            <div class="col-md-8">
-                <div class="mb-2">
-                    <span class="badge-alerta">Nivel de alerta</span>
-                </div>
+            <!-- Información -->
+            <div>
+                <span class="badge-alerta">Nivel de alerta</span>
+                <h1 class="titulo-resultado" id="txt-titulo">Cargando resultado...</h1>
                 
-                <h1 class="fw-bold text-warning mb-3" style="font-size: 2.2rem;">Atención requerida</h1>
-                
-                <p class="text-secondary mb-4" style="line-height: 1.6;">
-                    Algunas respuestas sugieren observar de cerca el desarrollo de tu peque. Te recomendamos compartir este reporte con el personal de CONAFE para recibir orientación oportuna.
+                <p class="descripcion-text" id="txt-descripcion">
+                    Analizando respuestas obtenidas...
                 </p>
 
-                <h6 class="fw-bold text-uppercase text-muted mb-3" style="font-size: 0.8rem; letter-spacing: 1px;">Próximos pasos</h6>
-                
-                <ul class="list-unstyled mb-4 d-flex flex-column gap-2 text-secondary">
-                    <li class="d-flex align-items-center gap-2">
-                        <span class="text-success fw-bold">✓</span> Descarga el reporte en PDF con el resumen de respuestas.
-                    </li>
-                    <li class="d-flex align-items-center gap-2">
-                        <span class="text-success fw-bold">✓</span> Compártelo con el especialista o educador de CONAFE.
-                    </li>
-                    <li class="d-flex align-items-center gap-2">
-                        <span class="text-success fw-bold">✓</span> Recibe orientación para acompañar a tu peque en casa.
-                    </li>
+                <div class="subtitulo-pasos">PRÓXIMOS PASOS</div>
+
+                <ul class="lista-pasos">
+                    <li><i class="bi bi-check-lg"></i> Descarga el reporte en PDF con el resumen de respuestas.</li>
+                    <li><i class="bi bi-check-lg"></i> Compártelo con el especialista o educador de CONAFE.</li>
+                    <li><i class="bi bi-check-lg"></i> Recibe orientación para acompañar a tu peque en casa.</li>
                 </ul>
 
-                <!-- BOTONES DE ACCIÓN -->
-                <div class="d-flex flex-wrap gap-3 mb-3 no-imprimir">
-                    <button class="btn btn-verde px-4 py-2 rounded-3 fw-medium d-flex align-items-center gap-2" onclick="generarPDF()">
-                        📄 Descargar reporte PDF
+                <div class="acciones-box">
+                    <button type="button" class="btn btn-pdf" onclick="window.print()">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Descargar reporte PDF
                     </button>
-                    <a href="/" class="btn btn-outline-verde px-4 py-2 rounded-3 fw-medium text-decoration-none">
-                        Volver al inicio
-                    </a>
+                    <a href="/" class="btn btn-inicio">Volver al inicio</a>
                 </div>
 
-                <small class="text-muted d-block" style="font-size: 0.8rem;">
+                <div class="nota-medica">
                     Este resultado no es un diagnóstico médico.
-                </small>
+                </div>
             </div>
 
         </div>
     </div>
-</div>
 
 <script>
-    function generarPDF() {
-        //que permite guardar directamente en PDF
-        window.print();
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+        var dataRaw = localStorage.getItem('veanme_resultado');
+        var puntaje = 0;
+
+        if (dataRaw) {
+            var data = JSON.parse(dataRaw);
+            puntaje = data.puntajeTotal || 0;
+        }
+
+        var imgSemaforo = document.getElementById('img-semaforo');
+        var txtTitulo = document.getElementById('txt-titulo');
+        var txtDesc = document.getElementById('txt-descripcion');
+
+        if (puntaje >= 15) {
+            // ROJO
+            imgSemaforo.src = "/static/images/semaforo-rojo.svg";
+            txtTitulo.innerText = "Atención prioritaria";
+            txtTitulo.className = "titulo-resultado rojo";
+            txtDesc.innerText = "Las respuestas sugieren que es muy importante realizar una valoración detallada con el personal de CONAFE para brindarte el apoyo necesario.";
+        } else if (puntaje >= 6) {
+            // AMARILLO
+            imgSemaforo.src = "/static/images/semaforo-amarillo.svg";
+            txtTitulo.innerText = "Atención requerida";
+            txtTitulo.className = "titulo-resultado amarillo";
+            txtDesc.innerText = "Algunas respuestas sugieren observar de cerca el desarrollo de tu peque. Te recomendamos compartir este reporte con el personal de CONAFE para recibir orientación oportuna.";
+        } else {
+            // VERDE
+            imgSemaforo.src = "/static/images/semaforo-verde.svg";
+            txtTitulo.innerText = "Desarrollo adecuado";
+            txtTitulo.className = "titulo-resultado verde";
+            txtDesc.innerText = "El desarrollo de tu peque se encuentra dentro del rango esperado para su edad. Te sugerimos continuar estimulando su aprendizaje cotidiano.";
+        }
+    });
 </script>
 
 </body>

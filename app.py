@@ -27,8 +27,11 @@ urls = (
 
     '/login/docente', 'LoginDocente',
     '/registro-nino', 'RegistroPrevio',
+    '/cuestionario', 'DeteccionTemprana',
     '/deteccion-temprana/cuestionario', 'DeteccionTemprana',
+    '/api/preguntas', 'deteccion_temprana.controllers.api_preguntas.ApiPreguntas',
     '/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
+    '/deteccion-temprana/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
     '/estrategias-didacticas', 'EstrategiasDidacticas',
 
     '/mi-perfil', 'MiPerfil',

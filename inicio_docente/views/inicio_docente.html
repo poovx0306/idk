@@ -43,8 +43,6 @@ $def with (id_docente, nombre_docente, correo_docente, total_estrategias, total_
     .tip-box { background: #f0fdfa; border-radius: 16px; padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
     .tip-check { width: 26px; height: 26px; border-radius: 50%; background: #fff; color: #0f766e; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
     .tip-text { font-size: 13.5px; color: #0f766e; line-height: 1.6; }
-
-    /* ---------- Menú flotante del avatar ---------- */
     .user-menu { position: relative; }
     .avatar { cursor: pointer; user-select: none; }
 
@@ -90,7 +88,7 @@ $def with (id_docente, nombre_docente, correo_docente, total_estrategias, total_
       </div>
 
       <a href="/docente/inicio?id=$id_docente" class="nav-item active">Inicio</a>
-      <a href="/estrategias-didacticas" class="nav-item">Estrategias</a>
+      <a href="/estrategias-didacticas?id=$id_docente" class="nav-item">Estrategias</a>
       <a href="#" class="nav-item">Actividades</a>
       <a href="/mi-perfil?id=$id_docente" class="nav-item">Mi perfil</a>
       <div class="sidebar-footer">
@@ -148,7 +146,7 @@ $def with (id_docente, nombre_docente, correo_docente, total_estrategias, total_
               <div class="crisis-sub">Protocolo visual paso a paso para contener una crisis sensorial o conductual en el aula</div>
             </div>
           </div>
-          <a href="#" class="crisis-btn">&gt; Abrir protocolo</a>
+          <a href="/boton-crisis?id=$id_docente" class="crisis-btn">&gt; Abrir protocolo</a>
         </div>
 
         <div class="stats">
@@ -168,11 +166,10 @@ $def with (id_docente, nombre_docente, correo_docente, total_estrategias, total_
 
         <div class="section-label">HERRAMIENTAS</div>
         <div class="tools">
-          <a href="#" class="tool-card">
+          <a href="/estrategias-didacticas?id=$id_docente" class="tool-card">
             <div class="tool-icon" style="background:#f0fdfa;color:#0f766e;">&#128269;</div>
             <div class="tool-title">Buscar estrategias</div>
-          </a>
-          <a href="#" class="tool-card">
+          <a href="/guias-rapidas?id=$id_docente" class="tool-card">
             <div class="tool-icon" style="background:#f3e8ff;color:#7e1232;">&#128214;</div>
             <div class="tool-title">Guías rápidas</div>
           </a>

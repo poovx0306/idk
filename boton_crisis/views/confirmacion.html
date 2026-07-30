@@ -1,0 +1,81 @@
+$def with (id_docente, notas)
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CONAAP - Crisis atendida</title>
+  <meta http-equiv="refresh" content="4;url=/docente/inicio?id=$id_docente">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 56px 48px;
+      text-align: center;
+      max-width: 460px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+    .check-circle {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: #0f766e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 26px;
+    }
+    .check-circle svg { width: 42px; height: 42px; }
+    h1 { font-size: 21px; color: #1e293b; margin-bottom: 10px; }
+    p { font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 24px; }
+    .nota-guardada {
+      background: #f0fdfa;
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .nota-label { font-size: 11.5px; font-weight: 700; color: #0f766e; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .nota-texto { font-size: 13.5px; color: #1e293b; line-height: 1.5; }
+    .btn-volver {
+      display: inline-block;
+      background: #7e1232;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 13px 26px;
+      border-radius: 12px;
+    }
+    .btn-volver:hover { background: #6a0f2a; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="4 12 9 17 20 6"></polyline>
+      </svg>
+    </div>
+    <h1>Crisis marcada como atendida</h1>
+    <p>El registro se guardó correctamente. Te llevaremos de vuelta al inicio en unos segundos.</p>
+
+    $if notas:
+      <div class="nota-guardada">
+        <div class="nota-label">NOTA GUARDADA</div>
+        <div class="nota-texto">$notas</div>
+      </div>
+
+    <a href="/docente/inicio?id=$id_docente" class="btn-volver">Volver al inicio ahora</a>
+  </div>
+</body>
+</html>

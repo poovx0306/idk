@@ -12,6 +12,8 @@ from estrategias_didacticas.controllers.estrategias_didacticas import Estrategia
 from mi_perfil_docente.controllers.mi_perfil import MiPerfil
 from deteccion_temprana.controllers.registro import RegistroPrevio
 from deteccion_temprana.controllers.deteccion import DeteccionTemprana
+from boton_crisis.controllers.boton_crisis import BotonCrisis, ConfirmacionCrisis
+from guias_rapidas.controllers.guias_rapidas import GuiasRapidas
 
 urls = (
     '/', 'Inicio',
@@ -22,10 +24,6 @@ urls = (
     '/login/administrativo', 'LoginAdministrativos',
     '/cerrar-sesion', 'CerrarSesion',
 
-
-    '/docente/inicio', 'InicioDocente',
-
-    '/login/docente', 'LoginDocente',
     '/registro-nino', 'RegistroPrevio',
     '/cuestionario', 'DeteccionTemprana',
     '/deteccion-temprana/cuestionario', 'DeteccionTemprana',
@@ -35,6 +33,10 @@ urls = (
     '/estrategias-didacticas', 'EstrategiasDidacticas',
 
     '/mi-perfil', 'MiPerfil',
+
+    '/boton-crisis', 'BotonCrisis',
+    '/boton-crisis/confirmacion', 'ConfirmacionCrisis',
+    '/guias-rapidas', 'GuiasRapidas',
 )
 app = web.application(urls, globals())
 

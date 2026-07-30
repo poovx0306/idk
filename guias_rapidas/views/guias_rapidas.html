@@ -1,0 +1,77 @@
+$def with (id_docente, categorias)
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CONAAP - Guías rápidas</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; background: #f1f5f9; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #fff; border-right: 1px solid #e2e8f0; padding: 24px 0; display: flex; flex-direction: column; }
+    .logo { display: flex; justify-content: center; align-items: center; padding: 10px 20px 24px 20px; }
+    .logo img { max-width: 100%; height: auto; max-height: 70px; object-fit: contain; }
+    .nav-item { padding: 11px 24px; font-size: 14px; color: #1e293b; text-decoration: none; display: block; }
+    .nav-item.active { margin: 2px 12px; padding: 11px 12px; font-weight: 600; color: #0f766e; background: #f0fdfa; border-radius: 10px; }
+    .sidebar-footer { margin-top: auto; border-top: 1px solid #e2e8f0; padding: 18px 24px 0; }
+    .sidebar-footer a { font-size: 13px; color: #64748b; text-decoration: none; }
+    .content { flex: 1; }
+    .header { background: #fff; padding: 24px 36px; border-bottom: 1px solid #e2e8f0; }
+    .header h1 { font-size: 20px; color: #1e293b; }
+    .header p { font-size: 13px; color: #64748b; margin-top: 2px; }
+    .main { padding: 28px 36px; }
+
+    .categoria-block { margin-bottom: 30px; }
+    .categoria-titulo {
+      font-size: 13px;
+      font-weight: bold;
+      color: #0f766e;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .guias-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .guia-card { background: #fff; border-radius: 14px; padding: 18px 20px; }
+    .guia-titulo { font-size: 14.5px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+    .guia-contenido { font-size: 13px; color: #64748b; line-height: 1.55; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="/static/logo_conafe.png" alt="CONAFE">
+      </div>
+      <a href="/docente/inicio?id=$id_docente" class="nav-item">Inicio</a>
+      <a href="/estrategias-didacticas?id=$id_docente" class="nav-item">Estrategias</a>
+      <a href="#" class="nav-item">Actividades</a>
+      <a href="/mi-perfil?id=$id_docente" class="nav-item">Mi perfil</a>
+      <div class="sidebar-footer">
+        <a href="/logout">Cerrar sesión</a>
+      </div>
+    </aside>
+
+    <div class="content">
+      <header class="header">
+        <h1>Guías rápidas</h1>
+        <p>Consejos breves para apoyar a alumnos con autismo en el aula</p>
+      </header>
+
+      <main class="main">
+        $for categoria, guias in categorias.items():
+          <div class="categoria-block">
+            <div class="categoria-titulo">$categoria</div>
+            <div class="guias-grid">
+              $for guia in guias:
+                <div class="guia-card">
+                  <div class="guia-titulo">$guia["titulo"]</div>
+                  <div class="guia-contenido">$guia["contenido"]</div>
+                </div>
+            </div>
+          </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

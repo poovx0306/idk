@@ -8,13 +8,14 @@ from inicios_sesion.padres.controllers.index import LoginPadres
 from inicios_sesion.administrativos.controllers.index import LoginAdministrativos
 from inicios_sesion.cerrar_sesion import CerrarSesion
 
-from estrategias_didacticas.controllers.estrategias_didacticas import EstrategiasDidacticas
+from estrategias_didacticas.controllers.estrategias_didacticas import EstrategiasDidacticas, FichaActividad
 from mi_perfil_docente.controllers.mi_perfil import MiPerfil
 from deteccion_temprana.controllers.registro import RegistroPrevio
 from deteccion_temprana.controllers.deteccion import DeteccionTemprana
 from boton_crisis.controllers.boton_crisis import BotonCrisis, ConfirmacionCrisis
 from guias_rapidas.controllers.guias_rapidas import GuiasRapidas
-
+from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad
+from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad, MisActividadesGuardadas
 urls = (
     '/', 'Inicio',
     '/inicio', 'Inicio',
@@ -31,6 +32,12 @@ urls = (
     '/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
     '/deteccion-temprana/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
     '/estrategias-didacticas', 'EstrategiasDidacticas',
+    '/estrategias-didacticas/ficha', 'FichaActividad',
+    '/actividades-guardadas', 'ActividadesGuardadas',
+    '/actividades-guardadas/ficha', 'FichaActividadAsignada',
+    '/actividades-guardadas/completar', 'MarcarActividad',
+    '/actividades-guardadas/guardar', 'GuardarActividad',
+    '/actividades-guardadas/guardadas', 'MisActividadesGuardadas',
 
     '/mi-perfil', 'MiPerfil',
 

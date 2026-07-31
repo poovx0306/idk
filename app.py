@@ -37,6 +37,7 @@ urls = (
     '/administrativo/inicio', 'InicioAdministrativo',
     '/administrativo/cuestionarios', 'Cuestionarios',
     '/administrativo/cuestionarios/nuevo', 'NuevoCuestionario',
+    '/administrativo/cuestionarios/editar', 'EditarCuestionario',
 
     '/inicio', 'Inicio',
     '/docente/inicio', 'InicioDocente',

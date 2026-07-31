@@ -5,10 +5,19 @@ BASE = 'sql/conaap.db'
 
 INSERTAR_DEMO = True
 
+# Numero verificado en Twilio (Verified Caller ID). Mientras tu cuenta de
+# Twilio siga en modo de prueba, SOLO puedes recibir SMS reales en numeros
+# que hayas verificado ahi (Phone Numbers > Manage > Verified Caller IDs,
+# hasta 5 numeros). Por eso los 3 usuarios de demo comparten el mismo
+# telefono: para probar la recuperacion de cualquiera de los 3, usa ese
+# mismo celular. Si verificas mas numeros en Twilio, puedes darle a cada
+# cuenta el suyo cambiando el cuarto valor de cada tupla.
+TELEFONO_VERIFICADO = '+527205947513'
+
 CUENTAS = [
-    ('ana.martinez@conafe.gob.mx', 'docente123', 'docente', 'Ana Martinez Reyes'),
-    ('maria.cruz@gmail.com', 'padre123', 'padre', 'Maria Cruz Hernandez'),
-    ('admin@conafe.gob.mx', 'admin123', 'administrativo', 'Jorge Lira Uribe'),
+    ('ana.martinez@conafe.gob.mx', 'docente123', 'docente', 'Ana Martinez Reyes', TELEFONO_VERIFICADO),
+    ('maria.cruz@gmail.com', 'padre123', 'padre', 'Maria Cruz Hernandez', TELEFONO_VERIFICADO),
+    ('admin@conafe.gob.mx', 'admin123', 'administrativo', 'Jorge Lira Uribe', TELEFONO_VERIFICADO),
 ]
 
 
@@ -29,7 +38,8 @@ def main():
             contrasena     TEXT NOT NULL,
             rol            TEXT NOT NULL,
             nombre         TEXT NOT NULL,
-            id_referencia  INTEGER
+            id_referencia  INTEGER,
+            telefono       TEXT
         )
     """)
 
@@ -37,6 +47,9 @@ def main():
     if 'id_referencia' not in columnas:
         cursor.execute('ALTER TABLE usuario ADD COLUMN id_referencia INTEGER')
         print('Columna id_referencia agregada.')
+    if 'telefono' not in columnas:
+        cursor.execute('ALTER TABLE usuario ADD COLUMN telefono TEXT')
+        print('Columna telefono agregada.')
 
     id_admin = None
     id_docente = None
@@ -67,17 +80,18 @@ def main():
         'padre': None,
     }
 
-    for correo, contrasena, rol, nombre in CUENTAS:
+    for correo, contrasena, rol, nombre, telefono in CUENTAS:
         cursor.execute("""
-            INSERT INTO usuario (correo, contrasena, rol, nombre, id_referencia)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO usuario (correo, contrasena, rol, nombre, id_referencia, telefono)
+            VALUES (?, ?, ?, ?, ?, ?)
             ON CONFLICT(correo) DO UPDATE SET
                 contrasena    = excluded.contrasena,
                 rol           = excluded.rol,
                 nombre        = excluded.nombre,
-                id_referencia = excluded.id_referencia
-        """, (correo, encriptar(contrasena), rol, nombre, referencias.get(rol)))
-        print('Cuenta lista:', correo, '/', contrasena, '(' + rol + ')')
+                id_referencia = excluded.id_referencia,
+                telefono      = excluded.telefono
+        """, (correo, encriptar(contrasena), rol, nombre, referencias.get(rol), telefono))
+        print('Cuenta lista:', correo, '/', contrasena, '(' + rol + ')', '- telefono:', telefono)
 
     conexion.commit()
     conexion.close()

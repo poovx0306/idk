@@ -1,4 +1,13 @@
 import web
+#pruebas
+from administrativos.controllers.cuestionarios import (
+    Cuestionarios, 
+    NuevoCuestionario, 
+    EliminarCuestionario, 
+    EditarCuestionario,
+    VerPreguntasCuestionario
+)
+from administrativos.controllers.inicio import InicioAdministrativo
 
 from portal_inicio.controllers.inicio import Inicio
 from inicio_docente.controllers.inicio_docente import InicioDocente
@@ -6,6 +15,7 @@ from inicio_docente.controllers.inicio_docente import InicioDocente
 from inicios_sesion.docentes.controllers.index import LoginDocentes
 from inicios_sesion.padres.controllers.index import LoginPadres
 from inicios_sesion.administrativos.controllers.index import LoginAdministrativos
+from inicios_sesion.recuperar.controllers.index import RecuperarContrasena
 from inicios_sesion.cerrar_sesion import CerrarSesion
 
 from estrategias_didacticas.controllers.estrategias_didacticas import EstrategiasDidacticas, FichaActividad
@@ -22,11 +32,18 @@ from avance_infante.controllers.avance_infante import AvanceInfante
 
 urls = (
     '/', 'Inicio',
+
+    #pruebas
+    '/administrativo/inicio', 'InicioAdministrativo',
+    '/administrativo/cuestionarios', 'Cuestionarios',
+    '/administrativo/cuestionarios/nuevo', 'NuevoCuestionario',
+
     '/inicio', 'Inicio',
     '/docente/inicio', 'InicioDocente',
     '/login/docente', 'LoginDocentes',
     '/login/padre', 'LoginPadres',
     '/login/administrativo', 'LoginAdministrativos',
+    '/recuperar-contrasena', 'RecuperarContrasena',
     '/cerrar-sesion', 'CerrarSesion',
 
     '/registro-nino', 'RegistroPrevio',

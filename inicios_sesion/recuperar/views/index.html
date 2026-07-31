@@ -1,0 +1,152 @@
+$def with (error, exito, paso, correo)
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONAAP - Recuperar contrasena</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { display: flex; min-height: 100vh; background-color: #ffffff; }
+
+        .left-panel {
+            flex: 1; background-color: #731331; color: #ffffff;
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 40px 60px; position: relative; overflow: hidden;
+        }
+        .brand-badge {
+            width: 42px; height: 42px; background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 18px; z-index: 2;
+        }
+        .left-content { margin-top: auto; margin-bottom: auto; z-index: 2; }
+        .left-content h1 { font-size: 3.5rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; }
+        .left-content p { font-size: 1.1rem; font-weight: 300; opacity: 0.9; max-width: 380px; line-height: 1.6; }
+        .left-footer { font-size: 0.8rem; opacity: 0.7; z-index: 2; }
+        .decorative-circle {
+            position: absolute; bottom: -180px; left: 50%; transform: translateX(-50%);
+            width: 480px; height: 480px; background-color: #590d23; border-radius: 50%; z-index: 1;
+        }
+
+        .right-panel { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
+        .login-card { width: 100%; max-width: 440px; }
+        .login-card h2 { font-size: 1.75rem; color: #1e293b; font-weight: 700; margin-bottom: 6px; }
+        .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 24px; }
+
+        .alerta {
+            background-color: #ffece8; border-left: 4px solid #f86a5e; color: #b91c1c;
+            padding: 12px 14px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px;
+        }
+        .exito {
+            background-color: #e6f7f5; border-left: 4px solid #0d9488; color: #0f5b53;
+            padding: 12px 14px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 0.8rem; color: #475569; margin-bottom: 8px; font-weight: 500; }
+        .form-group input {
+            width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0;
+            background-color: #f8fafc; border-radius: 8px; font-size: 0.9rem;
+            color: #1e293b; outline: none; transition: border-color 0.2s ease;
+        }
+        .form-group input:focus { border-color: #731331; background-color: #ffffff; }
+        .form-group input[readonly] { color: #64748b; }
+
+        .btn-submit {
+            width: 100%; padding: 12px; background-color: #731331; color: #ffffff;
+            border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600;
+            cursor: pointer; transition: background-color 0.2s ease; margin-top: 6px;
+        }
+        .btn-submit:hover { background-color: #590d23; }
+
+        .nota-pie { text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 22px; }
+        .nota-pie a { color: #0d9488; font-weight: 600; text-decoration: none; }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .left-panel { min-height: 220px; padding: 30px; }
+            .left-content h1 { font-size: 2.5rem; }
+            .decorative-circle { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="left-panel">
+        <div class="brand-badge">C</div>
+        <div class="left-content">
+            <h1>CONAAP</h1>
+            <p>Gestiona el cuestionario, las estrategias y los perfiles de la delegacion.</p>
+        </div>
+        <div class="left-footer">Consejo Nacional de Fomento Educativo &middot; Hidalgo</div>
+        <div class="decorative-circle"></div>
+    </div>
+
+    <div class="right-panel">
+        <div class="login-card">
+            <h2>Recuperar contrasena</h2>
+
+            $if paso == "1":
+                <p class="subtitle">Captura tu correo y te mandamos un codigo por SMS</p>
+            $elif paso == "2":
+                <p class="subtitle">Escribe el codigo que te llego por SMS y tu nueva contrasena</p>
+            $else:
+                <p class="subtitle">Listo</p>
+
+            $if error:
+                <div class="alerta">$error</div>
+
+            $if exito:
+                <div class="exito">$exito</div>
+
+            $if paso == "1":
+                <form action="/recuperar-contrasena" method="POST">
+                    <input type="hidden" name="paso" value="1">
+
+                    <div class="form-group">
+                        <label for="correo">Correo electronico</label>
+                        <input type="email" id="correo" name="correo" placeholder="nombre@conafe.gob.mx" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Enviar codigo por SMS</button>
+                </form>
+
+            $if paso == "2":
+                <form action="/recuperar-contrasena" method="POST">
+                    <input type="hidden" name="paso" value="2">
+
+                    <div class="form-group">
+                        <label for="correo">Correo electronico</label>
+                        <input type="email" id="correo" name="correo" value="$correo" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="codigo">Codigo recibido por SMS</label>
+                        <input type="text" id="codigo" name="codigo" placeholder="123456" inputmode="numeric" maxlength="10" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contrasena">Nueva contraseñw a</label>
+                        <input type="password" id="contrasena" name="contrasena" placeholder="Minimo 6 caracteres" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmar">Confirmar contrasena</label>
+                        <input type="password" id="confirmar" name="confirmar" placeholder="Escribe la contrasena otra vez" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Actualizar contrasena</button>
+                </form>
+
+            <p class="nota-pie">
+                $if paso == "listo":
+                    <a href="/login/administrativo">Ir a iniciar sesion</a>
+                $else:
+                    Ya la recordaste? <a href="/login/administrativo">Regresa a iniciar sesion</a>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS usuario (
     contrasena     TEXT NOT NULL,
     rol            TEXT NOT NULL,
     nombre         TEXT NOT NULL,
-    id_referencia  INTEGER
+    id_referencia  INTEGER,
+    telefono       TEXT
 );
 
 

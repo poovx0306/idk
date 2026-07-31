@@ -38,5 +38,6 @@ class DeteccionTemprana:
             )
             conexion.commit()
             conexion.close()
+            raise web.HTTPError('303 See Other', {'Location': '/padre/resultado'})
 
         return render.resultado(puntuacion)

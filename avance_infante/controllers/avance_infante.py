@@ -2,6 +2,8 @@ import web
 import sqlite3
 from datetime import date
 
+render = web.template.render('avance_infante/views')
+
 db_path = "sql/conaap.db"
 
 def actualizar_racha(id_infante):
@@ -32,7 +34,7 @@ def actualizar_racha(id_infante):
     conn.commit()
     conn.close()
 
-class index:
+class AvanceInfante:
     def GET(self):
         session = web.config._session
         id_infante = session.id_infante_actual
@@ -58,11 +60,6 @@ class index:
 
         conn.close()
 
-        return web.render.avance_infante(
-            seccion="avance",
-            evolucion=evolucion,
-            progreso_pct=progreso_pct,
-            hechas_act=hechas_act,
-            total_act=total_act,
-            racha=racha
+        return render.avance_infante(
+            "avance", evolucion, progreso_pct, hechas_act, total_act, racha
         )

@@ -2,11 +2,13 @@ import web
 import sqlite3
 import time
 
+render = web.template.render('inicio_padres/views')
+
 db_path = "sql/conaap.db"
 
 CONSEJOS_ROTATIVOS_QUERY = "SELECT titulo, contenido FROM guia_rapida WHERE publico IN ('padre','ambos') ORDER BY id"
 
-class index:
+class InicioPadres:
     def GET(self):
         session = web.config._session
         conn = sqlite3.connect(db_path)
@@ -58,13 +60,7 @@ class index:
 
         conn.close()
 
-        return web.render.inicio_padres(
-            seccion="inicio",
-            nombre_familia=session.nombre,
-            total_cuestionarios=total_cuestionarios,
-            total_ninos=total_ninos,
-            progreso_pct=progreso_pct,
-            historial=historial,
-            alerta=alerta,
-            consejo_hoy=consejo_hoy
+        return render.inicio_padres(
+            "inicio", session.nombre, total_cuestionarios, total_ninos,
+            progreso_pct, historial, alerta, consejo_hoy
         )

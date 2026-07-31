@@ -2,9 +2,11 @@ import web
 import sqlite3
 from datetime import date
 
+render = web.template.render('actividades_postcrisis/views')
+
 db_path = "sql/conaap.db"
 
-class index:
+class ActividadesPostcrisis:
     def GET(self):
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
@@ -12,9 +14,9 @@ class index:
         cur.execute("SELECT id_actividad, titulo, descripcion, duracion_min, pasos FROM actividad_postcrisis")
         actividades = cur.fetchall()
         conn.close()
-        return web.render.actividades_postcrisis(seccion="postcrisis", actividades=actividades)
+        return render.actividades_postcrisis("postcrisis", actividades)
 
-class marcar:
+class MarcarActividadPostcrisis:
     def POST(self):
         session = web.config._session
         datos = web.input(id_actividad=None)

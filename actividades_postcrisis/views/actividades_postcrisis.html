@@ -1,36 +1,87 @@
 $def with (seccion, actividades)
 
-<div class="sidebar">
-    <div class="logo-box">
-        <img src="/static/images/conafe.jpg" alt="CONAFE">
-        <p>Consejo Nacional de Fomento Educativo</p>
-    </div>
-    <nav>
-        <a href="/padre/inicio" class="$('active' if seccion=='inicio' else '')">Inicio</a>
-        <a href="/padre/guias" class="$('active' if seccion=='guias' else '')">Guías para el hogar</a>
-        <a href="/padre/postcrisis" class="$('active' if seccion=='postcrisis' else '')">Actividades post-crisis</a>
-        <a href="/padre/avance" class="$('active' if seccion=='avance' else '')">Avance de mi hijo</a>
-        <a href="/padre/perfil" class="$('active' if seccion=='perfil' else '')">Mi Perfil</a>
-    </nav>
-    <a href="/logout" class="cerrar-sesion">Cerrar sesión</a>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CONAAP - Actividades post-crisis</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; background: #f1f5f9; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #ffffff; border-right: 1px solid #e2e8f0; padding: 24px 0; display: flex; flex-direction: column; }
+    .logo { padding: 18px 20px 26px; text-align: center; }
+    .logo img { max-width: 160px; width: 100%; height: auto; object-fit: contain; }
+    .nav-item { margin: 2px 12px; padding: 11px 12px; border-radius: 10px; font-size: 14px; color: #1e293b; text-decoration: none; display: flex; align-items: center; gap: 10px; transition: background-color 0.15s ease; }
+    .nav-item svg { flex-shrink: 0; }
+    .nav-item:hover { background-color: #f1f5f9; }
+    .nav-item.active { font-weight: 600; color: #0f766e; background: #f0fdfa; }
+    .sidebar-footer { margin-top: auto; border-top: 1px solid #e2e8f0; padding: 18px 24px 0; }
+    .sidebar-footer a { font-size: 13px; color: #64748b; text-decoration: none; }
+    .content { flex: 1; }
+    .header { background: #fff; padding: 24px 36px; border-bottom: 1px solid #e2e8f0; }
+    .header h1 { font-size: 20px; color: #1e293b; }
+    .header p { font-size: 13px; color: #64748b; margin-top: 2px; }
+    .main { padding: 28px 36px; }
+    .guides-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .guide-card { background: #fff; border-radius: 16px; padding: 20px 22px; }
+    .guide-card h3 { font-size: 14.5px; color: #1e293b; margin-bottom: 8px; }
+    .guide-card p { font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 12px; }
+    .guide-card pre { white-space: pre-wrap; font-family: inherit; font-size: 12.5px; color: #475569; background: #f8fafc; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; line-height: 1.7; }
+    .btn-primary { width: 100%; text-align: center; background: #7e1232; color: #fff; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 11px; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo"><img src="/static/images/conafe.jpg" alt="CONAFE"></div>
 
-<div class="contenido">
-    <div class="header">
+      <a href="/padre/inicio" class="nav-item $('active' if seccion=='inicio' else '')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 22V12h6v10"></path></svg>
+        Inicio
+      </a>
+      <a href="/padre/guias" class="nav-item $('active' if seccion=='guias' else '')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        Guías para el hogar
+      </a>
+      <a href="/padre/postcrisis" class="nav-item $('active' if seccion=='postcrisis' else '')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>
+        Actividades post-crisis
+      </a>
+      <a href="/padre/avance" class="nav-item $('active' if seccion=='avance' else '')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        Avance de mi hijo
+      </a>
+      <a href="/padre/perfil" class="nav-item $('active' if seccion=='perfil' else '')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        Mi Perfil
+      </a>
+      <div class="sidebar-footer">
+        <a href="/cerrar-sesion">Cerrar sesión</a>
+      </div>
+    </aside>
+
+    <div class="content">
+      <header class="header">
         <h1>Actividades post-crisis</h1>
         <p>Qué hacer con tu hijo después de una crisis o meltdown</p>
-    </div>
+      </header>
 
-    <div class="lista-guias">
-        $for a in actividades:
-            <div class="card-guia">
-                <h3>$a.titulo ($a.duracion_min min)</h3>
-                <p>$a.descripcion</p>
-                <pre class="pasos">$a.pasos</pre>
-                <form method="POST" action="/padre/postcrisis/marcar">
-                    <input type="hidden" name="id_actividad" value="$a.id_actividad">
-                    <button type="submit" class="btn-vino">Ya la realicé</button>
-                </form>
+      <main class="main">
+        <div class="guides-grid">
+          $for a in actividades:
+            <div class="guide-card">
+              <h3>$a['titulo'] &middot; $a['duracion_min'] min</h3>
+              <p>$a['descripcion']</p>
+              <pre>$a['pasos']</pre>
+              <form method="POST" action="/padre/postcrisis/marcar">
+                <input type="hidden" name="id_actividad" value="$a['id_actividad']">
+                <button type="submit" class="btn-primary">Ya la realicé</button>
+              </form>
             </div>
+        </div>
+      </main>
     </div>
-</div>
+  </div>
+</body>
+</html>

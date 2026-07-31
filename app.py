@@ -7,7 +7,15 @@ from administrativos.controllers.cuestionarios import (
     EditarCuestionario,
     VerPreguntasCuestionario
 )
+#cosas de alejandro (no tocar)
 from administrativos.controllers.inicio import InicioAdministrativo
+from administrativos.controllers.resultados import Resultados
+from administrativos.controllers.estrategias_didacticas import EstrategiasDidacticasAdmin, NuevaEstrategiaAdmin
+from administrativos.controllers.docentes import DocentesAdmin
+from administrativos.controllers.docentes import DocentesAdmin, NuevoDocenteAdmin
+from administrativos.controllers.alumnos import AlumnosAdmin
+from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin
+from administrativos.controllers.padres import PadresAdmin
 
 from portal_inicio.controllers.inicio import Inicio
 from inicio_docente.controllers.inicio_docente import InicioDocente
@@ -40,6 +48,16 @@ urls = (
     '/administrativo/cuestionarios', 'Cuestionarios',
     '/administrativo/cuestionarios/nuevo', 'NuevoCuestionario',
     '/administrativo/cuestionarios/editar', 'EditarCuestionario',
+    '/administrativo/cuestionarios/ver_preguntas', 'VerPreguntasCuestionario',
+    # Resultados
+    '/administrativo/resultados', 'Resultados',
+    '/administrativo/estrategias', 'EstrategiasDidacticasAdmin',
+    '/administrativo/estrategias/nueva', 'NuevaEstrategiaAdmin',
+    '/administrativo/docentes', 'DocentesAdmin',
+    '/administrativo/docentes/nuevo', 'NuevoDocenteAdmin',
+    '/administrativo/alumnos', 'AlumnosAdmin',
+    '/administrativo/alumnos/nuevo', 'NuevoAlumnoAdmin',
+    '/administrativo/padres', 'PadresAdmin',
 
     '/inicio', 'Inicio',
     '/docente/inicio', 'InicioDocente',
@@ -66,7 +84,7 @@ urls = (
     '/actividades-guardadas/guardar', 'GuardarActividad',
     '/actividades-guardadas/guardadas', 'MisActividadesGuardadas',
 
-    '/padre/inicio', 'InicioPadres',
+    #'/padre/inicio', 'InicioPadres',
     '/padre/guias', 'GuiasHogar',
     '/padre/postcrisis', 'ActividadesPostcrisis',
     '/padre/postcrisis/marcar', 'MarcarActividadPostcrisis',

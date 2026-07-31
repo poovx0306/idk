@@ -6,6 +6,7 @@ from inicio_docente.controllers.inicio_docente import InicioDocente
 from inicios_sesion.docentes.controllers.index import LoginDocentes
 from inicios_sesion.padres.controllers.index import LoginPadres
 from inicios_sesion.administrativos.controllers.index import LoginAdministrativos
+from inicios_sesion.recuperar.controllers.index import RecuperarContrasena
 from inicios_sesion.cerrar_sesion import CerrarSesion
 
 from estrategias_didacticas.controllers.estrategias_didacticas import EstrategiasDidacticas
@@ -20,6 +21,7 @@ urls = (
     '/login/docente', 'LoginDocentes',
     '/login/padre', 'LoginPadres',
     '/login/administrativo', 'LoginAdministrativos',
+    '/recuperar-contrasena', 'RecuperarContrasena',
     '/cerrar-sesion', 'CerrarSesion',
 
 

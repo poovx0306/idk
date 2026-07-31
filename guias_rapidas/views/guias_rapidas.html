@@ -1,0 +1,94 @@
+$def with (id_docente, categorias)
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CONAAP - Guías rápidas</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; background: #f1f5f9; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #ffffff; border-right: 1px solid #e2e8f0; padding: 24px 0; display: flex; flex-direction: column; }
+    .logo { padding: 18px 20px 26px; text-align: center; }
+    .logo img { max-width: 160px; width: 100%; height: auto; object-fit: contain; }
+    .nav-item {
+      margin: 2px 12px; padding: 11px 12px; border-radius: 10px; font-size: 14px;
+      color: #1e293b; text-decoration: none; display: flex; align-items: center; gap: 10px;
+      transition: background-color 0.15s ease;
+    }
+    .nav-item svg { flex-shrink: 0; }
+    .nav-item:hover { background-color: #f1f5f9; }
+    .nav-item.active { font-weight: 600; color: #0f766e; background: #f0fdfa; }
+    .sidebar-footer { margin-top: auto; border-top: 1px solid #e2e8f0; padding: 18px 24px 0; }
+    .sidebar-footer a { font-size: 13px; color: #64748b; text-decoration: none; }
+    .content { flex: 1; }
+    .header { background: #fff; padding: 24px 36px; border-bottom: 1px solid #e2e8f0; }
+    .header h1 { font-size: 20px; color: #1e293b; }
+    .header p { font-size: 13px; color: #64748b; margin-top: 2px; }
+    .main { padding: 28px 36px; }
+
+    .categoria-block { margin-bottom: 30px; }
+    .categoria-titulo {
+      font-size: 13px;
+      font-weight: bold;
+      color: #0f766e;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .guias-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .guia-card { background: #fff; border-radius: 14px; padding: 18px 20px; }
+    .guia-titulo { font-size: 14.5px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+    .guia-contenido { font-size: 13px; color: #64748b; line-height: 1.55; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo"><img src="/static/images/conafe.jpg" alt="CONAFE"></div>
+
+      <a href="/docente/inicio?id=$id_docente" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 22V12h6v10"></path></svg>
+        Inicio
+      </a>
+      <a href="/estrategias-didacticas?id=$id_docente" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        Estrategias
+      </a>
+      <a href="/actividades-guardadas?id=$id_docente" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+        Actividades
+      </a>
+      <a href="/mi-perfil?id=$id_docente" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        Mi perfil
+      </a>
+      <div class="sidebar-footer">
+        <a href="/logout">Cerrar sesión</a>
+      </div>
+    </aside>
+
+    <div class="content">
+      <header class="header">
+        <h1>Guías rápidas</h1>
+        <p>Consejos breves para apoyar a alumnos con autismo en el aula</p>
+      </header>
+
+      <main class="main">
+        $for categoria, guias in categorias.items():
+          <div class="categoria-block">
+            <div class="categoria-titulo">$categoria</div>
+            <div class="guias-grid">
+              $for guia in guias:
+                <div class="guia-card">
+                  <div class="guia-titulo">$guia["titulo"]</div>
+                  <div class="guia-contenido">$guia["contenido"]</div>
+                </div>
+            </div>
+          </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

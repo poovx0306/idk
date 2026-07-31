@@ -1,0 +1,17 @@
+-- database: ../../sql/conaap.db
+
+-- Presione el botón ▷ en la esquina superior derecha de la ventana para ejecutar todo el archivo.
+
+-- 1. Crear la tabla de cuestionarios
+CREATE TABLE IF NOT EXISTS cuestionarios (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    estado TEXT DEFAULT 'Activo'
+);
+
+-- 2. Insertar los cuestionarios iniciales
+INSERT INTO cuestionarios (id, titulo, estado) VALUES (1, 'Tamizaje conductual TEA', 'Activo');
+INSERT INTO cuestionarios (id, titulo, estado) VALUES (2, 'Tamizaje de seguimiento (6-12 meses)', 'Borrador');
+
+-- 3. Vincular las preguntas existentes al primer cuestionario
+ALTER TABLE preguntas ADD COLUMN cuestionario_id INTEGER DEFAULT 1;

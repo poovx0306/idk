@@ -74,5 +74,5 @@ class LoginAdministrativos:
         sesion.rol = 'administrativo'
         sesion.id_referencia = usuario['id_referencia']
 
-        destino = '/estrategias-didacticas?id=%s' % (usuario['id_referencia'] or 1)
+        destino = '/administrativo/inicio'
         raise web.HTTPError('303 See Other', {'Location': destino})

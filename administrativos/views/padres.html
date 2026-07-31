@@ -1,0 +1,192 @@
+$def with (padres)
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+    :root {
+        --color-principal: #6c1d33;
+        --color-principal-hover: #541628;
+        --color-sidebar-active: #541628;
+        --color-fondo: #f8f9fa;
+        --color-borde: #edf2f7;
+    }
+
+    body {
+        background-color: var(--color-fondo);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        margin: 0;
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 250px;
+        background-color: var(--color-principal);
+        color: white;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1.5rem 1rem;
+        min-height: 100vh;
+    }
+
+    .sidebar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+        padding-left: 0.75rem;
+    }
+
+    .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .sidebar-menu a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+    .sidebar-menu a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .sidebar-menu a.active {
+        background-color: var(--color-sidebar-active);
+        color: white;
+        font-weight: 600;
+    }
+
+    /* Contenido principal */
+    .main-content {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+    }
+
+    /* Tabla */
+    .card-tabla {
+        background: #fff;
+        border: 1px solid var(--color-borde);
+        border-radius: 16px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        overflow: hidden;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table th {
+        color: #8898aa;
+        font-weight: 500;
+        font-size: 0.85rem;
+        border-bottom: 1px solid var(--color-borde);
+        padding: 1.25rem 1.5rem;
+    }
+
+    .table td {
+        padding: 1.25rem 1.5rem;
+        vertical-align: middle;
+        color: #32325d;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #f6f9fc;
+    }
+
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .badge-activa {
+        background-color: #e6f4ea;
+        color: #1e8e3e;
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding: 0.35em 0.9em;
+        border-radius: 12px;
+    }
+
+    .badge-inactiva {
+        background-color: #edf2f7;
+        color: #4a5568;
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding: 0.35em 0.9em;
+        border-radius: 12px;
+    }
+</style>
+
+<!-- Menú lateral -->
+<nav class="sidebar">
+    <div>
+        <a href="/administrativo/inicio" class="sidebar-brand">CONAAP</a>
+        <div class="sidebar-menu mt-4">
+            <a href="/administrativo/inicio">Inicio</a>
+            <a href="/administrativo/cuestionarios">Cuestionarios</a>
+            <a href="/administrativo/resultados">Resultados</a>
+            <a href="/administrativo/estrategias">Estrategias didácticas</a>
+            <a href="/administrativo/docentes">Docentes</a>
+            <a href="/administrativo/alumnos">Alumnos</a>
+            <a href="/administrativo/padres" class="active">Padres de familia</a>
+        </div>
+    </div>
+    <div>
+        <a href="/cerrar-sesion" class="text-white-50 text-decoration-none small">
+            <i class="bi bi-box-arrow-left me-2"></i>Cerrar sesión
+        </a>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<main class="main-content">
+    <!-- Encabezado -->
+    <div class="mb-4">
+        <h2 class="fw-bold text-dark m-0">Padres de familia</h2>
+        <p class="text-muted small m-0">Cuentas registradas para consultar historial · Solo lectura, por privacidad no se editan datos aquí</p>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card-tabla">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Correo electrónico</th>
+                        <th>Cuestionarios respondidos</th>
+                        <th>Miembro desde</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $if padres:
+                        $for p in padres:
+                            <tr>
+                                <td class="fw-semibold">$p['correo']</td>
+                                <td class="text-muted">$p['cuestionarios_respondidos']</td>
+                                <td class="text-muted">$p['miembro_desde']</td>
+                                <td>
+                                    $if p['estado'] == 'Activa':
+                                        <span class="badge-activa">Activa</span>
+                                    $else:
+                                        <span class="badge-inactiva">Inactiva</span>
+                                </td>
+                            </tr>
+                    $else:
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No hay cuentas de padres registradas.</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

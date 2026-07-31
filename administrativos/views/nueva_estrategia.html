@@ -1,0 +1,141 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+    :root {
+        --color-principal: #6c1d33;
+        --color-principal-hover: #541628;
+        --color-fondo-general: #6e6568;
+    }
+
+    body {
+        background-color: var(--color-fondo-general);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 2rem 0;
+    }
+
+    .card-formulario {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 650px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #2d3748;
+        margin-bottom: 0.4rem;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        color: #4a5568;
+        background-color: #f8fafc;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--color-principal);
+        box-shadow: 0 0 0 3px rgba(108, 29, 51, 0.1);
+        background-color: #fff;
+    }
+
+    .btn-borrador {
+        background-color: #ffffff;
+        color: #2d3748;
+        border: 1px solid #cbd5e0;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+    .btn-borrador:hover {
+        background-color: #f7fafc;
+    }
+
+    .btn-publicar {
+        background-color: var(--color-principal);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+    .btn-publicar:hover {
+        background-color: var(--color-principal-hover);
+        color: white;
+    }
+</style>
+
+<div class="card-formulario">
+    <h3 class="fw-bold text-dark mb-4">Nueva estrategia didáctica</h3>
+
+    <form method="POST" action="/administrativo/estrategias/nueva">
+        <!-- Título -->
+        <div class="mb-3">
+            <label class="form-label">Título de la actividad</label>
+            <input type="text" name="titulo" class="form-control" placeholder="Ej. Clasificación por colores y tamaños" required>
+        </div>
+
+        <!-- Fila de Condición, Materia y Grado -->
+        <div class="row mb-3">
+            <div class="col-md-5">
+                <label class="form-label">Condición</label>
+                <input type="text" name="condicion" class="form-control" value="Autismo (TEA)">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Materia</label>
+                <select name="materia" class="form-select">
+                    <option value="Matemáticas">Matemáticas</option>
+                    <option value="Hab. sociales">Hab. sociales</option>
+                    <option value="Español">Español</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Grado</label>
+                <select name="grado" class="form-select">
+                    <option value="1°">1°</option>
+                    <option value="2°" selected>2°</option>
+                    <option value="3°">3°</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Objetivo -->
+        <div class="mb-3">
+            <label class="form-label">Objetivo</label>
+            <textarea name="objetivo" class="form-control" rows="2" placeholder="Describe qué logrará el alumno con esta actividad..."></textarea>
+        </div>
+
+        <!-- Materiales necesarios -->
+        <div class="mb-3">
+            <label class="form-label">Materiales necesarios</label>
+            <input type="text" name="materiales" class="form-control" placeholder="Ej. Fichas de colores, charolas, tarjetas guía">
+        </div>
+
+        <!-- Paso a paso -->
+        <div class="mb-4">
+            <label class="form-label">Paso a paso</label>
+            <textarea name="pasos" class="form-control" rows="3" placeholder="1. Escribe el primer paso de la dinámica..."></textarea>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="d-flex justify-content-between align-items-center">
+            <button type="submit" name="accion" value="Borrador" class="btn btn-borrador">Guardar como borrador</button>
+            <button type="submit" name="accion" value="Publicar" class="btn btn-publicar">Publicar estrategia</button>
+        </div>
+    </form>
+</div>

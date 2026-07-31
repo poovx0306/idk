@@ -155,11 +155,11 @@ $def with (cuestionarios)
             <div class="sidebar-menu mt-4">
                 <a href="/administrativo/inicio">Inicio</a>
                 <a href="/administrativo/cuestionarios" class="active">Cuestionarios</a>
-                <a href="#">Resultados</a>
-                <a href="#">Estrategias didácticas</a>
-                <a href="#">Docentes</a>
-                <a href="#">Alumnos</a>
-                <a href="#">Padres de familia</a>
+                <a href="/administrativo/resultados">Resultados</a>
+                <a href="/administrativo/estrategias">Estrategias didácticas</a>
+                <a href="/administrativo/docentes">Docentes</a>
+                <a href="/administrativo/alumnos">Alumnos</a>
+                <a href="/administrativo/padres">Padres de familia</a>
             </div>
         </div>
         <div>
@@ -202,7 +202,7 @@ $def with (cuestionarios)
                         <span class="badge-draft me-2">Borrador</span>
 
                     <!-- Botones de navegación pasándoles el ID -->
-                    <a href="/administrativo/cuestionarios/preguntas?id=$c['id']" class="btn btn-outline-custom">Ver preguntas</a>
+                    <a href="/administrativo/cuestionarios/ver_preguntas?id=$c['id']" class="btn btn-outline-secondary btn-sm">Ver preguntas</a>
                     <a href="/administrativo/cuestionarios/editar?id=$c['id']" class="btn btn-outline-custom">Editar</a>
                     
                     <!-- Botón de borrado con confirmación mostrando el Título e ID -->

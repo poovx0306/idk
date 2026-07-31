@@ -141,3 +141,26 @@ class NuevoCuestionario:
             conn.close()
 
         raise web.seeother('/administrativo/cuestionarios')
+
+class VerPreguntasCuestionario:
+    def GET(self):
+        data = web.input()
+        cuestionario_id = data.get('id')
+
+        conn = conectar_bd()
+        cursor = conn.cursor()
+
+        # Obtener título e información del cuestionario
+        cursor.execute("SELECT * FROM cuestionarios WHERE id = ?", (cuestionario_id,))
+        cuestionario = cursor.fetchone()
+
+        # Obtener la lista de preguntas
+        cursor.execute("SELECT * FROM preguntas WHERE cuestionario_id = ? ORDER BY numero_pregunta ASC", (cuestionario_id,))
+        preguntas = cursor.fetchall()
+
+        conn.close()
+
+        if cuestionario:
+            return render.ver_preguntas(cuestionario=cuestionario, preguntas=preguntas)
+        else:
+            raise web.seeother('/administrativo/cuestionarios')

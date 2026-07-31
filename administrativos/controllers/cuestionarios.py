@@ -1,10 +1,14 @@
 import web
 import sqlite3
-
+import os
 render = web.template.render('administrativos/views/')
 
+
 def conectar_bd():
-    conn = sqlite3.connect('sql/conaap.db')
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    db_path = os.path.join(base_dir, 'sql', 'conaap.db')
+    
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -12,28 +16,28 @@ class Cuestionarios:
     def GET(self):
         conn = conectar_bd()
         cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT c.id, c.titulo, c.estado,
-                   COUNT(p.id) as preguntas,
-                   COUNT(DISTINCT p.seccion) as secciones
-            FROM cuestionarios c
-            LEFT JOIN preguntas p ON p.cuestionario_id = c.id
-            GROUP BY c.id;
-        ''')
+
+        cursor.execute('SELECT id, titulo, estado FROM cuestionarios')
         filas = cursor.fetchall()
-        
+
         cuestionarios_datos = []
         for f in filas:
+            cuestionario_id = f["id"]
+
+            # Contar cuántas preguntas pertenecen a este cuestionario
+            cursor.execute('SELECT COUNT(*) AS total FROM preguntas WHERE cuestionario_id = ?', (cuestionario_id,))
+            conteo = cursor.fetchone()
+            total_preguntas = conteo["total"] if conteo else 0
+
             cuestionarios_datos.append({
                 "id": f["id"],
                 "titulo": f["titulo"],
-                "preguntas": f["preguntas"],
-                "secciones": f["secciones"],
+                "preguntas": total_preguntas,  # <--- Aquí va el conteo real
+                "secciones": 0,
                 "respuestas": 0,
                 "estado": f["estado"]
             })
-            
+
         conn.close()
         return render.cuestionarios(cuestionarios=cuestionarios_datos)
 
@@ -77,13 +81,48 @@ class EditarCuestionario:
         
         conn = conectar_bd()
         cursor = conn.cursor()
+        
+        # Obtener datos del cuestionario
         cursor.execute("SELECT * FROM cuestionarios WHERE id = ?", (cuestionario_id,))
         cuestionario = cursor.fetchone()
+        
+        # Obtener sus preguntas
+        cursor.execute("SELECT * FROM preguntas WHERE cuestionario_id = ?", (cuestionario_id,))
+        preguntas = cursor.fetchall()
+        
         conn.close()
         
         if cuestionario:
-            return f"<h3>Formulario de edición para: {cuestionario['titulo']} (ID: {cuestionario['id']})</h3><a href='/administrativo/cuestionarios'>Volver</a>"
-        return "Cuestionario no encontrado."
+            return render.editar_cuestionario(cuestionario=cuestionario, preguntas=preguntas)
+        else:
+            raise web.seeother('/administrativo/cuestionarios')
+
+    def POST(self):
+        data = web.input()
+        cuestionario_id = data.get('cuestionario_id')
+        titulo = data.get('titulo_cuestionario')
+        texto_pregunta = data.get('texto_pregunta')
+        seccion = data.get('seccion', 'General')
+        numero_pregunta = data.get('numero_pregunta', 1)
+
+        conn = conectar_bd()
+        cursor = conn.cursor()
+
+        # 1. Actualizar el título del cuestionario
+        if titulo and cuestionario_id:
+            cursor.execute("UPDATE cuestionarios SET titulo = ? WHERE id = ?", (titulo, cuestionario_id))
+
+        # 2. Si escribió una nueva pregunta, insertarla
+        if texto_pregunta and cuestionario_id:
+            cursor.execute('''
+                INSERT INTO preguntas (cuestionario_id, numero_pregunta, seccion, texto, puntos_casi_nunca, puntos_a_veces, puntos_casi_siempre)
+                VALUES (?, ?, ?, ?, 2, 1, 0)
+            ''', (cuestionario_id, numero_pregunta, seccion, texto_pregunta))
+
+        conn.commit()
+        conn.close()
+
+        raise web.seeother('/administrativo/cuestionarios')
 
 class NuevoCuestionario:
     def GET(self):

@@ -1,4 +1,13 @@
 import web
+#pruebas
+from administrativos.controllers.cuestionarios import (
+    Cuestionarios, 
+    NuevoCuestionario, 
+    EliminarCuestionario, 
+    EditarCuestionario,
+    VerPreguntasCuestionario
+)
+from administrativos.controllers.inicio import InicioAdministrativo
 
 from portal_inicio.controllers.inicio import Inicio
 from inicio_docente.controllers.inicio_docente import InicioDocente
@@ -18,6 +27,12 @@ from actividades_guardadas.controllers.actividades_guardadas import ActividadesG
 from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad, MisActividadesGuardadas
 urls = (
     '/', 'Inicio',
+
+    #pruebas
+    '/administrativo/inicio', 'InicioAdministrativo',
+    '/administrativo/cuestionarios', 'Cuestionarios',
+    '/administrativo/cuestionarios/nuevo', 'NuevoCuestionario',
+
     '/inicio', 'Inicio',
     '/docente/inicio', 'InicioDocente',
     '/login/docente', 'LoginDocentes',

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONAAP - Panel de Administración</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --sidebar-width: 250px;
+            --primary-burgundy: #5c1428;
+            --hover-burgundy: #731331;
+            --bg-light: #f8f6f6;
+            --text-main: #222222;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Estructura de navegación lateral fija */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--primary-burgundy);
+            color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.5rem 1rem;
+            box-sizing: border-box;
+        }
+
+        .sidebar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar-menu a.active, 
+        .sidebar-menu a:hover {
+            background-color: var(--hover-burgundy);
+            color: #ffffff;
+        }
+
+        /* Área de contenido desfasada para evitar superposición con el sidebar */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2.5rem;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Tarjetas de métricas y acciones */
+        .metric-card, 
+        .action-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            height: 100%;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-burgundy);
+            line-height: 1;
+        }
+
+        .metric-label {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-top: 0.35rem;
+        }
+
+        .action-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* Paleta funcional para módulos de acción */
+        .bg-teal-subtle { background-color: #e6f7f5; color: #0d9488; }
+        .bg-blue-subtle { background-color: #ebf5ff; color: #2563eb; }
+        .bg-yellow-subtle { background-color: #fef9c3; color: #ca8a04; }
+        .bg-orange-subtle { background-color: #ffedd5; color: #ea580c; }
+
+        /* Contenedores de alertas e incidencias */
+        .alert-row {
+            background-color: #fff5f5;
+            border: 1px solid #ffe3e3;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .btn-action-primary {
+            background-color: #b91c1c;
+            color: #ffffff;
+            border: none;
+            font-size: 0.875rem;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+        }
+
+        .btn-action-primary:hover {
+            background-color: #991b1b;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menú de navegación lateral -->
+    <nav class="sidebar">
+        <div>
+            <a href="/administrativo/inicio" class="sidebar-brand">CONAAP</a>
+            <div class="sidebar-menu mt-4">
+                <a href="/administrativo/inicio" class="active">Inicio</a>
+                <a href="#">Cuestionarios</a>
+                <a href="#">Resultados</a>
+                <a href="#">Estrategias didácticas</a>
+                <a href="#">Docentes</a>
+                <a href="#">Alumnos</a>
+                <a href="#">Padres de familia</a>
+            </div>
+        </div>
+        <div>
+            <a href="/cerrar-sesion" class="text-white-50 text-decoration-none small">
+                <i class="bi bi-box-arrow-left me-2"></i>Cerrar sesión
+            </a>
+        </div>
+    </nav>
+
+    <!-- Panel principal -->
+    <main class="main-content">
+        
+        <!-- Encabezado de bienvenida y widget de usuario -->
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold m-0 text-dark">Bienvenido, Administrador</h2>
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end d-none d-sm-block">
+                    <div class="fw-bold small text-dark">Administrador General</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">CONAAP Central</div>
+                </div>
+                <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" 
+                     style="width: 42px; height: 42px; background-color: var(--primary-burgundy); font-size: 1rem;" 
+                     title="Perfil de usuario">
+                    A
+                </div>
+            </div>
+        </header>
+
+        <!-- Indicadores cuantitativos -->
+        <section class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="metric-card">
+                    <div class="metric-number">128</div>
+                    <div class="metric-label">Alumnos registrados</div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="metric-card">
+                    <div class="metric-number">24</div>
+                    <div class="metric-label">Docentes</div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="metric-card">
+                    <div class="metric-number">312</div>
+                    <div class="metric-label">Cuestionarios respondidos</div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="metric-card">
+                    <div class="metric-number">46</div>
+                    <div class="metric-label">Estrategias didácticas</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accesos a operaciones frecuentes -->
+        <section class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="action-card">
+                    <div class="action-icon bg-teal-subtle"><i class="bi bi-plus-lg"></i></div>
+                    <h6 class="fw-bold mb-1 text-dark">Nueva pregunta</h6>
+                    <span class="text-muted small">Agregar al cuestionario</span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="action-card">
+                    <div class="action-icon bg-blue-subtle"><i class="bi bi-journal-text"></i></div>
+                    <h6 class="fw-bold mb-1 text-dark">Nueva estrategia</h6>
+                    <span class="text-muted small">Publicar al repositorio</span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="action-card">
+                    <div class="action-icon bg-yellow-subtle"><i class="bi bi-person-plus"></i></div>
+                    <h6 class="fw-bold mb-1 text-dark">Registrar docente</h6>
+                    <span class="text-muted small">Dar de alta con clave</span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="action-card">
+                    <div class="action-icon bg-orange-subtle"><i class="bi bi-exclamation-triangle"></i></div>
+                    <h6 class="fw-bold mb-1 text-dark">Ver todos los resultados</h6>
+                    <span class="text-muted small">Historial completo</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Casos prioritarios sin asignar -->
+        <section class="bg-white p-4 rounded-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold m-0 text-dark">Casos que requieren atención</h5>
+                <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2 fw-semibold">2 con nivel de riesgo Alto</span>
+            </div>
+            <p class="text-muted small mb-4">Casos sin canalizar a un especialista, ordenados por fecha</p>
+
+            <div class="alert-row d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-danger rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">!</span>
+                    <div>
+                        <div class="fw-bold text-dark">Juan Pérez López</div>
+                        <span class="text-muted small">Puntaje 32 · Tamizaje conductual TEA · 14/07/2026</span>
+                    </div>
+                </div>
+                <button class="btn btn-action-primary">Asignar especialista</button>
+            </div>
+
+            <div class="alert-row d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-danger rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">!</span>
+                    <div>
+                        <div class="fw-bold text-dark">Sofía Ramírez Díaz</div>
+                        <span class="text-muted small">Puntaje 27 · Tamizaje conductual TEA · 11/07/2026</span>
+                    </div>
+                </div>
+                <button class="btn btn-action-primary">Asignar especialista</button>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

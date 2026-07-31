@@ -1,0 +1,54 @@
+$def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha)
+
+<div class="sidebar">
+    <div class="logo-box">
+        <img src="/static/images/conafe.jpg" alt="CONAFE">
+        <p>Consejo Nacional de Fomento Educativo</p>
+    </div>
+    <nav>
+        <a href="/padre/inicio" class="$('active' if seccion=='inicio' else '')">Inicio</a>
+        <a href="/padre/guias" class="$('active' if seccion=='guias' else '')">Guías para el hogar</a>
+        <a href="/padre/postcrisis" class="$('active' if seccion=='postcrisis' else '')">Actividades post-crisis</a>
+        <a href="/padre/avance" class="$('active' if seccion=='avance' else '')">Avance de mi hijo</a>
+        <a href="/padre/perfil" class="$('active' if seccion=='perfil' else '')">Mi Perfil</a>
+    </nav>
+    <a href="/logout" class="cerrar-sesion">Cerrar sesión</a>
+</div>
+
+<div class="contenido">
+    <div class="header">
+        <h1>Avance de mi hijo</h1>
+        <p>Así va progresando con las actividades</p>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <strong>$progreso_pct%</strong>
+            <p>Actividades completadas ($hechas_act de $total_act)</p>
+        </div>
+        $if racha:
+            <div class="stat-card">
+                <strong>$racha.racha_actual semana(s)</strong>
+                <p>Apoyando a tu hijo de forma constante</p>
+            </div>
+        $else:
+            <div class="stat-card">
+                <strong>0 semanas</strong>
+                <p>Completa tu primera actividad para empezar</p>
+            </div>
+    </div>
+
+    <div class="card-historial">
+        <h2>Evolución del desarrollo</h2>
+        $for fila in evolucion:
+            <div class="fila-historial">
+                <p>$fila.fecha</p>
+                $if fila.nivel_riesgo == "Alto":
+                    <span class="badge-riesgo-alto">Alto</span>
+                $elif fila.nivel_riesgo == "Medio":
+                    <span class="badge-riesgo-alto">Medio</span>
+                $else:
+                    <span class="badge-riesgo-bajo">Bajo</span>
+            </div>
+    </div>
+</div>

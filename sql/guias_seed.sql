@@ -21,3 +21,12 @@ INSERT INTO guia_rapida (categoria, titulo, contenido) VALUES
 ('Interacción social', 'Facilita el juego con otros compañeros', 'Actividades estructuradas con roles claros ayudan a que la interacción con el grupo sea menos abrumadora.'),
 ('Refuerzo positivo', 'Reconoce los logros pequeños', 'Un elogio específico e inmediato como Muy bien, guardaste tus cosas solo refuerza mejor que uno general.'),
 ('Refuerzo positivo', 'Sé constante entre la escuela y la casa', 'Cuando docentes y familia usan las mismas señales o recompensas, el aprendizaje se refuerza más rápido.');
+
+ALTER TABLE guia_rapida ADD COLUMN publico TEXT DEFAULT 'docente';
+
+INSERT INTO guia_rapida (categoria, titulo, contenido, publico) VALUES
+('Rutina diaria', 'Rutinas visuales', 'Usa un horario con imágenes para anticipar cada actividad del día. Reduce la ansiedad ante lo inesperado.', 'padre'),
+('Sueño', 'Reduce estímulos antes de dormir', 'Baja luces, evita pantallas 1 hora antes de dormir y mantén el mismo orden de pasos cada noche.', 'padre'),
+('Cambios y transiciones', 'Anticipa cambios', 'Avisa con tiempo si algo va a cambiar en la rutina (visita, salida, nueva persona). Usa palabras simples y directas.', 'padre'),
+('Aprendizaje', 'Sigue sus intereses', 'Aprovecha lo que le gusta a tu hijo para enseñarle nuevas habilidades; aprende mejor cuando está motivado.', 'padre'),
+('Comunicación', 'Comunicación en su nivel', 'Usa frases cortas, señala objetos, da tiempo extra para responder. No necesitas que hable para comunicarse.', 'padre');

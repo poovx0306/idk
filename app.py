@@ -14,8 +14,12 @@ from deteccion_temprana.controllers.registro import RegistroPrevio
 from deteccion_temprana.controllers.deteccion import DeteccionTemprana
 from boton_crisis.controllers.boton_crisis import BotonCrisis, ConfirmacionCrisis
 from guias_rapidas.controllers.guias_rapidas import GuiasRapidas
-from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad
 from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad, MisActividadesGuardadas
+from inicio_padres.controllers.inicio_padres import InicioPadres
+from guias_hogar.controllers.guias_hogar import GuiasHogar
+from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, MarcarActividadPostcrisis
+from avance_infante.controllers.avance_infante import AvanceInfante
+
 urls = (
     '/', 'Inicio',
     '/inicio', 'Inicio',
@@ -39,6 +43,12 @@ urls = (
     '/actividades-guardadas/guardar', 'GuardarActividad',
     '/actividades-guardadas/guardadas', 'MisActividadesGuardadas',
 
+    '/padre/inicio', 'InicioPadres',
+    '/padre/guias', 'GuiasHogar',
+    '/padre/postcrisis', 'ActividadesPostcrisis',
+    '/padre/postcrisis/marcar', 'MarcarActividadPostcrisis',
+    '/padre/avance', 'AvanceInfante',
+
     '/mi-perfil', 'MiPerfil',
 
     '/boton-crisis', 'BotonCrisis',
@@ -52,7 +62,8 @@ sesion = web.session.Session(app, almacen, initializer={
     'id_usuario': None,
     'nombre': None,
     'rol': None,
-    'id_referencia': None
+    'id_referencia': None,
+    'id_infante_actual': None
 })
 web.config._session = sesion
 

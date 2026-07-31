@@ -1,0 +1,36 @@
+$def with (seccion, actividades)
+
+<div class="sidebar">
+    <div class="logo-box">
+        <img src="/static/images/conafe.jpg" alt="CONAFE">
+        <p>Consejo Nacional de Fomento Educativo</p>
+    </div>
+    <nav>
+        <a href="/padre/inicio" class="$('active' if seccion=='inicio' else '')">Inicio</a>
+        <a href="/padre/guias" class="$('active' if seccion=='guias' else '')">Guías para el hogar</a>
+        <a href="/padre/postcrisis" class="$('active' if seccion=='postcrisis' else '')">Actividades post-crisis</a>
+        <a href="/padre/avance" class="$('active' if seccion=='avance' else '')">Avance de mi hijo</a>
+        <a href="/padre/perfil" class="$('active' if seccion=='perfil' else '')">Mi Perfil</a>
+    </nav>
+    <a href="/logout" class="cerrar-sesion">Cerrar sesión</a>
+</div>
+
+<div class="contenido">
+    <div class="header">
+        <h1>Actividades post-crisis</h1>
+        <p>Qué hacer con tu hijo después de una crisis o meltdown</p>
+    </div>
+
+    <div class="lista-guias">
+        $for a in actividades:
+            <div class="card-guia">
+                <h3>$a.titulo ($a.duracion_min min)</h3>
+                <p>$a.descripcion</p>
+                <pre class="pasos">$a.pasos</pre>
+                <form method="POST" action="/padre/postcrisis/marcar">
+                    <input type="hidden" name="id_actividad" value="$a.id_actividad">
+                    <button type="submit" class="btn-vino">Ya la realicé</button>
+                </form>
+            </div>
+    </div>
+</div>

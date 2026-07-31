@@ -1,0 +1,74 @@
+$def with (seccion, nombre_familia, total_cuestionarios, total_ninos, progreso_pct, historial, alerta, consejo_hoy)
+
+<div class="sidebar">
+    <div class="logo-box">
+        <img src="/static/images/conafe.jpg" alt="CONAFE">
+        <p>Consejo Nacional de Fomento Educativo</p>
+    </div>
+    <nav>
+        <a href="/padre/inicio" class="$('active' if seccion=='inicio' else '')">Inicio</a>
+        <a href="/padre/guias" class="$('active' if seccion=='guias' else '')">Guías para el hogar</a>
+        <a href="/padre/postcrisis" class="$('active' if seccion=='postcrisis' else '')">Actividades post-crisis</a>
+        <a href="/padre/avance" class="$('active' if seccion=='avance' else '')">Avance de mi hijo</a>
+        <a href="/padre/perfil" class="$('active' if seccion=='perfil' else '')">Mi Perfil</a>
+    </nav>
+    <a href="/logout" class="cerrar-sesion">Cerrar sesión</a>
+</div>
+
+<div class="contenido">
+    <div class="header">
+        <h1>Hola, familia $nombre_familia</h1>
+        <p>Bienvenida de nuevo a tu panel</p>
+    </div>
+
+    $if alerta:
+        <div class="alerta-riesgo">
+            <div>
+                <strong>Tienes una alerta pendiente de seguimiento</strong>
+                <p>Tu último resultado sugiere compartirlo con un especialista de CONAFE</p>
+            </div>
+            <a href="/resultado" class="btn-blanco">Ver resultado</a>
+        </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <strong>$total_cuestionarios</strong>
+            <p>Cuestionarios respondidos</p>
+        </div>
+        <div class="stat-card">
+            <strong>$total_ninos</strong>
+            <p>Niño(s) registrado(s)</p>
+        </div>
+        <div class="stat-card">
+            <strong>$progreso_pct%</strong>
+            <p>Actividades completadas &mdash; <a href="/padre/avance">ver avance</a></p>
+        </div>
+    </div>
+
+    <div class="card-historial">
+        <div class="card-header">
+            <h2>Historial reciente</h2>
+            <a href="/deteccion_temprana" class="btn-vino">+ Comenzar nuevo cuestionario</a>
+        </div>
+        $for fila in historial:
+            <div class="fila-historial">
+                <div>
+                    <strong>Cuestionario de $fila.nombre_infante</strong>
+                    <p>$fila.fecha</p>
+                </div>
+                <div>
+                    $if fila.nivel_riesgo in ("Medio", "Alto"):
+                        <span class="badge-riesgo-alto">Atención requerida</span>
+                    $else:
+                        <span class="badge-riesgo-bajo">Desarrollo habitual</span>
+                    <a href="/resultado?id=$fila.id_resultado">Descargar PDF</a>
+                </div>
+            </div>
+    </div>
+
+    $if consejo_hoy:
+        <div class="card-consejo">
+            <strong>CONSEJO DEL DÍA</strong>
+            <p><strong>$consejo_hoy.titulo:</strong> $consejo_hoy.contenido</p>
+        </div>
+</div>

@@ -12,28 +12,6 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 modelo_ia = genai.GenerativeModel("gemini-flash-latest")
 
 
-def generar_prediccion(hechas_act, total_act, evolucion):
-    niveles = [fila["nivel_riesgo"] for fila in evolucion]
-    resumen_niveles = ", ".join(niveles) if niveles else "sin cuestionarios registrados todavia"
-
-    prompt = f"""Eres un asistente que apoya a padres de ninos con autismo en Mexico, dentro de un programa de CONAFE.
-Con base en estos datos, escribe un parrafo breve (maximo 4 lineas), calido y realista, en espanol,
-explicando que mejoras puede esperar el padre si sigue apoyando a su hijo con las actividades.
-No hagas diagnosticos medicos ni promesas exageradas, solo menciona beneficios generales y realistas
-basados en constancia y apoyo familiar.
-
-Datos:
-- Actividades post-crisis completadas: {hechas_act} de {total_act}
-- Evolucion de los cuestionarios de desarrollo (del mas viejo al mas reciente): {resumen_niveles}
-"""
-    try:
-        respuesta = modelo_ia.generate_content(prompt)
-        return respuesta.text
-    except Exception as error:
-        print("ERROR IA: %s" % (error,))
-        return "Sigue apoyando a tu hijo con las actividades diarias; la constancia y el acompañamiento en casa hacen una gran diferencia en su desarrollo."
-
-
 def generar_analisis_evolucion(evolucion, fechas_actividades, hechas_asignadas, total_asignadas):
     if not evolucion:
         return "Todavia no hay cuestionarios de desarrollo registrados para poder analizar la evolucion. En cuanto respondas el primero, aqui vera el analisis."
@@ -44,11 +22,18 @@ def generar_analisis_evolucion(evolucion, fechas_actividades, hechas_asignadas, 
     resumen_actividades = "\n".join(f"- {f}" for f in fechas_actividades) if fechas_actividades else "Sin actividades post-crisis registradas todavia."
 
     prompt = f"""Eres un asistente que apoya a padres de ninos con autismo en Mexico, en un programa de CONAFE.
-Analiza la siguiente informacion y escribe un parrafo breve (maximo 5 lineas), claro y en espanol,
-explicando como ha ido evolucionando el desarrollo del nino desde el primer cuestionario, relacionandolo
-con la constancia en las actividades que ha hecho la familia. Si hay mejora, dilo con cautela; si no hay
-suficiente informacion todavia para concluir algo, dilo tambien con honestidad. No hagas diagnosticos
-medicos, solo un analisis de tendencia general y de acompanamiento, con tono calido.
+
+Analiza la siguiente informacion y escribe un analisis extenso, claro y en espanol (entre 8 y 10 lineas),
+explicando como ha ido evolucionando el desarrollo del nino desde el primer cuestionario, relacionando
+especificamente las fechas de las actividades post-crisis con las fechas y niveles de riesgo de los
+cuestionarios. Estructura el analisis asi:
+1. Un resumen de donde empezo (primer resultado) y donde esta ahora (ultimo resultado).
+2. Si la constancia en actividades coincide en el tiempo con cambios en el nivel de riesgo, mencionalo
+   con cautela (sin asegurar causalidad directa, solo como una relacion observable).
+3. Que puede esperar la familia si mantiene o aumenta esta constancia, mencionando areas concretas
+   (regulacion emocional, comunicacion, manejo de rutinas, reduccion de crisis).
+Si todavia no hay suficiente informacion para concluir una tendencia clara, dilo con honestidad en vez
+de inventar una conclusion. No hagas diagnosticos medicos, mantén un tono calido y de acompanamiento.
 
 Historial de cuestionarios (nivel de riesgo por fecha, del mas viejo al mas reciente):
 {resumen_resultados}
@@ -111,18 +96,6 @@ class AvanceInfante:
 
         hoy = str(date.today())
 
-        cur.execute("SELECT texto, fecha FROM prediccion_ia WHERE id_infante = ?", (id_infante,))
-        cache_prediccion = cur.fetchone()
-        if cache_prediccion and cache_prediccion["fecha"] == hoy:
-            prediccion = cache_prediccion["texto"]
-        else:
-            prediccion = generar_prediccion(hechas_act, total_act, evolucion)
-            cur.execute("""
-                INSERT INTO prediccion_ia (id_infante, texto, fecha) VALUES (?, ?, ?)
-                ON CONFLICT(id_infante) DO UPDATE SET texto = excluded.texto, fecha = excluded.fecha
-            """, (id_infante, prediccion, hoy))
-            conn.commit()
-
         cur.execute("SELECT texto, fecha FROM analisis_evolucion_ia WHERE id_infante = ?", (id_infante,))
         cache_analisis = cur.fetchone()
         if cache_analisis and cache_analisis["fecha"] == hoy:
@@ -139,5 +112,5 @@ class AvanceInfante:
 
         return render.avance_infante(
             "avance", evolucion, progreso_pct, hechas_act, total_act,
-            dias_apoyando, prediccion, analisis_evolucion
+            dias_apoyando, analisis_evolucion
         )

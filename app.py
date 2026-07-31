@@ -32,6 +32,7 @@ from deteccion_temprana.controllers.registro import RegistroPrevio
 from deteccion_temprana.controllers.deteccion import DeteccionTemprana
 from deteccion_temprana.controllers.seleccionar_nino import SeleccionarNino, ElegirNino
 from deteccion_temprana.controllers.resultado_padre import ResultadoPadre
+from deteccion_temprana.controllers.guardar_resultado import GuardarResultadoAPI
 from boton_crisis.controllers.boton_crisis import BotonCrisis, ConfirmacionCrisis
 from guias_rapidas.controllers.guias_rapidas import GuiasRapidas
 from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad, MisActividadesGuardadas
@@ -39,6 +40,7 @@ from inicio_padres.controllers.inicio_padres import InicioPadres
 from guias_hogar.controllers.guias_hogar import GuiasHogar
 from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, MarcarActividadPostcrisis
 from avance_infante.controllers.avance_infante import AvanceInfante
+from mi_perfil_padres.controllers.mi_perfil import MiPerfilPadre
 
 urls = (
     '/', 'Inicio',
@@ -73,6 +75,7 @@ urls = (
     '/cuestionario', 'DeteccionTemprana',
     '/deteccion-temprana/cuestionario', 'DeteccionTemprana',
     '/api/preguntas', 'deteccion_temprana.controllers.api_preguntas.ApiPreguntas',
+    '/api/guardar-resultado', 'GuardarResultadoAPI',
     '/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
     '/deteccion-temprana/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
     '/padre/resultado', 'ResultadoPadre',
@@ -84,11 +87,12 @@ urls = (
     '/actividades-guardadas/guardar', 'GuardarActividad',
     '/actividades-guardadas/guardadas', 'MisActividadesGuardadas',
 
-    #'/padre/inicio', 'InicioPadres',
+    '/padre/inicio', 'InicioPadres',
     '/padre/guias', 'GuiasHogar',
     '/padre/postcrisis', 'ActividadesPostcrisis',
     '/padre/postcrisis/marcar', 'MarcarActividadPostcrisis',
     '/padre/avance', 'AvanceInfante',
+    '/padre/perfil', 'MiPerfilPadre',
     
 
     '/mi-perfil', 'MiPerfil',

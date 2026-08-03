@@ -18,6 +18,7 @@ CUENTAS = [
     ('ana.martinez@conafe.gob.mx', 'docente123', 'docente', 'Ana Martinez Reyes', TELEFONO_VERIFICADO),
     ('maria.cruz@gmail.com', 'padre123', 'padre', 'Maria Cruz Hernandez', TELEFONO_VERIFICADO),
     ('admin@conafe.gob.mx', 'admin123', 'administrativo', 'Jorge Lira Uribe', TELEFONO_VERIFICADO),
+    ('miguel@gmail.com','miguel123','padre','Miguel Corona', TELEFONO_VERIFICADO),
 ]
 
 

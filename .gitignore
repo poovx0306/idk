@@ -1,11 +1,3 @@
 *.pyc
 __pycache__/
-<<<<<<< HEAD
-.venv/sql/conaap.db
-sessions/
-__pycache__/
-*.pyc
-=======
 .venv/
-sql/conaap.db
->>>>>>> 5801676fc9b444f4c399be971362045df9f19654

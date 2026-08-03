@@ -63,8 +63,6 @@ class LoginAdministrativos:
 
         usuario = self.buscarUsuario(correo, contrasena)
 
-        # Mensaje generico a proposito: no se le dice al atacante
-        # si fallo el correo o si fallo la contrasena.
         if usuario is None:
             return render.index("El correo o la contrasena no son correctos.")
 

@@ -74,13 +74,4 @@ class LoginPadres:
         sesion.rol = 'padre'
         sesion.id_referencia = usuario['id_referencia']
 
-        conexion = sqlite3.connect('sql/conaap.db')
-        cursor = conexion.cursor()
-        cursor.execute("SELECT COUNT(*) FROM infantes WHERE id_padres = ?", (usuario['id_referencia'],))
-        tiene_ninos = cursor.fetchone()[0] > 0
-        conexion.close()
-
-        if tiene_ninos:
-            raise web.HTTPError('303 See Other', {'Location': '/padre/seleccionar-nino'})
-        else:
-            raise web.HTTPError('303 See Other', {'Location': '/registro-nino'})
+        raise web.HTTPError('303 See Other', {'Location': '/registro-nino'})

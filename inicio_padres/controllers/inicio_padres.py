@@ -2,11 +2,13 @@ import web
 import sqlite3
 import time
 
+render = web.template.render('inicio_padres/views')
+
 db_path = "sql/conaap.db"
 
 CONSEJOS_ROTATIVOS_QUERY = "SELECT titulo, contenido FROM guia_rapida WHERE publico IN ('padre','ambos') ORDER BY id"
 
-class index:
+class InicioPadres:
     def GET(self):
         session = web.config._session
         conn = sqlite3.connect(db_path)
@@ -26,16 +28,17 @@ class index:
         """, (id_padre,))
         total_cuestionarios = cur.fetchone()["total"]
 
+        cur.execute("SELECT COUNT(*) FROM actividad_postcrisis")
+        total_postcrisis = cur.fetchone()[0] or 0
+
         cur.execute("""
-            SELECT COUNT(*) AS total, SUM(CASE WHEN estado = 'Completada' THEN 1 ELSE 0 END) AS completadas
-            FROM actividad_asignada aa
-            JOIN infantes i ON i.id_infante = aa.id_infante
+            SELECT COUNT(DISTINCT r.id_actividad) FROM actividad_postcrisis_realizada r
+            JOIN infantes i ON i.id_infante = r.id_infante
             WHERE i.id_padres = ?
         """, (id_padre,))
-        fila_prog = cur.fetchone()
-        total_act = fila_prog["total"] or 0
-        completadas_act = fila_prog["completadas"] or 0
-        progreso_pct = round((completadas_act / total_act) * 100) if total_act > 0 else 0
+        postcrisis_realizadas = cur.fetchone()[0] or 0
+
+        progreso_pct = round((postcrisis_realizadas / total_postcrisis) * 100) if total_postcrisis > 0 else 0
 
         cur.execute("""
             SELECT r.id_resultado, r.fecha, r.nivel_riesgo, i.nombre AS nombre_infante
@@ -58,13 +61,7 @@ class index:
 
         conn.close()
 
-        return web.render.inicio_padres(
-            seccion="inicio",
-            nombre_familia=session.nombre,
-            total_cuestionarios=total_cuestionarios,
-            total_ninos=total_ninos,
-            progreso_pct=progreso_pct,
-            historial=historial,
-            alerta=alerta,
-            consejo_hoy=consejo_hoy
+        return render.inicio_padres(
+            "inicio", session.nombre, total_cuestionarios, total_ninos,
+            progreso_pct, historial, alerta, consejo_hoy
         )

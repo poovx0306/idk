@@ -1,4 +1,4 @@
-$def with ()
+$def with (es_padre)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -297,6 +297,7 @@ $def with ()
     </div>
 </div>
 
+<script>window.ES_PADRE = $:("true" if es_padre else "false");</script>
 <script src="/static/js/cuestionario.js"></script>
 
 </body>

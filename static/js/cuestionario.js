@@ -128,5 +128,16 @@ function finalizarEvaluacion() {
     };
 
     localStorage.setItem('veanme_resultado', JSON.stringify(resultadoData));
-    window.location.href = '/resultado';
+
+    if (window.ES_PADRE) {
+        fetch('/api/guardar-resultado', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ puntaje: puntajeTotal })
+        }).finally(function() {
+            window.location.href = '/padre/resultado';
+        });
+    } else {
+        window.location.href = '/resultado';
+    }
 }

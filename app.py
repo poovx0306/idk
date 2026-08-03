@@ -7,7 +7,15 @@ from administrativos.controllers.cuestionarios import (
     EditarCuestionario,
     VerPreguntasCuestionario
 )
+#cosas de alejandro (no tocar)
 from administrativos.controllers.inicio import InicioAdministrativo
+from administrativos.controllers.resultados import Resultados
+from administrativos.controllers.estrategias_didacticas import EstrategiasDidacticasAdmin, NuevaEstrategiaAdmin
+from administrativos.controllers.docentes import DocentesAdmin
+from administrativos.controllers.docentes import DocentesAdmin, NuevoDocenteAdmin
+from administrativos.controllers.alumnos import AlumnosAdmin
+from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin
+from administrativos.controllers.padres import PadresAdmin
 
 from portal_inicio.controllers.inicio import Inicio
 from inicio_docente.controllers.inicio_docente import InicioDocente
@@ -22,13 +30,24 @@ from estrategias_didacticas.controllers.estrategias_didacticas import Estrategia
 from mi_perfil_docente.controllers.mi_perfil import MiPerfil
 from deteccion_temprana.controllers.registro import RegistroPrevio
 from deteccion_temprana.controllers.deteccion import DeteccionTemprana
+from deteccion_temprana.controllers.seleccionar_nino import SeleccionarNino, ElegirNino
+from deteccion_temprana.controllers.resultado_padre import ResultadoPadre
+from deteccion_temprana.controllers.guardar_resultado import GuardarResultadoAPI
 from boton_crisis.controllers.boton_crisis import BotonCrisis, ConfirmacionCrisis
 from guias_rapidas.controllers.guias_rapidas import GuiasRapidas
 from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad, MisActividadesGuardadas
+<<<<<<< HEAD
 from inicio_padres.controllers.inicio_padres import index as InicioPadres
 from guias_hogar.controllers.guias_hogar import index as GuiasHogar
 from actividades_postcrisis.controllers.actividades_postcrisis import index as ActividadesPostcrisis, marcar as MarcarActividadPostcrisis
 from avance_infante.controllers.avance_infante import index as AvanceInfante
+=======
+from inicio_padres.controllers.inicio_padres import InicioPadres
+from guias_hogar.controllers.guias_hogar import GuiasHogar
+from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, MarcarActividadPostcrisis
+from avance_infante.controllers.avance_infante import AvanceInfante
+from mi_perfil_padres.controllers.mi_perfil import MiPerfilPadre
+>>>>>>> 5801676fc9b444f4c399be971362045df9f19654
 
 urls = (
     '/', 'Inicio',
@@ -38,6 +57,16 @@ urls = (
     '/administrativo/cuestionarios', 'Cuestionarios',
     '/administrativo/cuestionarios/nuevo', 'NuevoCuestionario',
     '/administrativo/cuestionarios/editar', 'EditarCuestionario',
+    '/administrativo/cuestionarios/ver_preguntas', 'VerPreguntasCuestionario',
+    # Resultados
+    '/administrativo/resultados', 'Resultados',
+    '/administrativo/estrategias', 'EstrategiasDidacticasAdmin',
+    '/administrativo/estrategias/nueva', 'NuevaEstrategiaAdmin',
+    '/administrativo/docentes', 'DocentesAdmin',
+    '/administrativo/docentes/nuevo', 'NuevoDocenteAdmin',
+    '/administrativo/alumnos', 'AlumnosAdmin',
+    '/administrativo/alumnos/nuevo', 'NuevoAlumnoAdmin',
+    '/administrativo/padres', 'PadresAdmin',
 
     '/inicio', 'Inicio',
     '/docente/inicio', 'InicioDocente',
@@ -48,11 +77,15 @@ urls = (
     '/cerrar-sesion', 'CerrarSesion',
 
     '/registro-nino', 'RegistroPrevio',
+    '/padre/seleccionar-nino', 'SeleccionarNino',
+    '/padre/elegir-nino', 'ElegirNino',
     '/cuestionario', 'DeteccionTemprana',
     '/deteccion-temprana/cuestionario', 'DeteccionTemprana',
     '/api/preguntas', 'deteccion_temprana.controllers.api_preguntas.ApiPreguntas',
+    '/api/guardar-resultado', 'GuardarResultadoAPI',
     '/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
     '/deteccion-temprana/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
+    '/padre/resultado', 'ResultadoPadre',
     '/estrategias-didacticas', 'EstrategiasDidacticas',
     '/estrategias-didacticas/ficha', 'FichaActividad',
     '/actividades-guardadas', 'ActividadesGuardadas',
@@ -66,6 +99,8 @@ urls = (
     '/padre/postcrisis', 'ActividadesPostcrisis',
     '/padre/postcrisis/marcar', 'MarcarActividadPostcrisis',
     '/padre/avance', 'AvanceInfante',
+    '/padre/perfil', 'MiPerfilPadre',
+    
 
     '/mi-perfil', 'MiPerfil',
 

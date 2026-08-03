@@ -7,7 +7,9 @@ render = web.template.render('deteccion_temprana/views/')
 
 class DeteccionTemprana:
     def GET(self):
-        return render.cuestionario()
+        session = web.config._session
+        es_padre = bool(getattr(session, "id_infante_actual", None))
+        return render.cuestionario(es_padre)
 
     def POST(self):
         datos = web.input()
@@ -38,5 +40,6 @@ class DeteccionTemprana:
             )
             conexion.commit()
             conexion.close()
+            raise web.HTTPError('303 See Other', {'Location': '/padre/resultado'})
 
         return render.resultado(puntuacion)

@@ -19,9 +19,16 @@ class InicioAdministrativo:
         except:
             total_estrategias = 0
 
+        # Convertimos la consulta a una lista estándar de Python con list()
+        try:
+            casos_pendientes = list(db.query('SELECT * FROM resultados LIMIT 5'))
+        except:
+            casos_pendientes = []
+
         return render.inicio(
             alumnos=total_alumnos,
             docentes=total_docentes,
             cuestionarios=total_cuestionarios,
-            estrategias=total_estrategias
+            estrategias=total_estrategias,
+            casos_pendientes=casos_pendientes
         )

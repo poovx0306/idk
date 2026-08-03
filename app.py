@@ -25,10 +25,10 @@ from deteccion_temprana.controllers.deteccion import DeteccionTemprana
 from boton_crisis.controllers.boton_crisis import BotonCrisis, ConfirmacionCrisis
 from guias_rapidas.controllers.guias_rapidas import GuiasRapidas
 from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad, MisActividadesGuardadas
-from inicio_padres.controllers.inicio_padres import InicioPadres
-from guias_hogar.controllers.guias_hogar import GuiasHogar
-from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, MarcarActividadPostcrisis
-from avance_infante.controllers.avance_infante import AvanceInfante
+from inicio_padres.controllers.inicio_padres import index as InicioPadres
+from guias_hogar.controllers.guias_hogar import index as GuiasHogar
+from actividades_postcrisis.controllers.actividades_postcrisis import index as ActividadesPostcrisis, marcar as MarcarActividadPostcrisis
+from avance_infante.controllers.avance_infante import index as AvanceInfante
 
 urls = (
     '/', 'Inicio',

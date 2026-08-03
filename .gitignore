@@ -1,3 +1,6 @@
 *.pyc
 __pycache__/
-.venv/
+.venv/sql/conaap.db
+sessions/
+__pycache__/
+*.pyc

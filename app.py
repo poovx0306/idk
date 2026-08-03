@@ -37,6 +37,7 @@ from inicio_padres.controllers.inicio_padres import InicioPadres
 from guias_hogar.controllers.guias_hogar import GuiasHogar
 from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, MarcarActividadPostcrisis
 from avance_infante.controllers.avance_infante import AvanceInfante
+from mi_perfil_padres.controllers.mi_perfil import MiPerfilPadre
 
 urls = (
     '/', 'Inicio',

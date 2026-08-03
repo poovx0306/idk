@@ -1,0 +1,37 @@
+$def with (resultado)
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CONAAP - Resultado</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; background: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .card { background: #fff; border-radius: 20px; padding: 40px; width: 100%; max-width: 460px; text-align: center; }
+        .logo { max-width: 140px; margin-bottom: 20px; }
+        h1 { font-size: 20px; color: #1e293b; margin-bottom: 6px; }
+        .nivel { display: inline-block; padding: 8px 20px; border-radius: 999px; font-weight: 700; font-size: 15px; margin: 16px 0; }
+        .nivel-alto { background: #fee2e2; color: #b91c1c; }
+        .nivel-medio { background: #fef3c7; color: #92400e; }
+        .nivel-bajo { background: #d1fae5; color: #065f46; }
+        .puntaje { color: #64748b; font-size: 14px; margin-bottom: 10px; }
+        .btn-volver { display: inline-block; margin-top: 20px; background: #7e1232; color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 10px; font-weight: 700; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img class="logo" src="/static/images/conafe.jpg" alt="CONAFE">
+        <h1>Resultado del cuestionario</h1>
+        <div class="puntaje">Puntaje obtenido: $resultado['puntaje']</div>
+
+        $if resultado['nivel_riesgo'] == 'Alto':
+            <div class="nivel nivel-alto">Riesgo Alto</div>
+        $elif resultado['nivel_riesgo'] == 'Medio':
+            <div class="nivel nivel-medio">Riesgo Medio</div>
+        $else:
+            <div class="nivel nivel-bajo">Riesgo Bajo</div>
+
+        <a class="btn-volver" href="/padre/inicio">Volver a mi panel</a>
+    </div>
+</body>
+</html>

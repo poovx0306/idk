@@ -1,0 +1,34 @@
+$def with (ninos)
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CONAAP - Selecciona a tu hijo</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; background: #6a1c32; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .card { background: #fff; border-radius: 20px; padding: 40px; width: 100%; max-width: 420px; text-align: center; }
+        h1 { font-size: 20px; color: #1e293b; margin-bottom: 24px; }
+        .nino-card { display: block; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 20px; margin-bottom: 12px; text-decoration: none; color: #1e293b; text-align: left; }
+        .nino-card:hover { background: #f1f5f9; }
+        .nino-nombre { font-weight: 700; font-size: 15px; }
+        .nino-edad { font-size: 13px; color: #64748b; margin-top: 2px; }
+        .btn-nuevo { display: block; margin-top: 20px; background: #7e1232; color: #fff; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 14px; }
+        .link-logout { display: block; margin-top: 18px; color: #64748b; font-size: 13px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>¿Con cuál niño quieres continuar?</h1>
+
+        $for nino in ninos:
+            <a class="nino-card" href="/padre/elegir-nino?id_infante=$nino['id_infante']">
+                <div class="nino-nombre">$nino['nombre']</div>
+                <div class="nino-edad">$nino['edad'] años</div>
+            </a>
+
+        <a class="btn-nuevo" href="/registro-nino">+ Registrar otro niño</a>
+        <a class="link-logout" href="/cerrar-sesion">Cerrar sesión</a>
+    </div>
+</body>
+</html>

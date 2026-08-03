@@ -6,15 +6,32 @@ render = web.template.render('actividades_postcrisis/views')
 
 db_path = "sql/conaap.db"
 
+
+def _listar(id_infante, id_recien_marcada=None):
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT ap.id_actividad, ap.titulo, ap.descripcion, ap.duracion_min, ap.pasos,
+        CASE WHEN EXISTS (
+            SELECT 1 FROM actividad_postcrisis_realizada r
+            WHERE r.id_actividad = ap.id_actividad
+              AND r.id_infante = ?
+              AND date(r.fecha) = date('now')
+        ) THEN 1 ELSE 0 END AS completada_hoy
+        FROM actividad_postcrisis ap
+    """, (id_infante,))
+    actividades = cur.fetchall()
+    conn.close()
+    return render.actividades_postcrisis("postcrisis", actividades, id_recien_marcada)
+
+
 class ActividadesPostcrisis:
     def GET(self):
-        conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-        cur = conn.cursor()
-        cur.execute("SELECT id_actividad, titulo, descripcion, duracion_min, pasos FROM actividad_postcrisis")
-        actividades = cur.fetchall()
-        conn.close()
-        return render.actividades_postcrisis("postcrisis", actividades)
+        session = web.config._session
+        id_infante = session.id_infante_actual
+        return _listar(id_infante)
+
 
 class MarcarActividadPostcrisis:
     def POST(self):
@@ -31,7 +48,4 @@ class MarcarActividadPostcrisis:
         conn.commit()
         conn.close()
 
-        from avance_infante.controllers.avance_infante import actualizar_racha
-        actualizar_racha(id_infante)
-
-        raise web.HTTPError('303 See Other', {'Location': '/padre/postcrisis'})
+        return _listar(id_infante, id_recien_marcada=datos.id_actividad)

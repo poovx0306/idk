@@ -1,4 +1,4 @@
-$def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha)
+$def with (seccion, evolucion, progreso_pct, hechas_act, total_act, dias_apoyando, analisis_evolucion)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -27,7 +27,7 @@ $def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha)
     .stat-card { flex: 1; background: #fff; border-radius: 16px; padding: 20px 22px; }
     .stat-num { font-size: 24px; font-weight: 700; color: #1e293b; }
     .stat-label { font-size: 12.5px; color: #64748b; margin-top: 4px; }
-    .history-card { background: #fff; border-radius: 16px; padding: 22px; }
+    .history-card { background: #fff; border-radius: 16px; padding: 22px; margin-bottom: 22px; }
     .history-card h2 { font-size: 16px; color: #1e293b; margin-bottom: 16px; }
     .history-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f1f5f9; }
     .history-item:last-child { border-bottom: none; }
@@ -35,6 +35,10 @@ $def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha)
     .badge { font-size: 11.5px; font-weight: 700; padding: 5px 12px; border-radius: 20px; }
     .badge-alto { background: #fee2e2; color: #b91c1c; }
     .badge-bajo { background: #d1fae5; color: #065f46; }
+    .analisis-box { background: #f0fdfa; border-radius: 12px; padding: 18px 20px; margin-top: 16px; }
+    .analisis-tag { display: inline-block; font-size: 11px; font-weight: 700; color: #0f766e; background: #fff; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
+    .analisis-texto { font-size: 13.5px; color: #0f766e; line-height: 1.6; margin-bottom: 8px; }
+    .analisis-disclaimer { font-size: 11px; color: #64748b; }
   </style>
 </head>
 <body>
@@ -77,18 +81,12 @@ $def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha)
         <div class="stats">
           <div class="stat-card">
             <div class="stat-num">$progreso_pct%</div>
-            <div class="stat-label">Actividades completadas ($hechas_act de $total_act)</div>
+            <div class="stat-label">Actividades post-crisis completadas ($hechas_act de $total_act)</div>
           </div>
-          $if racha:
-            <div class="stat-card">
-              <div class="stat-num">$racha['racha_actual'] semana(s)</div>
-              <div class="stat-label">Apoyando a tu hijo de forma constante</div>
-            </div>
-          $else:
-            <div class="stat-card">
-              <div class="stat-num">0 semanas</div>
-              <div class="stat-label">Completa tu primera actividad para empezar</div>
-            </div>
+          <div class="stat-card">
+            <div class="stat-num">$dias_apoyando día(s)</div>
+            <div class="stat-label">Apoyando a tu hijo de forma constante</div>
+          </div>
         </div>
 
         <div class="history-card">
@@ -103,6 +101,12 @@ $def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha)
               $else:
                 <span class="badge badge-bajo">Bajo</span>
             </div>
+
+          <div class="analisis-box">
+            <span class="analisis-tag">Análisis con IA</span>
+            <p class="analisis-texto">$analisis_evolucion</p>
+            <p class="analisis-disclaimer">Esto es una orientación general y no sustituye una evaluación profesional.</p>
+          </div>
         </div>
       </main>
     </div>

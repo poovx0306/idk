@@ -181,6 +181,40 @@ $def with (error)
             background-color: #ffffff;
         }
 
+        /* Campo de contrasena con boton de mostrar/ocultar */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 44px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 6px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            border-radius: 6px;
+        }
+
+        .toggle-password:hover {
+            color: #731331;
+        }
+
+        .toggle-password svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+
         .forgot-password {
             display: block;
             text-align: right;
@@ -279,7 +313,12 @@ $def with (error)
 
                 <div class="form-group">
                     <label for="contrasena">Contrasena</label>
-                    <input type="password" id="contrasena" name="contrasena" placeholder="Escribe tu contrasena" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="contrasena" name="contrasena" placeholder="Escribe tu contrasena" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('contrasena', this)" aria-label="Mostrar contrasena">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
                 </div>
 
                 <a href="/recuperar-contrasena" class="forgot-password">Olvidaste tu contrasena?</a>
@@ -290,6 +329,18 @@ $def with (error)
             <p class="nota-pie">Eres madre o padre? <a href="/login/padre">Entra por aqui</a></p>
         </div>
     </div>
+
+    <script>
+        const EYE_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        const EYE_CLOSED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a19.7 19.7 0 0 1 4.22-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a19.65 19.65 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+
+        function togglePassword(id, btn) {
+            const input = document.getElementById(id);
+            const showing = input.type === 'text';
+            input.type = showing ? 'password' : 'text';
+            btn.innerHTML = showing ? EYE_OPEN : EYE_CLOSED;
+        }
+    </script>
 
 </body>
 </html>

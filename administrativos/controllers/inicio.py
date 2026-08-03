@@ -28,33 +28,12 @@ class InicioAdministrativo:
         cursor.execute("SELECT COUNT(*) as total FROM estrategias_didacticas")
         total_estrategias = cursor.fetchone()['total']
 
-        conn.close()
-
-class InicioAdministrativo:
-    def GET(self):
-        conn = conectar_bd()
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT COUNT(*) as total FROM alumnos")
-        total_alumnos = cursor.fetchone()['total']
-
-        cursor.execute("SELECT COUNT(*) as total FROM docentes")
-        total_docentes = cursor.fetchone()['total']
-
-        cursor.execute("SELECT COUNT(*) as total FROM resultados_cuestionarios")
-        total_cuestionarios = cursor.fetchone()['total']
-
-        cursor.execute("SELECT COUNT(*) as total FROM estrategias_didacticas")
-        total_estrategias = cursor.fetchone()['total']
-
-        # Consultar los casos reales para la sección de atención
-        # Ajusta los nombres de las tablas y campos
         cursor.execute("""
-            SELECT a.nombre || ' ' || a.apellido as nombre_completo, 
-                   r.puntaje, r.tipo_cuestionario, r.fecha 
-            FROM alumnos a 
-            JOIN resultados_cuestionarios r ON a.id = r.alumno_id 
-            ORDER BY r.fecha DESC LIMIT 5
+            SELECT alumno as nombre_completo, 
+                   puntaje, cuestionario as tipo_cuestionario, 
+                   nivel_riesgo, fecha 
+            FROM resultados_cuestionarios 
+            ORDER BY fecha DESC LIMIT 5
         """)
         casos_pendientes = cursor.fetchall()
 

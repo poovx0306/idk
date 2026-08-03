@@ -25,7 +25,7 @@ class LoginPadres:
             cursor = conexion.cursor()
 
             query = ("SELECT id_usuario, nombre, id_referencia FROM usuario "
-                     "WHERE correo = ? AND contrasena = ? AND rol = 'padre'")
+                    "WHERE correo = ? AND contrasena = ? AND rol = 'padre'")
             cursor.execute(query, (correo, self.encriptar(contrasena)))
             fila = cursor.fetchone()
 

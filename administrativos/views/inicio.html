@@ -1,4 +1,4 @@
-$def with (total_alumnos=0, total_docentes=0, total_cuestionarios=0, total_estrategias=0, casos_pendientes=[])
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -141,18 +141,15 @@ $def with (total_alumnos=0, total_docentes=0, total_cuestionarios=0, total_estra
 
     <!-- Menú de navegación lateral -->
     <nav class="sidebar">
-        <div>
-            <a href="/administrativo/inicio" class="sidebar-brand">CONAAP</a>
-            <div class="sidebar-menu mt-4">
-                <a href="/administrativo/inicio" class="active">Inicio</a>
-                <a href="/administrativo/cuestionarios" >Cuestionarios</a>
-                <a href="/administrativo/resultados">Resultados</a>
-                <a href="/administrativo/estrategias">Estrategias didácticas</a>
-                <a href="/administrativo/docentes">Docentes</a>
-                <a href="/administrativo/alumnos">Alumnos</a>
-                <a href="/administrativo/padres">Padres de familia</a>
-            </div>
-        </div>
+<div class="sidebar-menu mt-4">
+    <a href="/administrativo/inicio" class="active">Inicio</a>
+    <a href="/administrativo/cuestionarios">Cuestionarios</a>
+    <a href="/administrativo/resultados">Resultados</a>
+    <a href="/administrativo/estrategias">Estrategias didácticas</a>
+    <a href="/administrativo/docentes">Docentes</a>
+    <a href="/administrativo/alumnos">Alumnos</a>
+    <a href="/administrativo/padres">Padres de familia</a>
+</div>
         </div>
         <div>
             <a href="/cerrar-sesion" class="text-white-50 text-decoration-none small">
@@ -182,32 +179,32 @@ $def with (total_alumnos=0, total_docentes=0, total_cuestionarios=0, total_estra
         </header>
 
         <!-- Indicadores cuantitativos -->
-         <section class="row g-3 mb-4">
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="metric-card">
-            <div class="metric-number">$total_alumnos</div>
-            <div class="metric-label">Alumnos registrados</div>
-        </div>
-    </div>
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="metric-card">
-            <div class="metric-number">$total_docentes</div>
-            <div class="metric-label">Docentes</div>
-        </div>
-    </div>
-    <div class="col-12 col-sm-6 col-xl-3">
-    <div class="metric-card">
-        <div class="metric-number">$total_cuestionarios</div>
-        <div class="metric-label">Cuestionarios respondidos</div>
-    </div>
-    </div>
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="metric-card">
-            <div class="metric-number">$total_estrategias</div>
-            <div class="metric-label">Estrategias didácticas</div>
-        </div>
-    </div>
-</section>
+        <section class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="metric-card">
+                    <div class="metric-number">128</div>
+                    <div class="metric-label">Alumnos registrados</div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="metric-card">
+                    <div class="metric-number">24</div>
+                    <div class="metric-label">Docentes</div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="metric-card">
+                    <div class="metric-number">312</div>
+                    <div class="metric-label">Cuestionarios respondidos</div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="metric-card">
+                    <div class="metric-number">46</div>
+                    <div class="metric-label">Estrategias didácticas</div>
+                </div>
+            </div>
+        </section>
 
         <!-- Accesos a operaciones frecuentes -->
         <section class="row g-3 mb-4">
@@ -242,26 +239,35 @@ $def with (total_alumnos=0, total_docentes=0, total_cuestionarios=0, total_estra
         </section>
 
         <!-- Casos prioritarios sin asignar -->
-<section class="bg-white p-4 rounded-3 shadow-sm">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <h5 class="m-0">Casos que requieren atención</h5>
-    </div>
-    <p class="text-muted small mb-4">Casos sin canalizar a un especialista, ordenados por fecha</p>
+        <section class="bg-white p-4 rounded-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold m-0 text-dark">Casos que requieren atención</h5>
+                <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2 fw-semibold">2 con nivel de riesgo Alto</span>
+            </div>
+            <p class="text-muted small mb-4">Casos sin canalizar a un especialista, ordenados por fecha</p>
 
-    $if len(casos_pendientes) == 0:
-        <p class="text-muted text-center py-3">No hay casos pendientes de atención en este momento.</p>
-    $else:
-        $for caso in casos_pendientes:
-            <div class="alert-row d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 mb-3">
+            <div class="alert-row d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
                 <div class="d-flex align-items-center gap-3">
                     <span class="badge bg-danger rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">!</span>
                     <div>
-                        <div class="fw-bold text-dark">$caso['nombre_completo']</div>
-                        <span class="text-muted small">Puntaje $caso['puntaje'] · $caso['tipo_cuestionario'] · $caso['fecha']</span>
+                        <div class="fw-bold text-dark">Juan Pérez López</div>
+                        <span class="text-muted small">Puntaje 32 · Tamizaje conductual TEA · 14/07/2026</span>
                     </div>
                 </div>
+                <button class="btn btn-action-primary">Asignar especialista</button>
             </div>
-</section>
+
+            <div class="alert-row d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-danger rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">!</span>
+                    <div>
+                        <div class="fw-bold text-dark">Sofía Ramírez Díaz</div>
+                        <span class="text-muted small">Puntaje 27 · Tamizaje conductual TEA · 11/07/2026</span>
+                    </div>
+                </div>
+                <button class="btn btn-action-primary">Asignar especialista</button>
+            </div>
+        </section>
 
     </main>
 

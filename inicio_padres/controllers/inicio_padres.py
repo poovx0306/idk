@@ -28,17 +28,16 @@ class InicioPadres:
         """, (id_padre,))
         total_cuestionarios = cur.fetchone()["total"]
 
-        cur.execute("SELECT COUNT(*) FROM actividad_postcrisis")
-        total_postcrisis = cur.fetchone()[0] or 0
-
         cur.execute("""
-            SELECT COUNT(DISTINCT r.id_actividad) FROM actividad_postcrisis_realizada r
-            JOIN infantes i ON i.id_infante = r.id_infante
+            SELECT COUNT(*) AS total, SUM(CASE WHEN estado = 'Completada' THEN 1 ELSE 0 END) AS completadas
+            FROM actividad_asignada aa
+            JOIN infantes i ON i.id_infante = aa.id_infante
             WHERE i.id_padres = ?
         """, (id_padre,))
-        postcrisis_realizadas = cur.fetchone()[0] or 0
-
-        progreso_pct = round((postcrisis_realizadas / total_postcrisis) * 100) if total_postcrisis > 0 else 0
+        fila_prog = cur.fetchone()
+        total_act = fila_prog["total"] or 0
+        completadas_act = fila_prog["completadas"] or 0
+        progreso_pct = round((completadas_act / total_act) * 100) if total_act > 0 else 0
 
         cur.execute("""
             SELECT r.id_resultado, r.fecha, r.nivel_riesgo, i.nombre AS nombre_infante

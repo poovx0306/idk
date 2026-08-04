@@ -153,34 +153,35 @@ $def with (cuestionario, preguntas)
         </div>
         
         <div class="card-body">
-            $if preguntas:
-                <div class="lista-preguntas">
-                $for p in preguntas:
-                    <div class="item-pregunta d-flex align-items-start">
+$if preguntas:
+        <div class="lista-preguntas">
+            $for p in preguntas:
+                <div class="item-pregunta d-flex justify-content-between align-items-start p-3 border-bottom">
+                    <div class="d-flex align-items-start gap-2">
                         <span class="numero-pregunta">$p['numero_pregunta'].</span>
                         <div class="texto-pregunta">
-                            <div class="d-flex align-items-center">
-                                $p['texto']
+                            <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+                                <span>$p['texto']</span>
                                 <span class="seccion-tag" title="Sección del cuestionario">
                                     <i class="bi bi-diagram-2 me-1"></i> Sección: $p['seccion']
                                 </span>
                             </div>
-                            
-                            <!-- Desglose de puntuación (asumiendo nombres de columnas) -->
-                            <div class="puntos-container">
+                            <!-- Desglose de puntuación -->
+                            <div class="puntos-container d-flex gap-3 text-muted small">
                                 <span class="puntos-tag">Casi siempre: <strong>$p['puntos_casi_siempre']</strong> pts</span>
                                 <span class="puntos-tag">A veces: <strong>$p['puntos_a_veces']</strong> pts</span>
                                 <span class="puntos-tag">Casi nunca: <strong>$p['puntos_casi_nunca']</strong> pts</span>
                             </div>
                         </div>
                     </div>
+                    <!-- Botón de edición individual para esta pregunta -->
+                    <a href="/administrativo/cuestionarios/editar_pregunta?id=$p['id']" class="btn btn-sm btn-outline-secondary" title="Editar esta pregunta">
+                        <i class="bi bi-pencil"></i>
+                    </a>
                 </div>
-            $else:
-                <div class="empty-state">
-                    <i class="bi bi-question-circle display-4 mb-3 d-block"></i>
-                    <h4>Este cuestionario aún no tiene preguntas.</h4>
-                    <p class="mb-0">Para agregar preguntas, ve a la sección de edición.</p>
-                </div>
+    $else:
+        <div class="empty-state p-4 text-center">
+            <i class="bi bi-question-circle display-4 mb-3 d-block text-muted"></i>
+            <h4>Este cuestionario aún no tiene preguntas.</h4>
+            <p class="mb-0 text-muted">Para agregar preguntas, ve a la sección de edición.</p>
         </div>
-    </div>
-</div>

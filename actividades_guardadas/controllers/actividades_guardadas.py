@@ -4,6 +4,17 @@ import sqlite3
 render = web.template.render('actividades_guardadas/views')
 
 
+def obtener_docente(cursor, id_docente):
+    cursor.execute(
+        "SELECT nombre, correo FROM docente WHERE id_docente = ?",
+        (id_docente,),
+    )
+    fila = cursor.fetchone()
+    nombre = fila["nombre"] if fila else "Docente"
+    correo = fila["correo"] if fila else "sin-correo@conafe.gob.mx"
+    return nombre, correo
+
+
 class ActividadesGuardadas:
     """Lista las actividades asignadas por el docente, con filtros."""
 
@@ -14,6 +25,8 @@ class ActividadesGuardadas:
         conexion = sqlite3.connect("sql/conaap.db")
         conexion.row_factory = sqlite3.Row
         cursor = conexion.cursor()
+
+        nombre_docente, correo_docente = obtener_docente(cursor, id_docente)
 
         consulta = "SELECT * FROM actividad_asignada WHERE id_docente = ?"
         parametros = [id_docente]
@@ -35,7 +48,8 @@ class ActividadesGuardadas:
         conexion.close()
 
         return render.actividades_guardadas(
-            id_docente, actividades, datos.grado, datos.grupo, datos.materia
+            id_docente, nombre_docente, correo_docente, actividades,
+            datos.grado, datos.grupo, datos.materia
         )
 
 
@@ -45,6 +59,8 @@ def _cargar_ficha(id_docente, id_actividad):
     conexion = sqlite3.connect("sql/conaap.db")
     conexion.row_factory = sqlite3.Row
     cursor = conexion.cursor()
+
+    nombre_docente, correo_docente = obtener_docente(cursor, id_docente)
 
     cursor.execute("""
         SELECT a.*, d.nombre AS nombre_docente
@@ -71,7 +87,9 @@ def _cargar_ficha(id_docente, id_actividad):
     texto_pasos = actividad["paso_a_paso"] or ""
     pasos = [p.strip() for p in texto_pasos.split("|") if p.strip()]
 
-    return render.ficha_actividad_asignada(id_docente, actividad, materiales, pasos, guardada)
+    return render.ficha_actividad_asignada(
+        id_docente, nombre_docente, correo_docente, actividad, materiales, pasos, guardada
+    )
 
 
 class FichaActividadAsignada:
@@ -136,6 +154,9 @@ class GuardarActividad:
         conexion.commit()
         conexion.close()
 
+        return _cargar_ficha(id_docente, datos.id_actividad)
+
+
 class MisActividadesGuardadas:
     """Lista solo las actividades que el docente marco como guardadas (favoritas)."""
 
@@ -147,6 +168,8 @@ class MisActividadesGuardadas:
         conexion.row_factory = sqlite3.Row
         cursor = conexion.cursor()
 
+        nombre_docente, correo_docente = obtener_docente(cursor, id_docente)
+
         cursor.execute("""
             SELECT a.*
             FROM actividad_favorita f
@@ -157,6 +180,4 @@ class MisActividadesGuardadas:
         guardadas = cursor.fetchall()
         conexion.close()
 
-        return render.mis_actividades_guardadas(id_docente, guardadas)
-
-        return _cargar_ficha(id_docente, datos.id_actividad)
+        return render.mis_actividades_guardadas(id_docente, nombre_docente, correo_docente, guardadas)

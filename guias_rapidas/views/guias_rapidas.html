@@ -1,4 +1,4 @@
-$def with (id_docente, categorias)
+$def with (id_docente, nombre_docente, correo_docente, categorias)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -23,9 +23,10 @@ $def with (id_docente, categorias)
     .sidebar-footer { margin-top: auto; border-top: 1px solid #e2e8f0; padding: 18px 24px 0; }
     .sidebar-footer a { font-size: 13px; color: #64748b; text-decoration: none; }
     .content { flex: 1; }
-    .header { background: #fff; padding: 24px 36px; border-bottom: 1px solid #e2e8f0; }
+    .header { background: #fff; padding: 24px 36px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
     .header h1 { font-size: 20px; color: #1e293b; }
     .header p { font-size: 13px; color: #64748b; margin-top: 2px; }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; background: #7e1232; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; }
     .main { padding: 28px 36px; }
 
     .categoria-block { margin-bottom: 30px; }
@@ -41,6 +42,42 @@ $def with (id_docente, categorias)
     .guia-card { background: #fff; border-radius: 14px; padding: 18px 20px; }
     .guia-titulo { font-size: 14.5px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
     .guia-contenido { font-size: 13px; color: #64748b; line-height: 1.55; }
+
+    .user-menu { position: relative; }
+    .avatar { cursor: pointer; user-select: none; }
+
+    .dropdown {
+      position: absolute;
+      top: 54px;
+      right: 0;
+      width: 320px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.18);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      visibility: hidden;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 50;
+    }
+    .dropdown.open { opacity: 1; transform: translateY(0); visibility: visible; }
+
+    .dd-managed { background: #f1f5f9; color: #64748b; font-size: 12px; text-align: center; padding: 10px; border-bottom: 1px solid #e2e8f0; }
+    .dd-header { text-align: center; padding: 20px 20px 16px; }
+    .dd-avatar { width: 64px; height: 64px; border-radius: 50%; background: #7e1232; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; margin: 0 auto 12px; }
+    .dd-name { font-size: 15px; font-weight: 600; color: #1e293b; }
+    .dd-email { font-size: 12.5px; color: #64748b; margin-top: 3px; }
+    .dd-manage-btn { display: inline-block; margin-top: 14px; padding: 8px 18px; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px; color: #0f766e; text-decoration: none; font-weight: 600; }
+    .dd-manage-btn:hover { background: #f0fdfa; }
+
+    .dd-list { padding: 6px; border-top: 1px solid #e2e8f0; }
+    .dd-item { display: flex; align-items: center; gap: 14px; padding: 11px 14px; font-size: 13.5px; color: #1e293b; text-decoration: none; border-radius: 12px; }
+    .dd-item:hover { background: #f1f5f9; }
+    .dd-ico { width: 32px; height: 32px; border-radius: 50%; background: #f0fdfa; color: #0f766e; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+    .dd-item.logout { color: #7e1232; }
+    .dd-item.logout .dd-ico { background: #fce8ee; color: #7e1232; }
   </style>
 </head>
 <body>
@@ -65,14 +102,46 @@ $def with (id_docente, categorias)
         Mi perfil
       </a>
       <div class="sidebar-footer">
-        <a href="/logout">Cerrar sesión</a>
+        <a href="/cerrar-sesion">Cerrar sesión</a>
       </div>
     </aside>
 
     <div class="content">
       <header class="header">
-        <h1>Guías rápidas</h1>
-        <p>Consejos breves para apoyar a alumnos con autismo en el aula</p>
+        <div>
+          <h1>Guías rápidas</h1>
+          <p>Consejos breves para apoyar a alumnos con autismo en el aula</p>
+        </div>
+
+        <div class="user-menu">
+          <div class="avatar" id="avatarBtn">$nombre_docente[0]</div>
+
+          <div class="dropdown" id="dropdown">
+            <div class="dd-managed">Cuenta institucional · CONAFE</div>
+
+            <div class="dd-header">
+              <div class="dd-avatar">$nombre_docente[0]</div>
+              <div class="dd-name">$nombre_docente</div>
+              <div class="dd-email">$correo_docente</div>
+              <a href="/mi-perfil?id=$id_docente" class="dd-manage-btn">Ver perfil</a>
+            </div>
+
+            <div class="dd-list">
+              <a href="/actividades-guardadas/guardadas?id=$id_docente" class="dd-item">
+                <span class="dd-ico">&#128278;</span> Actividades guardadas
+              </a>
+              <a href="/docente/inicio?id=$id_docente" class="dd-item">
+                <span class="dd-ico">&#127968;</span> Ir al inicio
+              </a>
+            </div>
+
+            <div class="dd-list">
+              <a href="/cerrar-sesion" class="dd-item logout">
+                <span class="dd-ico">&#8617;</span> Cerrar sesión
+              </a>
+            </div>
+          </div>
+        </div>
       </header>
 
       <main class="main">
@@ -90,5 +159,23 @@ $def with (id_docente, categorias)
       </main>
     </div>
   </div>
+
+  <script>
+    const avatarBtn = document.getElementById('avatarBtn');
+    const dropdown = document.getElementById('dropdown');
+
+    avatarBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') dropdown.classList.remove('open');
+    });
+  </script>
 </body>
 </html>

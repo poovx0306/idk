@@ -4,6 +4,19 @@ import sqlite3
 render = web.template.render('estrategias_didacticas/views')
 
 
+def obtener_docente(cursor, id_docente):
+    cursor.execute("""
+        SELECT docente.nombre, usuario.correo
+        FROM docente
+        JOIN usuario ON usuario.id_referencia = docente.id_docente AND usuario.rol = 'docente'
+        WHERE docente.id_docente = ?
+    """, (id_docente,))
+    fila = cursor.fetchone()
+    nombre = fila["nombre"] if fila else "Docente"
+    correo = fila["correo"] if fila else "sin-correo@conafe.gob.mx"
+    return nombre, correo
+
+
 class EstrategiasDidacticas:
     def GET(self):
         datos = web.input(id="1", condicion="Autismo (TEA)", materia="", grado="")
@@ -13,11 +26,9 @@ class EstrategiasDidacticas:
         conexion.row_factory = sqlite3.Row
         cursor = conexion.cursor()
 
-        cursor.execute("SELECT nombre FROM docente WHERE id_docente = ?", (id_docente,))
-        docente = cursor.fetchone()
-        nombre_docente = docente["nombre"] if docente else "Docente"
+        nombre_docente, correo_docente = obtener_docente(cursor, id_docente)
 
-        consulta = "SELECT * FROM estrategias_didacticas WHERE 1=1"
+        consulta = "SELECT * FROM estrategias_didacticas WHERE estado = 'Publicada'"
         parametros = []
 
         if datos.condicion:
@@ -36,7 +47,7 @@ class EstrategiasDidacticas:
         conexion.close()
 
         return render.estrategias_didacticas(
-            id_docente, nombre_docente, estrategias,
+            id_docente, nombre_docente, correo_docente, estrategias,
             datos.condicion, datos.materia, datos.grado
         )
 
@@ -50,12 +61,10 @@ class FichaActividad:
         conexion.row_factory = sqlite3.Row
         cursor = conexion.cursor()
 
-        cursor.execute("SELECT nombre FROM docente WHERE id_docente = ?", (id_docente,))
-        docente = cursor.fetchone()
-        nombre_docente = docente["nombre"] if docente else "Docente"
+        nombre_docente, correo_docente = obtener_docente(cursor, id_docente)
 
         cursor.execute(
-            "SELECT * FROM estrategias_didacticas WHERE id_estrategia = ?",
+            "SELECT * FROM estrategias_didacticas WHERE id = ?",
             (datos.id_estrategia,)
         )
         estrategia = cursor.fetchone()
@@ -67,4 +76,4 @@ class FichaActividad:
         texto_pasos = estrategia["paso_a_paso"] or ""
         pasos = [p.strip() for p in texto_pasos.split("|") if p.strip()]
 
-        return render.ficha_actividad(id_docente, nombre_docente, estrategia, pasos)
+        return render.ficha_actividad(id_docente, nombre_docente, correo_docente, estrategia, pasos)

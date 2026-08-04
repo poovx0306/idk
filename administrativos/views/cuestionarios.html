@@ -181,39 +181,38 @@ $def with (cuestionarios)
             </a>
         </div>
 
-        $for c in cuestionarios:
-            <div class="questionnaire-card d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="icon-box">
-                        <i class="bi bi-journal-text fs-5"></i>
-                    </div>
-                    <div>
-                        <h6 class="fw-bold m-0 text-dark">$c['titulo']</h6>
-                        <span class="text-muted small">
-                            $c['preguntas'] preguntas · $c['secciones'] secciones · $c['respuestas'] respuestas
-                        </span>
-                    </div>
+<div class="d-flex flex-column gap-3">
+    $for c in cuestionarios:
+        <div class="questionnaire-card d-flex flex-column flex-md-row align-items-md-center justify-content-between p-3 border rounded shadow-sm bg-white w-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-box">
+                    <i class="bi bi-journal-text fs-5"></i>
                 </div>
-
-                <div class="d-flex align-items-center gap-2 align-self-end align-self-md-center">
-                    $if c['estado'] == 'Activo':
-                        <span class="badge-active me-2">Activo</span>
-                    $else:
-                        <span class="badge-draft me-2">Borrador</span>
-
-                    <!-- Botones de navegación pasándoles el ID -->
-                    <a href="/administrativo/cuestionarios/ver_preguntas?id=$c['id']" class="btn btn-outline-secondary btn-sm">Ver preguntas</a>
-                    <a href="/administrativo/cuestionarios/editar?id=$c['id']" class="btn btn-outline-custom">Editar</a>
-                    
-                    <!-- Botón de borrado con confirmación mostrando el Título e ID -->
-                    <form action="/administrativo/cuestionarios/eliminar" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este cuestionario? Esta acción no se puede deshacer.');">
-    <input type="hidden" name="id" value="$c['id']">
-    <button type="submit" class="btn btn-outline-danger-custom" title="Eliminar cuestionario">
-        <i class="bi bi-trash"></i>
-    </button>
-</form>
+                <div>
+                    <h6 class="fw-bold m-0 text-dark">$c['titulo']</h6>
+                    <span class="text-muted small">
+                        $c['preguntas'] preguntas &middot; $c['secciones'] secciones &middot; $c['respuestas'] respuestas
+                    </span>
                 </div>
             </div>
+
+            <div class="d-flex align-items-center gap-2 align-self-end align-self-md-center mt-3 mt-md-0">
+                $if c['estado'] == 'Activo':
+                    <span class="badge-active me-2">Activo</span>
+                $else:
+                    <span class="badge-draft me-2">Borrador</span>
+
+                <a href="/administrativo/cuestionarios/ver_preguntas?id=$c['id']" class="btn btn-outline-secondary btn-sm">Ver preguntas</a>
+                
+                <form action="/administrativo/cuestionarios/eliminar" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este cuestionario? Esta acción no se puede deshacer.');">
+                    <input type="hidden" name="id" value="$c['id']">
+                    <button type="submit" class="btn btn-outline-danger-custom" title="Eliminar cuestionario">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+</div>
     </main>
 
 </body>

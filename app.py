@@ -11,8 +11,7 @@ from administrativos.controllers.cuestionarios import (
 from administrativos.controllers.inicio import InicioAdministrativo
 from administrativos.controllers.resultados import Resultados
 from administrativos.controllers.estrategias_didacticas import EstrategiasDidacticasAdmin, NuevaEstrategiaAdmin
-from administrativos.controllers.docentes import DocentesAdmin
-from administrativos.controllers.docentes import DocentesAdmin, NuevoDocenteAdmin
+from administrativos.controllers.docentes import DocentesAdmin, NuevoDocenteAdmin, EditarDocenteAdmin, BajaDocenteAdmin
 from administrativos.controllers.alumnos import AlumnosAdmin
 from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin
 from administrativos.controllers.padres import PadresAdmin
@@ -49,6 +48,7 @@ urls = (
     '/administrativo/cuestionarios', 'Cuestionarios',
     '/administrativo/cuestionarios/nuevo', 'NuevoCuestionario',
     '/administrativo/cuestionarios/editar', 'EditarCuestionario',
+    '/administrativo/cuestionarios/eliminar', 'EliminarCuestionario',
     '/administrativo/cuestionarios/ver_preguntas', 'VerPreguntasCuestionario',
     # Resultados
     '/administrativo/resultados', 'Resultados',
@@ -56,6 +56,8 @@ urls = (
     '/administrativo/estrategias/nueva', 'NuevaEstrategiaAdmin',
     '/administrativo/docentes', 'DocentesAdmin',
     '/administrativo/docentes/nuevo', 'NuevoDocenteAdmin',
+    '/administrativo/docentes/editar', 'EditarDocenteAdmin',
+    '/administrativo/docentes/baja', 'BajaDocenteAdmin',
     '/administrativo/alumnos', 'AlumnosAdmin',
     '/administrativo/alumnos/nuevo', 'NuevoAlumnoAdmin',
     '/administrativo/padres', 'PadresAdmin',

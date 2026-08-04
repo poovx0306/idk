@@ -12,7 +12,7 @@ class InicioAdministrativo:
         except:
             total_alumnos = 0
         
-        # Total de docentes (verificando si la tabla es 'docente' o 'docentes')
+        # Total de docentes
         try:
             total_docentes = db.query('SELECT COUNT(*) as total FROM docente')[0].total
         except:
@@ -36,9 +36,9 @@ class InicioAdministrativo:
         except:
             total_estrategias = 0
 
-        # Casos pendientes reales
+        # Casos pendientes o en rojo (ajusta la condición según el campo de tu tabla resultados, por ejemplo: nivel, puntaje o estatus)
         try:
-            casos_pendientes = list(db.query('SELECT * FROM resultados LIMIT 5'))
+            casos_pendientes = list(db.query("SELECT * FROM resultados WHERE nivel_riesgo = 'Alto' OR resultado = 'Alto' LIMIT 5"))
         except:
             casos_pendientes = []
 

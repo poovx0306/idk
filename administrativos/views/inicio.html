@@ -248,7 +248,7 @@ $def with (alumnos, docentes, cuestionarios, estrategias, casos_pendientes)
 
 <!-- Casos prioritarios sin asignar -->
 <section class="bg-white p-4 rounded-3 shadow-sm">
-    <div class="d-flex justify-content-between align-items-center mb-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="fw-bold m-0 text-dark">Casos que requieren atención</h5>
         <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2 fw-semibold">Casos pendientes</span>
     </div>
@@ -258,15 +258,17 @@ $def with (alumnos, docentes, cuestionarios, estrategias, casos_pendientes)
         <p class="text-muted text-center py-3">No hay casos pendientes en este momento.</p>
     $else:
         $for caso in casos_pendientes:
-            <div class="alert-row d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-3">
+            <div class="alert-row d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-3 p-3 border rounded-3 bg-light-subtle">
                 <div class="d-flex align-items-center gap-3">
-                    <span class="badge bg-danger rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">!</span>
+                    <div class="badge bg-danger rounded-circle p-2 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
                     <div>
-                        <div class="fw-bold text-dark">$getattr(caso, 'nombre', 'Alumno sin nombre')</div>
-                        <span class="text-muted small">Puntaje $getattr(caso, 'puntaje', 'N/A') · Casos de atención</span>
+                        <div class="fw-bold text-dark">$getattr(caso, 'nombre', 'Alumno ID: ' + str(getattr(caso, 'id_infante', 'N/A')))</div>
+                        <span class="text-muted small">Puntaje obtenido: $getattr(caso, 'puntaje', 'N/A') - Nivel Rojo / Crítico</span>
                     </div>
                 </div>
-                <button class="btn btn-action-primary">Asignar especialista</button>
+                <a href="/administrativo/resultados" class="btn btn-sm btn-danger px-3">Asignar especialista</a>
             </div>
 </section>
 

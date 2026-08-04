@@ -17,7 +17,7 @@ class EstrategiasDidacticas:
         docente = cursor.fetchone()
         nombre_docente = docente["nombre"] if docente else "Docente"
 
-        consulta = "SELECT * FROM estrategias_didacticas WHERE 1=1"
+        consulta = "SELECT * FROM estrategias_didacticas WHERE estado = 'Publicada'"
         parametros = []
 
         if datos.condicion:
@@ -55,7 +55,7 @@ class FichaActividad:
         nombre_docente = docente["nombre"] if docente else "Docente"
 
         cursor.execute(
-            "SELECT * FROM estrategias_didacticas WHERE id_estrategia = ?",
+            "SELECT * FROM estrategias_didacticas WHERE id = ?",
             (datos.id_estrategia,)
         )
         estrategia = cursor.fetchone()

@@ -58,7 +58,8 @@ CREATE TABLE IF NOT EXISTS actividad_asignada (
 CREATE TABLE IF NOT EXISTS padres (
     id_padres  INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre     TEXT NOT NULL,
-    telefono   TEXT NOT NULL
+    telefono   TEXT NOT NULL,
+    contrasena TEXT NOT NULL
 );
 
 

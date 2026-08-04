@@ -5,13 +5,29 @@ import datetime
 render = web.template.render('boton_crisis/views')
 
 
-class BotonCrisis:
-    """Muestra el protocolo de crisis y registra cuando se marca como atendida."""
+def obtener_docente(cursor, id_docente):
+    cursor.execute(
+        "SELECT nombre, correo FROM docente WHERE id_docente = ?",
+        (id_docente,),
+    )
+    fila = cursor.fetchone()
+    nombre = fila["nombre"] if fila else "Docente"
+    correo = fila["correo"] if fila else "sin-correo@conafe.gob.mx"
+    return nombre, correo
 
+
+class BotonCrisis:
     def GET(self):
         datos = web.input(id="1")
         id_docente = datos.id
-        return render.boton_crisis(id_docente)
+
+        conexion = sqlite3.connect("sql/conaap.db")
+        conexion.row_factory = sqlite3.Row
+        cursor = conexion.cursor()
+        nombre_docente, correo_docente = obtener_docente(cursor, id_docente)
+        conexion.close()
+
+        return render.boton_crisis(id_docente, nombre_docente, correo_docente)
 
     def POST(self):
         datos = web.input(id="1", notas="")
@@ -33,8 +49,6 @@ class BotonCrisis:
 
 
 class ConfirmacionCrisis:
-    """Pantalla de confirmación con la palomita verde (acceso directo, por si acaso)."""
-
     def GET(self):
         datos = web.input(id="1")
         id_docente = datos.id

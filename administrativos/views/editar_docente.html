@@ -1,4 +1,4 @@
-$def with (error='')
+$def with (docente, error='')
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -52,19 +52,19 @@ $def with (error='')
         background-color: #fff;
     }
 
-    .alert-error {
-        background-color: #fef2f2;
-        border: 1px solid #fecaca;
-        color: #b91c1c;
+    .alert-notif {
+        background-color: #e6f9f5;
+        border: 1px solid #b2f5ea;
+        color: #0b6b5f;
         border-radius: 10px;
         font-size: 0.85rem;
         padding: 0.85rem 1rem;
     }
 
-    .alert-notif {
-        background-color: #e6f9f5;
-        border: 1px solid #b2f5ea;
-        color: #0b6b5f;
+    .alert-error {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
         border-radius: 10px;
         font-size: 0.85rem;
         padding: 0.85rem 1rem;
@@ -105,47 +105,55 @@ $def with (error='')
 </style>
 
 <div class="card-formulario">
-    <h3 class="fw-bold text-dark mb-4">Registrar docente</h3>
+    <h3 class="fw-bold text-dark mb-4">Editar docente</h3>
 
     $if error:
         <div class="alert-error mb-3">
             <i class="bi bi-exclamation-triangle me-2"></i>$error
         </div>
 
-    <form method="POST" action="/administrativo/docentes/nuevo">
+    <form method="POST" action="/administrativo/docentes/editar">
+        <input type="hidden" name="id" value="$docente['id']">
+
         <!-- Nombre completo -->
         <div class="mb-3">
             <label class="form-label">Nombre completo</label>
-            <input type="text" name="nombre" class="form-control" placeholder="Ej. Ana Martínez López" required>
+            <input type="text" name="nombre" class="form-control" value="$docente['nombre']" required>
         </div>
 
         <!-- Correo institucional -->
         <div class="mb-3">
             <label class="form-label">Correo institucional</label>
-            <input type="email" name="correo" class="form-control" placeholder="nombre@conafe.gob.mx" required>
+            <input type="email" name="correo" class="form-control" value="$docente['correo']" required>
         </div>
 
-        <!-- Clave y Contraseña -->
-        <div class="row mb-4">
+        <!-- Clave y Alumnos -->
+        <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Clave de docente</label>
-                <input type="text" name="clave" class="form-control" placeholder="CNF-1058" required>
+                <input type="text" name="clave" class="form-control" value="$docente['clave']" required>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Contraseña temporal</label>
-                <input type="password" name="password" class="form-control" placeholder="********" required>
+                <label class="form-label">Alumnos asignados</label>
+                <input type="number" name="alumnos" class="form-control" value="$docente['alumnos']" min="0">
             </div>
+        </div>
+
+        <!-- Contraseña nueva (opcional) -->
+        <div class="mb-4">
+            <label class="form-label">Contraseña nueva (opcional)</label>
+            <input type="password" name="password" class="form-control" placeholder="Déjalo vacío para no cambiarla">
         </div>
 
         <!-- Alerta informativa -->
         <div class="alert alert-notif mb-4" role="alert">
-            Se enviará una notificación al docente para que confirme su acceso al portal de inicio de sesión.
+            Los cambios de nombre y correo se aplican también en la cuenta de acceso del docente.
         </div>
 
         <!-- Botones de Acción -->
         <div class="d-flex justify-content-between align-items-center">
             <a href="/administrativo/docentes" class="btn-cancelar">Cancelar</a>
-            <button type="submit" class="btn-registrar-docente">Registrar docente</button>
+            <button type="submit" class="btn-registrar-docente">Guardar cambios</button>
         </div>
     </form>
 </div>

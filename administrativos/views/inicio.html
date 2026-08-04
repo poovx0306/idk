@@ -178,65 +178,73 @@ $def with (alumnos, docentes, cuestionarios, estrategias, casos_pendientes)
             </div>
         </header>
 
-        <!-- Indicadores cuantitativos -->
-        <section class="row g-3 mb-4">
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="metric-card">
-                    <div class="metric-number">128</div>
-                    <div class="metric-label">Alumnos registrados</div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="metric-card">
-                    <div class="metric-number">24</div>
-                    <div class="metric-label">Docentes</div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="metric-card">
-                    <div class="metric-number">312</div>
-                    <div class="metric-label">Cuestionarios respondidos</div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="metric-card">
-                    <div class="metric-number">46</div>
-                    <div class="metric-label">Estrategias didácticas</div>
-                </div>
-            </div>
-        </section>
+<!-- Indicadores cuantitativos -->
+<section class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="metric-card">
+            <div class="metric-number">$alumnos</div>
+            <div class="metric-label">Alumnos registrados</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="metric-card">
+            <div class="metric-number">$docentes</div>
+            <div class="metric-label">Docentes</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="metric-card">
+            <div class="metric-number">$cuestionarios</div>
+            <div class="metric-label">Cuestionarios respondidos</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="metric-card">
+            <div class="metric-number">$estrategias</div>
+            <div class="metric-label">Estrategias didácticas</div>
+        </div>
+    </div>
+</section>
 
         <!-- Accesos a operaciones frecuentes -->
-        <section class="row g-3 mb-4">
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="action-card">
-                    <div class="action-icon bg-teal-subtle"><i class="bi bi-plus-lg"></i></div>
-                    <h6 class="fw-bold mb-1 text-dark">Nueva pregunta</h6>
-                    <span class="text-muted small">Agregar al cuestionario</span>
-                </div>
+<section class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="/administrativo/cuestionarios" class="text-decoration-none">
+            <div class="action-card h-100">
+                <div class="action-icon bg-teal-subtle"><i class="bi bi-plus-lg"></i></div>
+                <h6 class="fw-bold mb-1 text-dark">Nueva pregunta</h6>
+                <span class="text-muted small">Agregar al cuestionario</span>
             </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="action-card">
-                    <div class="action-icon bg-blue-subtle"><i class="bi bi-journal-text"></i></div>
-                    <h6 class="fw-bold mb-1 text-dark">Nueva estrategia</h6>
-                    <span class="text-muted small">Publicar al repositorio</span>
-                </div>
+        </a>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="/administrativo/estrategias" class="text-decoration-none">
+            <div class="action-card h-100">
+                <div class="action-icon bg-blue-subtle"><i class="bi bi-journal-text"></i></div>
+                <h6 class="fw-bold mb-1 text-dark">Nueva estrategia</h6>
+                <span class="text-muted small">Publicar al repositorio</span>
             </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="action-card">
-                    <div class="action-icon bg-yellow-subtle"><i class="bi bi-person-plus"></i></div>
-                    <h6 class="fw-bold mb-1 text-dark">Registrar docente</h6>
-                    <span class="text-muted small">Dar de alta con clave</span>
-                </div>
+        </a>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="/administrativo/docentes" class="text-decoration-none">
+            <div class="action-card h-100">
+                <div class="action-icon bg-yellow-subtle"><i class="bi bi-person-plus"></i></div>
+                <h6 class="fw-bold mb-1 text-dark">Registrar docente</h6>
+                <span class="text-muted small">Dar de alta con clave</span>
             </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="action-card">
-                    <div class="action-icon bg-orange-subtle"><i class="bi bi-exclamation-triangle"></i></div>
-                    <h6 class="fw-bold mb-1 text-dark">Ver todos los resultados</h6>
-                    <span class="text-muted small">Historial completo</span>
-                </div>
+        </a>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="/administrativo/resultados" class="text-decoration-none">
+            <div class="action-card h-100">
+                <div class="action-icon bg-orange-subtle"><i class="bi bi-exclamation-triangle"></i></div>
+                <h6 class="fw-bold mb-1 text-dark">Ver todos los resultados</h6>
+                <span class="text-muted small">Historial completo</span>
             </div>
-        </section>
+        </a>
+    </div>
+</section>
 
 <!-- Casos prioritarios sin asignar -->
 <section class="bg-white p-4 rounded-3 shadow-sm">

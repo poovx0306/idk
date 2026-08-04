@@ -74,7 +74,6 @@ urls = (
     '/deteccion-temprana/cuestionario', 'DeteccionTemprana',
     '/api/preguntas', 'deteccion_temprana.controllers.api_preguntas.ApiPreguntas',
     '/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
-    '/deteccion-temprana/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
     '/estrategias-didacticas', 'EstrategiasDidacticas',
     '/estrategias-didacticas/ficha', 'FichaActividad',
     '/actividades-guardadas', 'ActividadesGuardadas',

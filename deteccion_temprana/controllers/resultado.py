@@ -3,7 +3,6 @@ import sqlite3
 
 render = web.template.render('deteccion_temprana/views/')
 
-
 class ResultadoPadre:
     def GET(self):
         session = web.config._session

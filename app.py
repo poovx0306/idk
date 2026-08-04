@@ -80,7 +80,7 @@ urls = (
     '/actividades-guardadas/guardar', 'GuardarActividad',
     '/actividades-guardadas/guardadas', 'MisActividadesGuardadas',
 
-    #'/padre/inicio', 'InicioPadres',
+    '/padre/inicio', 'InicioPadres',
     '/padre/guias', 'GuiasHogar',
     '/padre/postcrisis', 'ActividadesPostcrisis',
     '/padre/postcrisis/marcar', 'MarcarActividadPostcrisis',

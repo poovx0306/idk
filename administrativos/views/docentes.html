@@ -1,4 +1,4 @@
-$def with (docentes, total=0, aviso='', error='')
+$def with (docente, total=0, aviso='', error='')
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -273,8 +273,8 @@ $def with (docentes, total=0, aviso='', error='')
                     </tr>
                 </thead>
                 <tbody>
-                    $if docentes:
-                        $for d in docentes:
+                    $if docente:
+                        $for d in docente:
                             <tr>
                                 <td class="fw-semibold">$d['nombre']</td>
                                 <td class="text-muted">$d['correo']</td>

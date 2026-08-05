@@ -75,6 +75,9 @@ urls = (
     '/deteccion-temprana/cuestionario', 'DeteccionTemprana',
     '/api/preguntas', 'deteccion_temprana.controllers.api_preguntas.ApiPreguntas',
     '/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
+#no mover esta linea ni la de arriba alv
+    '/deteccion-temprana/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
+
     '/estrategias-didacticas', 'EstrategiasDidacticas',
     '/estrategias-didacticas/ficha', 'FichaActividad',
     '/actividades-guardadas', 'ActividadesGuardadas',
@@ -91,7 +94,6 @@ urls = (
     '/padre/perfil', 'MiPerfilPadre',
     '/padre/seleccionar-nino', 'SeleccionarNino',
     '/padre/elegir-nino', 'ElegirNino',
-    '/padre/resultado', 'ResultadoPadre',
     '/api/guardar-resultado', 'GuardarResultadoAPI',
 
     '/mi-perfil', 'MiPerfil',

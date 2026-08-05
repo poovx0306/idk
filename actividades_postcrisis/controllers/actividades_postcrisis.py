@@ -31,7 +31,4 @@ class MarcarActividadPostcrisis:
         conn.commit()
         conn.close()
 
-        from avance_infante.controllers.avance_infante import actualizar_racha
-        actualizar_racha(id_infante)
-
         raise web.HTTPError('303 See Other', {'Location': '/padre/postcrisis'})

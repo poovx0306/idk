@@ -199,7 +199,7 @@ class EditarDocenteAdmin:
             if conn:
                 conn.close()
 
-        raise web.seeother('/administrativo/docentes?aviso=Cambios+guardados+correctamente')
+        raise web.seeother(web.ctx.homedomain + '/administrativo/docentes')
 
 
 class BajaDocenteAdmin:

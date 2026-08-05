@@ -17,6 +17,7 @@ from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin
 from administrativos.controllers.padres import PadresAdmin
 
 from portal_inicio.controllers.inicio import Inicio
+from sobre_autismo.controllers.sobre_autismo import SobreAutismo
 from inicio_docente.controllers.inicio_docente import InicioDocente
 
 from inicios_sesion.docentes.controllers.index import LoginDocentes
@@ -42,6 +43,7 @@ from mi_perfil_padre.controllers.mi_perfil import MiPerfilPadre
 
 urls = (
     '/', 'Inicio',
+    '/sobre-autismo', 'SobreAutismo',
 
     #pruebas
     '/administrativo/inicio', 'InicioAdministrativo',

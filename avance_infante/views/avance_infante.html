@@ -1,4 +1,4 @@
-$def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha)
+$def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha, analisis)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -81,14 +81,19 @@ $def with (seccion, evolucion, progreso_pct, hechas_act, total_act, racha)
           </div>
           $if racha:
             <div class="stat-card">
-              <div class="stat-num">$racha['racha_actual'] semana(s)</div>
-              <div class="stat-label">Apoyando a tu hijo de forma constante</div>
+              <div class="stat-num">$racha día(s)</div>
+              <div class="stat-label">Días distintos completando actividades post-crisis</div>
             </div>
           $else:
             <div class="stat-card">
-              <div class="stat-num">0 semanas</div>
-              <div class="stat-label">Completa tu primera actividad para empezar</div>
+              <div class="stat-num">0 días</div>
+              <div class="stat-label">Completa tu primera actividad post-crisis para empezar</div>
             </div>
+        </div>
+
+        <div class="history-card" style="margin-bottom: 22px; background: #f0fdfa;">
+          <h2 style="color: #0f766e;">Análisis del avance</h2>
+          <p style="font-size: 13.5px; color: #115e59; line-height: 1.6;">$analisis</p>
         </div>
 
         <div class="history-card">

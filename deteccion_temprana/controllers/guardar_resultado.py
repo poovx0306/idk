@@ -5,7 +5,6 @@ from datetime import date
 
 render = web.template.render('deteccion_temprana/views/')
 
-
 class GuardarResultadoAPI:
     def POST(self):
         session = web.config._session

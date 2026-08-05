@@ -21,14 +21,11 @@ class InicioAdministrativo:
             except:
                 total_docentes = 0
         
-        # Total de cuestionarios respondidos
+# Total de cuestionarios respondidos
         try:
-            total_cuestionarios = db.query('SELECT COUNT(*) as total FROM cuestionario')[0].total
+            total_cuestionarios = db.query('SELECT COUNT(*) as total FROM resultados_cuestionarios')[0].total
         except:
-            try:
-                total_cuestionarios = db.query('SELECT COUNT(*) as total FROM cuestionarios')[0].total
-            except:
-                total_cuestionarios = 0
+            total_cuestionarios = 0
             
         # Total de estrategias didácticas
         try:

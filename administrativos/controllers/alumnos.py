@@ -4,69 +4,137 @@ import os
 
 render = web.template.render('administrativos/views/')
 
+
 def conectar_bd():
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     db_path = os.path.join(base_dir, 'sql', 'conaap.db')
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
     return conn
+
 
 class AlumnosAdmin:
     def GET(self):
         data = web.input(docente='', grado='')
-        docente = data.get('docente', '').strip()
-        grado = data.get('grado', '').strip()
+        docente = data.docente.strip()
+        grado = data.grado.strip()
 
-        conn = conectar_bd()
-        cursor = conn.cursor()
+        alumnos = []
+        lista_docentes = []
+        total = 0
+        conn = None
 
-        query = "SELECT * FROM alumnos WHERE 1=1"
-        params = []
+        try:
+            conn = conectar_bd()
+            cursor = conn.cursor()
 
-        if docente:
-            query += " AND docente_asignado = ?"
-            params.append(docente)
+            query = """
+                SELECT i.id_infante AS id,
+                       i.nombre,
+                       i.edad,
+                       i.condicion,
+                       i.grado,
+                       i.id_docente1,
+                       d.nombre AS docente_asignado
+                FROM infantes i
+                LEFT JOIN docente d ON d.id_docente = i.id_docente1
+                WHERE 1=1
+            """
+            params = []
 
-        if grado:
-            query += " AND grado = ?"
-            params.append(grado)
+            if docente:
+                query += " AND i.id_docente1 = ?"
+                params.append(docente)
 
-        query += " ORDER BY id DESC"
+            if grado:
+                query += " AND i.grado = ?"
+                params.append(grado)
 
-        cursor.execute(query, params)
-        alumnos = cursor.fetchall()
-        
-        cursor.execute("SELECT COUNT(*) as total FROM alumnos")
-        total = cursor.fetchone()['total']
+            query += " ORDER BY i.id_infante DESC"
 
-        conn.close()
+            cursor.execute(query, params)
+            alumnos = cursor.fetchall()
+
+            cursor.execute("SELECT COUNT(*) AS total FROM infantes")
+            total = cursor.fetchone()['total']
+
+            cursor.execute("SELECT id_docente, nombre FROM docente ORDER BY nombre")
+            lista_docentes = cursor.fetchall()
+
+        except sqlite3.Error as e:
+            print("Error de base de datos en AlumnosAdmin:", e)
+        except Exception as e:
+            print("Error inesperado en AlumnosAdmin:", e)
+        finally:
+            if conn:
+                conn.close()
+
         return render.alumnos(
-            alumnos=alumnos, 
-            total=total, 
-            docente_sel=docente, 
-            grado_sel=grado
+            alumnos=alumnos,
+            total=total,
+            docente_sel=docente,
+            grado_sel=grado,
+            lista_docentes=lista_docentes
         )
-    
+
+
 class NuevoAlumnoAdmin:
     def GET(self):
-        return render.nuevo_alumno()
+        datos = web.input(error='')
+        lista_docentes = []
+        conn = None
+
+        try:
+            conn = conectar_bd()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id_docente, nombre FROM docente ORDER BY nombre")
+            lista_docentes = cursor.fetchall()
+        except sqlite3.Error as e:
+            print("Error de base de datos en NuevoAlumnoAdmin:", e)
+        except Exception as e:
+            print("Error inesperado en NuevoAlumnoAdmin:", e)
+        finally:
+            if conn:
+                conn.close()
+
+        return render.nuevo_alumno(lista_docentes=lista_docentes, error=datos.error)
 
     def POST(self):
-        data = web.input(nombre='', edad='', condicion='', docente_asignado='', grado='')
-        
-        nombre = data.get('nombre')
-        edad = data.get('edad')
-        condicion = data.get('condicion')
-        docente_asignado = data.get('docente_asignado')
-        grado = data.get('grado')
+        datos = web.input(nombre='', edad='', condicion='', id_docente1='', grado='')
+        nombre = datos.nombre.strip()
+        condicion = datos.condicion.strip()
+        grado = datos.grado.strip()
+        id_docente1 = datos.id_docente1.strip()
+        conn = None
 
-        conn = conectar_bd()
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO alumnos (nombre, edad, condicion, docente_asignado, grado) VALUES (?, ?, ?, ?, ?)",
-            (nombre, edad, condicion, docente_asignado, grado)
-        )
-        conn.commit()
-        conn.close()
+        try:
+            edad = int(datos.edad or 0)
+        except ValueError:
+            edad = 0
+
+        if not nombre or not id_docente1:
+            raise web.seeother('/administrativo/alumnos/nuevo?error=El+nombre+y+el+docente+son+obligatorios')
+
+        try:
+            conn = conectar_bd()
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO infantes (nombre, edad, id_docente1, condicion, grado) VALUES (?, ?, ?, ?, ?)",
+                (nombre, edad, id_docente1, condicion, grado)
+            )
+            conn.commit()
+
+        except web.HTTPError:
+            raise
+        except sqlite3.Error as e:
+            print("Error de base de datos al registrar alumno:", e)
+            raise web.seeother('/administrativo/alumnos/nuevo?error=No+se+pudo+registrar+al+alumno')
+        except Exception as e:
+            print("Error inesperado al registrar alumno:", e)
+            raise web.seeother('/administrativo/alumnos/nuevo?error=Ocurrio+un+error+inesperado')
+        finally:
+            if conn:
+                conn.close()
 
         raise web.seeother('/administrativo/alumnos')

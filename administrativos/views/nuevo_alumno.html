@@ -1,3 +1,5 @@
+$def with (lista_docentes=[], error='')
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
@@ -50,6 +52,15 @@
         background-color: #fff;
     }
 
+    .alert-error {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        padding: 0.85rem 1rem;
+    }
+
     .btn-cancelar {
         background-color: #ffffff;
         color: #2d3748;
@@ -87,6 +98,11 @@
 <div class="card-formulario">
     <h3 class="fw-bold text-dark mb-4">Registrar alumno</h3>
 
+    $if error:
+        <div class="alert-error mb-3">
+            <i class="bi bi-exclamation-triangle me-2"></i>$error
+        </div>
+
     <form method="POST" action="/administrativo/alumnos/nuevo">
         <!-- Nombre completo -->
         <div class="mb-3">
@@ -98,7 +114,7 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Edad</label>
-                <input type="text" name="edad" class="form-control" placeholder="Ej. 7 años" required>
+                <input type="number" name="edad" class="form-control" placeholder="Ej. 7" min="0" max="18" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Grado</label>
@@ -119,10 +135,10 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Docente asignado</label>
-                <select name="docente_asignado" class="form-select" required>
+                <select name="id_docente1" class="form-select" required>
                     <option value="" selected disabled>Selecciona un docente</option>
-                    <option value="Prof. Ana Martínez">Prof. Ana Martínez</option>
-                    <option value="Prof. Carlos Vega">Prof. Carlos Vega</option>
+                    $for doc in lista_docentes:
+                        <option value="$doc['id_docente']">$doc['nombre']</option>
                 </select>
             </div>
         </div>

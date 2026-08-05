@@ -27,13 +27,13 @@ class DocentesAdmin:
             cursor = conn.cursor()
 
             cursor.execute("""
-                SELECT id_docente AS id,
-                       nombre,
-                       correo,
-                       clave_docente AS clave,
-                       0 AS alumnos
-                FROM docente
-                ORDER BY id_docente DESC
+                SELECT d.id_docente AS id,
+                       d.nombre,
+                       d.correo,
+                       d.clave_docente AS clave,
+                       (SELECT COUNT(*) FROM infantes i WHERE i.id_docente1 = d.id_docente) AS alumnos
+                FROM docente d
+                ORDER BY d.id_docente DESC
             """)
             docente = cursor.fetchall()
 
@@ -83,6 +83,10 @@ class NuevoDocenteAdmin:
             cursor.execute("SELECT id_docente FROM docente WHERE LOWER(correo) = ?", (correo,))
             if cursor.fetchone():
                 raise web.seeother('/administrativo/docentes/nuevo?error=Ese+correo+ya+esta+registrado')
+
+            cursor.execute("SELECT id_usuario FROM usuario WHERE LOWER(correo) = ?", (correo,))
+            if cursor.fetchone():
+                raise web.seeother('/administrativo/docentes/nuevo?error=Ese+correo+ya+tiene+una+cuenta+en+el+sistema')
 
             cursor.execute("SELECT id_admin FROM administrador LIMIT 1")
             fila_admin = cursor.fetchone()
@@ -135,13 +139,13 @@ class EditarDocenteAdmin:
             conn = conectar_bd()
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT id_docente AS id,
-                       nombre,
-                       correo,
-                       clave_docente AS clave,
-                       0 AS alumnos
-                FROM docente
-                WHERE id_docente = ?
+                SELECT d.id_docente AS id,
+                       d.nombre,
+                       d.correo,
+                       d.clave_docente AS clave,
+                       (SELECT COUNT(*) FROM infantes i WHERE i.id_docente1 = d.id_docente) AS alumnos
+                FROM docente d
+                WHERE d.id_docente = ?
             """, (datos.id,))
             docente = cursor.fetchone()
         except sqlite3.Error as e:
@@ -213,7 +217,7 @@ class EditarDocenteAdmin:
             if conn:
                 conn.close()
 
-        raise web.seeother(web.ctx.homedomain + '/administrativo/docentes')
+        raise web.seeother('/administrativo/docentes?aviso=Cambios+guardados+correctamente')
 
 
 class BajaDocenteAdmin:

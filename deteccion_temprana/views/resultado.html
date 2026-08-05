@@ -305,13 +305,13 @@ $def with ()
         var txtTitulo = document.getElementById('txt-titulo');
         var txtDesc = document.getElementById('txt-descripcion');
 
-        if (puntaje >= 15) {
+        if (puntaje >= 65) {
             // ROJO
             imgSemaforo.src = "/static/images/semaforo-rojo.svg";
             txtTitulo.innerText = "Atención prioritaria";
             txtTitulo.className = "titulo-resultado rojo";
             txtDesc.innerText = "Las respuestas sugieren que es muy importante realizar una valoración detallada con el personal de CONAFE para brindarte el apoyo necesario.";
-        } else if (puntaje >= 6) {
+        } else if (puntaje >= 18) {
             // AMARILLO
             imgSemaforo.src = "/static/images/semaforo-amarillo.svg";
             txtTitulo.innerText = "Atención requerida";

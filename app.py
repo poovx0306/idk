@@ -94,7 +94,6 @@ urls = (
     '/padre/perfil', 'MiPerfilPadre',
     '/padre/seleccionar-nino', 'SeleccionarNino',
     '/padre/elegir-nino', 'ElegirNino',
-    '/padre/resultado', 'ResultadoPadre',
     '/api/guardar-resultado', 'GuardarResultadoAPI',
 
     '/mi-perfil', 'MiPerfil',

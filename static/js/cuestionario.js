@@ -128,5 +128,21 @@ function finalizarEvaluacion() {
     };
 
     localStorage.setItem('veanme_resultado', JSON.stringify(resultadoData));
-    window.location.href = '/resultado';
+
+    // Mandar los datos al servidor para guardarlos en SQLite (Base de datos)
+    fetch('/guardar-resultado', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ puntaje: puntajeTotal })
+    })
+    .then(response => response.json())
+    .then(data => {
+        window.location.href = '/resultado';
+    })
+    .catch(error => {
+        console.error("Error al guardar:", error);
+        window.location.href = '/resultado';
+    });
 }

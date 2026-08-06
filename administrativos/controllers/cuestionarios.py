@@ -32,7 +32,7 @@ class Cuestionarios:
             cuestionarios_datos.append({
                 "id": f["id"],
                 "titulo": f["titulo"],
-                "preguntas": total_preguntas,  # <--- Aquí va el conteo real
+                "preguntas": total_preguntas,
                 "secciones": 0,
                 "respuestas": 0,
                 "estado": f["estado"]

@@ -23,7 +23,7 @@ class InicioAdministrativo:
 
         # Total de cuestionarios
         try:
-            total_cuestionarios = db.query('SELECT COUNT(*) as total FROM cuestionario')[0].total
+            total_cuestionarios = db.query('SELECT COUNT(*) as total FROM resultados')[0].total
         except Exception as e:
             print("Error al contar cuestionarios:", e)
             total_cuestionarios = 0
@@ -37,7 +37,7 @@ class InicioAdministrativo:
 
         # Casos pendientes o en rojo
         try:
-            casos_pendientes = list(db.query("SELECT * FROM resultados WHERE nivel_riesgo = 'Alto' OR resultado = 'Alto' LIMIT 5"))
+            casos_pendientes = list(db.query("SELECT * FROM resultados WHERE nivel_riesgo = 'Alto' LIMIT 5"))
         except Exception as e:
             print("Error al consultar casos pendientes:", e)
             casos_pendientes = []

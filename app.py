@@ -12,8 +12,7 @@ from administrativos.controllers.inicio import InicioAdministrativo
 from administrativos.controllers.resultados import Resultados
 from administrativos.controllers.estrategias_didacticas import EstrategiasDidacticasAdmin, NuevaEstrategiaAdmin
 from administrativos.controllers.docentes import DocentesAdmin, NuevoDocenteAdmin, EditarDocenteAdmin, BajaDocenteAdmin
-from administrativos.controllers.alumnos import AlumnosAdmin
-from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin
+from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin, EditarAlumnoAdmin, EliminarAlumnoAdmin
 from administrativos.controllers.padres import PadresAdmin
 
 from portal_inicio.controllers.inicio import Inicio
@@ -62,6 +61,8 @@ urls = (
     '/administrativo/docentes/baja', 'BajaDocenteAdmin',
     '/administrativo/alumnos', 'AlumnosAdmin',
     '/administrativo/alumnos/nuevo', 'NuevoAlumnoAdmin',
+    '/administrativo/alumnos/editar', 'EditarAlumnoAdmin',
+    '/administrativo/alumnos/eliminar', 'EliminarAlumnoAdmin',
     '/administrativo/padres', 'PadresAdmin',
 
     #nueva ruta

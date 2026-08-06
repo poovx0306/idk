@@ -219,7 +219,7 @@ $def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[])
                 <select name="docente" class="form-select border-0 fw-semibold p-0 shadow-none">
                     <option value="" $('selected' if docente_sel == '' else '')>Todos</option>
                     $for doc in lista_docentes:
-                        <option value="$doc['id_docente']" $('selected' if str(doc['id_docente']) == docente_sel else '')>$doc['nombre']</option>
+                        <option value="$doc['id_docente']" $('selected' if doc['id_docente'] == docente_sel else '')>$doc['nombre']</option>
                 </select>
             </div>
             <div class="col-md-4">

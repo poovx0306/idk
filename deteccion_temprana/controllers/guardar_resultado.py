@@ -17,12 +17,15 @@ class GuardarResultadoAPI:
             web.header('Content-Type', 'application/json')
             return json.dumps({"ok": False})
 
-        if puntaje < 15:
-            nivel_riesgo = "Bajo"
-        elif puntaje < 30:
+        print("DATOS RECIBIDOS:", datos)
+        print("PUNTAJE CONVERTIDO:", puntaje)
+
+        if puntaje >= 35:
+            nivel_riesgo = "Alto"
+        elif puntaje >= 18:
             nivel_riesgo = "Medio"
         else:
-            nivel_riesgo = "Alto"
+            nivel_riesgo = "Bajo"
 
         conn = sqlite3.connect("sql/conaap.db")
         cur = conn.cursor()

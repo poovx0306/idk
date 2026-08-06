@@ -13,7 +13,7 @@ from administrativos.controllers.resultados import Resultados
 from administrativos.controllers.estrategias_didacticas import EstrategiasDidacticasAdmin, NuevaEstrategiaAdmin
 from administrativos.controllers.docentes import DocentesAdmin, NuevoDocenteAdmin, EditarDocenteAdmin, BajaDocenteAdmin
 from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin, EditarAlumnoAdmin, EliminarAlumnoAdmin
-from administrativos.controllers.padres import PadresAdmin
+from administrativos.controllers.padres import PadresAdmin, NuevoPadreAdmin, EditarPadreAdmin, EliminarPadreAdmin
 
 from portal_inicio.controllers.inicio import Inicio
 from sobre_autismo.controllers.sobre_autismo import SobreAutismo
@@ -64,6 +64,9 @@ urls = (
     '/administrativo/alumnos/editar', 'EditarAlumnoAdmin',
     '/administrativo/alumnos/eliminar', 'EliminarAlumnoAdmin',
     '/administrativo/padres', 'PadresAdmin',
+    '/administrativo/padres/nuevo', 'NuevoPadreAdmin',
+    '/administrativo/padres/editar', 'EditarPadreAdmin',
+    '/administrativo/padres/eliminar', 'EliminarPadreAdmin',
 
     #nueva ruta
     '/administrativo/cuestionarios/editar_pregunta', 'administrativos.controllers.editar_pregunta.EditarPregunta',

@@ -27,14 +27,24 @@ class Cuestionarios:
             # Contar cuántas preguntas pertenecen a este cuestionario
             cursor.execute('SELECT COUNT(*) AS total FROM preguntas WHERE cuestionario_id = ?', (cuestionario_id,))
             conteo = cursor.fetchone()
-            total_preguntas = conteo["total"] if conteo else 0
+            total_preguntas = conteo['total'] if conteo else 0
+
+            # Contar cuántas secciones únicas hay
+            cursor.execute('SELECT COUNT(DISTINCT seccion) AS total FROM preguntas WHERE cuestionario_id = ?', (cuestionario_id,))
+            conteo_secciones = cursor.fetchone()
+            total_secciones = conteo_secciones['total'] if conteo_secciones else 0
+
+            # Contar cuántas respuestas/resultados se han guardado
+            cursor.execute('SELECT COUNT(*) AS total FROM resultados')
+            conteo_respuestas = cursor.fetchone()
+            total_respuestas = conteo_respuestas['total'] if conteo_respuestas else 0
 
             cuestionarios_datos.append({
                 "id": f["id"],
                 "titulo": f["titulo"],
                 "preguntas": total_preguntas,
-                "secciones": 0,
-                "respuestas": 0,
+                "secciones": total_secciones,
+                "respuestas": total_respuestas,
                 "estado": f["estado"]
             })
 

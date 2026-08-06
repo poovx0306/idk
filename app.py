@@ -64,6 +64,9 @@ urls = (
     '/administrativo/alumnos/nuevo', 'NuevoAlumnoAdmin',
     '/administrativo/padres', 'PadresAdmin',
 
+    #nueva ruta
+    '/administrativo/cuestionarios/editar_pregunta', 'administrativos.controllers.editar_pregunta.EditarPregunta',
+
     '/inicio', 'Inicio',
     '/docente/inicio', 'InicioDocente',
     '/login/docente', 'LoginDocentes',

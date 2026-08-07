@@ -49,7 +49,7 @@ class InicioPadres:
         """, (id_padre,))
         historial = cur.fetchall()
 
-        alerta = historial and historial[0]["nivel_riesgo"] in ("Medio", "Alto")
+        alerta = bool(historial)
 
         cur.execute(CONSEJOS_ROTATIVOS_QUERY)
         consejos = cur.fetchall()

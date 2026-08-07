@@ -1,9 +1,9 @@
 import web
 #pruebas
 from administrativos.controllers.cuestionarios import (
-    Cuestionarios, 
-    NuevoCuestionario, 
-    EliminarCuestionario, 
+    Cuestionarios,
+    NuevoCuestionario,
+    EliminarCuestionario,
     EditarCuestionario,
     VerPreguntasCuestionario
 )
@@ -39,6 +39,7 @@ from guias_hogar.controllers.guias_hogar import GuiasHogar
 from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, MarcarActividadPostcrisis
 from avance_infante.controllers.avance_infante import AvanceInfante
 from mi_perfil_padre.controllers.mi_perfil import MiPerfilPadre
+from actividades_casa.controllers.actividades_casa import ActividadesCasa, MarcarActividadCasa
 
 urls = (
     '/', 'Inicio',
@@ -100,6 +101,8 @@ urls = (
     '/padre/postcrisis', 'ActividadesPostcrisis',
     '/padre/postcrisis/marcar', 'MarcarActividadPostcrisis',
     '/padre/avance', 'AvanceInfante',
+    '/padre/actividades-casa', 'ActividadesCasa',
+    '/padre/actividades-casa/marcar', 'MarcarActividadCasa',
     '/padre/perfil', 'MiPerfilPadre',
     '/padre/seleccionar-nino', 'SeleccionarNino',
     '/padre/elegir-nino', 'ElegirNino',

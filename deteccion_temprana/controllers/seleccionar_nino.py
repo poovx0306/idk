@@ -8,6 +8,7 @@ class SeleccionarNino:
     def GET(self):
         session = web.config._session
         id_padres = session.id_referencia
+        datos = web.input(destino='inicio')
 
         conn = sqlite3.connect("sql/conaap.db")
         conn.row_factory = sqlite3.Row
@@ -16,14 +17,17 @@ class SeleccionarNino:
         ninos = cur.fetchall()
         conn.close()
 
-        return render.seleccionar_nino(ninos)
+        return render.seleccionar_nino(ninos, datos.destino)
 
 
 class ElegirNino:
     def GET(self):
         session = web.config._session
-        datos = web.input(id_infante=None)
+        datos = web.input(id_infante=None, destino='inicio')
 
         session.id_infante_actual = int(datos.id_infante)
 
-        raise web.HTTPError('303 See Other', {'Location': '/padre/inicio'})
+        if datos.destino == 'cuestionario':
+            raise web.HTTPError('303 See Other', {'Location': '/cuestionario'})
+        else:
+            raise web.HTTPError('303 See Other', {'Location': '/padre/inicio'})

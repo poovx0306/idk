@@ -81,6 +81,6 @@ class LoginPadres:
         conexion.close()
 
         if tiene_ninos:
-            raise web.HTTPError('303 See Other', {'Location': '/padre/seleccionar-nino'})
+            raise web.HTTPError('303 See Other', {'Location': '/padre/inicio'})
         else:
             raise web.HTTPError('303 See Other', {'Location': '/registro-nino'})

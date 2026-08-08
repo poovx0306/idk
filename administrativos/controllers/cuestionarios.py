@@ -174,3 +174,25 @@ class VerPreguntasCuestionario:
             return render.ver_preguntas(cuestionario=cuestionario, preguntas=preguntas)
         else:
             raise web.seeother('/administrativo/cuestionarios')
+
+    #nueva funcionnnn
+class ToggleEstadoCuestionario:
+    def POST(self):
+        data = web.input()
+        cuestionario_id = data.get('id')
+        nuevo_estado = data.get('estado')  # 'Activo' o 'Inactivo'
+
+        if cuestionario_id and nuevo_estado:
+            conn = conectar_bd()
+            cursor = conn.cursor()
+
+            # Si se va a activar, primero desactivar TODOS los demás
+            if nuevo_estado == 'Activo':
+                cursor.execute("UPDATE cuestionarios SET estado = 'Inactivo' WHERE id != ?", (cuestionario_id,))
+
+            # Actualizar el estado del cuestionario seleccionado
+            cursor.execute("UPDATE cuestionarios SET estado = ? WHERE id = ?", (nuevo_estado, cuestionario_id))
+            conn.commit()
+            conn.close()
+
+        raise web.seeother('/administrativo/cuestionarios')

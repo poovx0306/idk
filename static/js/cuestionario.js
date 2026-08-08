@@ -129,8 +129,7 @@ function finalizarEvaluacion() {
 
     localStorage.setItem('veanme_resultado', JSON.stringify(resultadoData));
 
-    // Mandar los datos al servidor para guardarlos en SQLite (Base de datos)
-    fetch('/guardar-resultado', {
+    fetch('/api/guardar-resultado', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -1,4 +1,4 @@
-$def with ()
+$def with (es_padre)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -275,12 +275,15 @@ $def with ()
                     <li><i class="bi bi-check-lg"></i> Recibe orientación para acompañar a tu peque en casa.</li>
                 </ul>
 
-                <div class="acciones-box">
+               <div class="acciones-box">
                     <button type="button" class="btn btn-pdf" onclick="window.print()">
                         <i class="bi bi-file-earmark-text"></i>
                         Descargar reporte PDF
                     </button>
-                    <a href="/" class="btn btn-inicio">Volver al inicio</a>
+                    $if es_padre:
+                        <a href="/padre/inicio" class="btn btn-inicio">Volver</a>
+                    $else:
+                        <a href="/" class="btn btn-inicio">Volver al inicio</a>
                 </div>
 
                 <div class="nota-medica">

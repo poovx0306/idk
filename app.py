@@ -1,9 +1,9 @@
 import web
 #pruebas
 from administrativos.controllers.cuestionarios import (
-    Cuestionarios, 
-    NuevoCuestionario, 
-    EliminarCuestionario, 
+    Cuestionarios,
+    NuevoCuestionario,
+    EliminarCuestionario,
     EditarCuestionario,
     VerPreguntasCuestionario
 )
@@ -12,9 +12,8 @@ from administrativos.controllers.inicio import InicioAdministrativo
 from administrativos.controllers.resultados import Resultados
 from administrativos.controllers.estrategias_didacticas import EstrategiasDidacticasAdmin, NuevaEstrategiaAdmin
 from administrativos.controllers.docentes import DocentesAdmin, NuevoDocenteAdmin, EditarDocenteAdmin, BajaDocenteAdmin
-from administrativos.controllers.alumnos import AlumnosAdmin
-from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin
-from administrativos.controllers.padres import PadresAdmin
+from administrativos.controllers.alumnos import AlumnosAdmin, NuevoAlumnoAdmin, EditarAlumnoAdmin, EliminarAlumnoAdmin
+from administrativos.controllers.padres import PadresAdmin, NuevoPadreAdmin, EditarPadreAdmin, EliminarPadreAdmin
 
 from portal_inicio.controllers.inicio import Inicio
 from sobre_autismo.controllers.sobre_autismo import SobreAutismo
@@ -40,6 +39,7 @@ from guias_hogar.controllers.guias_hogar import GuiasHogar
 from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, MarcarActividadPostcrisis
 from avance_infante.controllers.avance_infante import AvanceInfante
 from mi_perfil_padre.controllers.mi_perfil import MiPerfilPadre
+from actividades_casa.controllers.actividades_casa import ActividadesCasa, MarcarActividadCasa
 
 urls = (
     '/', 'Inicio',
@@ -62,7 +62,12 @@ urls = (
     '/administrativo/docentes/baja', 'BajaDocenteAdmin',
     '/administrativo/alumnos', 'AlumnosAdmin',
     '/administrativo/alumnos/nuevo', 'NuevoAlumnoAdmin',
+    '/administrativo/alumnos/editar', 'EditarAlumnoAdmin',
+    '/administrativo/alumnos/eliminar', 'EliminarAlumnoAdmin',
     '/administrativo/padres', 'PadresAdmin',
+    '/administrativo/padres/nuevo', 'NuevoPadreAdmin',
+    '/administrativo/padres/editar', 'EditarPadreAdmin',
+    '/administrativo/padres/eliminar', 'EliminarPadreAdmin',
 
     #nueva ruta
     '/administrativo/cuestionarios/editar_pregunta', 'administrativos.controllers.editar_pregunta.EditarPregunta',
@@ -98,6 +103,8 @@ urls = (
     '/padre/postcrisis', 'ActividadesPostcrisis',
     '/padre/postcrisis/marcar', 'MarcarActividadPostcrisis',
     '/padre/avance', 'AvanceInfante',
+    '/padre/actividades-casa', 'ActividadesCasa',
+    '/padre/actividades-casa/marcar', 'MarcarActividadCasa',
     '/padre/perfil', 'MiPerfilPadre',
     '/padre/seleccionar-nino', 'SeleccionarNino',
     '/padre/elegir-nino', 'ElegirNino',

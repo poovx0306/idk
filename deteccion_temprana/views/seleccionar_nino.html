@@ -1,4 +1,4 @@
-$def with (ninos)
+$def with (ninos, destino)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -22,7 +22,7 @@ $def with (ninos)
         <h1>¿Con cuál niño quieres continuar?</h1>
 
         $for nino in ninos:
-            <a class="nino-card" href="/padre/elegir-nino?id_infante=$nino['id_infante']">
+            <a class="nino-card" href="/padre/elegir-nino?id_infante=$nino['id_infante']&destino=$destino">
                 <div class="nino-nombre">$nino['nombre']</div>
                 <div class="nino-edad">$nino['edad'] años</div>
             </a>

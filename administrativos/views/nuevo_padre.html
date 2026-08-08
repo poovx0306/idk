@@ -1,0 +1,154 @@
+$def with (error='')
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+    :root {
+        --color-principal: #6c1d33;
+        --color-principal-hover: #541628;
+        --color-fondo-general: #6e6568;
+    }
+
+    body {
+        background-color: var(--color-fondo-general);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 2rem 0;
+    }
+
+    .card-formulario {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #2d3748;
+        margin-bottom: 0.4rem;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        color: #4a5568;
+        background-color: #f8fafc;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--color-principal);
+        box-shadow: 0 0 0 3px rgba(108, 29, 51, 0.1);
+        background-color: #fff;
+    }
+
+    .alert-error {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        padding: 0.85rem 1rem;
+    }
+
+    .alert-notif {
+        background-color: #e6f9f5;
+        border: 1px solid #b2f5ea;
+        color: #0b6b5f;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        padding: 0.85rem 1rem;
+    }
+
+    .btn-cancelar {
+        background-color: #ffffff;
+        color: #2d3748;
+        border: 1px solid #cbd5e0;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        transition: background-color 0.2s;
+    }
+
+    .btn-cancelar:hover {
+        background-color: #f7fafc;
+        color: #2d3748;
+    }
+
+    .btn-registrar-padre {
+        background-color: var(--color-principal);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+    .btn-registrar-padre:hover {
+        background-color: var(--color-principal-hover);
+        color: white;
+    }
+</style>
+
+<div class="card-formulario">
+    <h3 class="fw-bold text-dark mb-4">Registrar familia</h3>
+
+    $if error:
+        <div class="alert-error mb-3">
+            <i class="bi bi-exclamation-triangle me-2"></i>$error
+        </div>
+
+    <form method="POST" action="/administrativo/padres/nuevo">
+        <!-- Nombre del tutor -->
+        <div class="mb-3">
+            <label class="form-label">Nombre del padre, madre o tutor</label>
+            <input type="text" name="nombre" class="form-control" placeholder="Ej. Maria Cruz Hernández" required>
+        </div>
+
+        <!-- Correo -->
+        <div class="mb-3">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" name="correo" class="form-control" placeholder="familia@ejemplo.com" required>
+        </div>
+
+        <!-- Contraseña y Estado -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label">Contraseña temporal</label>
+                <input type="password" name="password" class="form-control" placeholder="********" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Estado de la cuenta</label>
+                <select name="estado" class="form-select">
+                    <option value="Activa" selected>Activa</option>
+                    <option value="Inactiva">Inactiva</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Alerta informativa -->
+        <div class="alert alert-notif mb-4" role="alert">
+            Se creará la cuenta de acceso al portal de padres. Los niños se registran después desde la sección de Alumnos.
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="/administrativo/padres" class="btn-cancelar">Cancelar</a>
+            <button type="submit" class="btn-registrar-padre">Registrar familia</button>
+        </div>
+    </form>
+</div>

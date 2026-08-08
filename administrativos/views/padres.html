@@ -1,4 +1,4 @@
-$def with (padres)
+$def with (padres, total=0)
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -8,6 +8,7 @@ $def with (padres)
         --color-principal: #6c1d33;
         --color-principal-hover: #541628;
         --color-sidebar-active: #541628;
+        --color-verde-filtro: #109384;
         --color-fondo: #f8f9fa;
         --color-borde: #edf2f7;
     }
@@ -74,6 +75,22 @@ $def with (padres)
         overflow-y: auto;
     }
 
+    .btn-registrar {
+        background-color: var(--color-principal);
+        color: white;
+        border-radius: 12px;
+        padding: 0.5rem 1.25rem;
+        font-weight: 600;
+        border: none;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+    .btn-registrar:hover {
+        background-color: var(--color-principal-hover);
+        color: white;
+    }
+
     /* Tabla */
     .card-tabla {
         background: #fff;
@@ -124,6 +141,77 @@ $def with (padres)
         padding: 0.35em 0.9em;
         border-radius: 12px;
     }
+
+    .link-editar {
+        color: var(--color-verde-filtro);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .link-editar:hover {
+        text-decoration: underline;
+    }
+
+    .link-eliminar {
+        color: #d32f2f;
+        font-weight: 600;
+        text-decoration: none;
+        background: none;
+        border: none;
+        padding: 0;
+        font-size: 0.95rem;
+        cursor: pointer;
+    }
+
+    .link-eliminar:hover {
+        text-decoration: underline;
+    }
+
+    /* Modal de confirmacion */
+    .modal-content {
+        border: none;
+        border-radius: 18px;
+        padding: 0.5rem;
+    }
+
+    .icono-alerta {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: #fef2f2;
+        color: #d32f2f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+    }
+
+    .btn-cancelar-modal {
+        background-color: #ffffff;
+        color: #2d3748;
+        border: 1px solid #cbd5e0;
+        border-radius: 12px;
+        padding: 0.65rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn-cancelar-modal:hover {
+        background-color: #f7fafc;
+    }
+
+    .btn-confirmar-eliminar {
+        background-color: #d32f2f;
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        padding: 0.65rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn-confirmar-eliminar:hover {
+        background-color: #b02525;
+        color: #ffffff;
+    }
 </style>
 
 <!-- Menú lateral -->
@@ -150,9 +238,14 @@ $def with (padres)
 <!-- Contenido principal -->
 <main class="main-content">
     <!-- Encabezado -->
-    <div class="mb-4">
-        <h2 class="fw-bold text-dark m-0">Padres de familia</h2>
-        <p class="text-muted small m-0">Cuentas registradas para consultar historial · Solo lectura, por privacidad no se editan datos aquí</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark m-0">Padres de familia</h2>
+            <p class="text-muted small m-0">$total cuentas registradas</p>
+        </div>
+        <a href="/administrativo/padres/nuevo" class="btn-registrar">
+        + Registrar familia
+        </a>
     </div>
 
     <!-- Tabla -->
@@ -161,17 +254,27 @@ $def with (padres)
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Nombre</th>
                         <th>Correo electrónico</th>
-                        <th>Cuestionarios respondidos</th>
+                        <th>Niños</th>
+                        <th>Cuestionarios</th>
                         <th>Miembro desde</th>
                         <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     $if padres:
                         $for p in padres:
                             <tr>
-                                <td class="fw-semibold">$p['correo']</td>
+                                <td class="fw-semibold">
+                                    $if p['nombre']:
+                                        $p['nombre']
+                                    $else:
+                                        <span class="text-muted">Sin nombre</span>
+                                </td>
+                                <td class="text-muted">$p['correo']</td>
+                                <td class="text-muted">$p['ninos']</td>
                                 <td class="text-muted">$p['cuestionarios_respondidos']</td>
                                 <td class="text-muted">$p['miembro_desde']</td>
                                 <td>
@@ -180,13 +283,65 @@ $def with (padres)
                                     $else:
                                         <span class="badge-inactiva">Inactiva</span>
                                 </td>
+                                <td>
+                                    <a href="/administrativo/padres/editar?id=$p['id']" class="link-editar me-2">Editar</a>
+                                    <span class="text-muted">·</span>
+                                    <button type="button"
+                                            class="link-eliminar ms-2 boton-eliminar"
+                                            data-id="$p['id']"
+                                            data-nombre="$(p['nombre'] or p['correo'])">Eliminar</button>
+                                </td>
                             </tr>
                     $else:
                         <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">No hay cuentas de padres registradas.</td>
+                            <td colspan="7" class="text-center py-4 text-muted">No hay cuentas de padres registradas.</td>
                         </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </main>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <div class="icono-alerta mx-auto mb-3">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">¿Eliminar esta cuenta?</h5>
+                <p class="text-muted small mb-0">
+                    Estás por eliminar la cuenta de <strong id="nombrePadreEliminar"></strong>.
+                    Perderá su acceso al portal de padres.
+                    Esta acción no se puede deshacer.
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center gap-2 pb-4">
+                <button type="button" class="btn-cancelar-modal" data-bs-dismiss="modal">Cancelar</button>
+                <form method="POST" action="/administrativo/padres/eliminar" class="d-inline m-0">
+                    <input type="hidden" name="id" id="idPadreEliminar" value="">
+                    <button type="submit" class="btn-confirmar-eliminar">Sí, eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var modalEliminar = new bootstrap.Modal(document.getElementById('modalEliminar'));
+        var campoId = document.getElementById('idPadreEliminar');
+        var campoNombre = document.getElementById('nombrePadreEliminar');
+        var botones = document.querySelectorAll('.boton-eliminar');
+
+        botones.forEach(function (boton) {
+            boton.addEventListener('click', function () {
+                campoId.value = boton.getAttribute('data-id');
+                campoNombre.textContent = boton.getAttribute('data-nombre');
+                modalEliminar.show();
+            });
+        });
+    });
+</script>

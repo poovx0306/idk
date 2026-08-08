@@ -11,7 +11,7 @@ db_path = "sql/conaap.db"
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 
-def generar_analisis_ia(id_infante, evolucion, hechas_act, total_act, racha):
+def generar_analisis_ia(id_infante, evolucion, hechas_act, total_act):
     hoy = str(datetime.date.today())
 
     conn = sqlite3.connect(db_path)
@@ -42,11 +42,10 @@ Datos disponibles:
 - Historial de niveles de riesgo por cuestionario (en orden cronológico):
 {resumen_resultados}
 - Actividades asignadas por el docente: {hechas_act} completadas de {total_act}.
-- Días distintos en los que se completó una actividad post-crisis: {racha}.
 
 Escribe un análisis breve (máximo 4-5 líneas) en español, dirigido directamente al padre/madre,
-que correlacione la constancia en las actividades post-crisis y las actividades asignadas con la
-evolución del nivel de riesgo. Sé honesto pero alentador, sin dar diagnósticos médicos."""
+que correlacione la constancia en las actividades con la evolución del nivel de riesgo.
+Sé honesto pero alentador, sin dar diagnósticos médicos."""
 
     try:
         genai.configure(api_key=GEMINI_API_KEY)
@@ -70,14 +69,28 @@ evolución del nivel de riesgo. Sé honesto pero alentador, sin dar diagnóstico
 class AvanceInfante:
     def GET(self):
         session = web.config._session
-        id_infante = session.id_infante_actual
+        datos = web.input(id_infante=None)
 
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
 
+        if not datos.id_infante:
+            id_padres = session.id_referencia
+            cur.execute("SELECT id_infante, nombre, edad FROM infantes WHERE id_padres = ?", (id_padres,))
+            ninos = cur.fetchall()
+            conn.close()
+            return render.avance_infante_seleccion("avance", ninos)
+
+        id_infante = int(datos.id_infante)
+
+        cur.execute("SELECT nombre FROM infantes WHERE id_infante = ?", (id_infante,))
+        infante = cur.fetchone()
+        nombre_infante = infante["nombre"] if infante else ""
+
         cur.execute("SELECT fecha, nivel_riesgo FROM resultados WHERE id_infante1 = ? ORDER BY fecha", (id_infante,))
         evolucion = cur.fetchall()
+        total_cuestionarios = len(evolucion)
 
         cur.execute("""
             SELECT COUNT(*) AS total, SUM(CASE WHEN estado='Completada' THEN 1 ELSE 0 END) AS hechas
@@ -88,16 +101,23 @@ class AvanceInfante:
         hechas_act = act["hechas"] or 0
         progreso_pct = round((hechas_act / total_act) * 100) if total_act > 0 else 0
 
-        cur.execute(
-            "SELECT COUNT(DISTINCT fecha) AS racha FROM actividad_postcrisis_realizada WHERE id_infante = ?",
-            (id_infante,)
-        )
-        racha = cur.fetchone()["racha"] or 0
+        cur.execute("SELECT COUNT(*) AS total FROM actividad_casa_realizada WHERE id_infante = ?", (id_infante,))
+        actividades_casa_hechas = cur.fetchone()["total"] or 0
 
         conn.close()
 
-        analisis = generar_analisis_ia(id_infante, evolucion, hechas_act, total_act, racha)
+        respondio_cuestionario = total_cuestionarios > 0
+        hizo_actividades = hechas_act > 0
+
+        if not respondio_cuestionario and not hizo_actividades:
+            analisis = "Contesta el cuestionario y realiza actividades para que podamos darte un análisis del avance."
+        elif respondio_cuestionario and not hizo_actividades:
+            analisis = "Realiza las actividades asignadas para que podamos darte un análisis del avance."
+        elif not respondio_cuestionario and hizo_actividades:
+            analisis = "Contesta el cuestionario para que podamos darte un análisis del avance."
+        else:
+            analisis = generar_analisis_ia(id_infante, evolucion, hechas_act, total_act)
 
         return render.avance_infante(
-            "avance", evolucion, progreso_pct, hechas_act, total_act, racha, analisis
+            "avance", nombre_infante, total_cuestionarios, progreso_pct, hechas_act, total_act, actividades_casa_hechas, analisis
         )

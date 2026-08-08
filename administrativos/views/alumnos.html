@@ -1,4 +1,4 @@
-$def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[])
+$def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[], aviso='', error='')
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -91,6 +91,25 @@ $def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[])
         color: white;
     }
 
+    /* Avisos */
+    .aviso-ok {
+        background-color: #e6f9f5;
+        border: 1px solid #b2f5ea;
+        color: #0b6b5f;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        padding: 0.85rem 1rem;
+    }
+
+    .aviso-error {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        padding: 0.85rem 1rem;
+    }
+
     /* Filtros */
     .card-filtros {
         background: #fff;
@@ -170,10 +189,61 @@ $def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[])
         color: #d32f2f;
         font-weight: 600;
         text-decoration: none;
+        background: none;
+        border: none;
+        padding: 0;
+        font-size: 0.95rem;
+        cursor: pointer;
     }
 
     .link-eliminar:hover {
         text-decoration: underline;
+    }
+
+    /* Modal de confirmacion */
+    .modal-content {
+        border: none;
+        border-radius: 18px;
+        padding: 0.5rem;
+    }
+
+    .icono-alerta {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: #fef2f2;
+        color: #d32f2f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+    }
+
+    .btn-cancelar-modal {
+        background-color: #ffffff;
+        color: #2d3748;
+        border: 1px solid #cbd5e0;
+        border-radius: 12px;
+        padding: 0.65rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn-cancelar-modal:hover {
+        background-color: #f7fafc;
+    }
+
+    .btn-confirmar-eliminar {
+        background-color: #d32f2f;
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        padding: 0.65rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn-confirmar-eliminar:hover {
+        background-color: #b02525;
+        color: #ffffff;
     }
 </style>
 
@@ -211,6 +281,16 @@ $def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[])
         </a>
     </div>
 
+    <!-- Avisos -->
+    $if aviso:
+        <div class="aviso-ok mb-3">
+            <i class="bi bi-check-circle me-2"></i>$aviso
+        </div>
+    $if error:
+        <div class="aviso-error mb-3">
+            <i class="bi bi-exclamation-triangle me-2"></i>$error
+        </div>
+
     <!-- Barra de Filtros -->
     <div class="card-filtros mb-4">
         <form method="GET" action="/administrativo/alumnos" class="row align-items-center g-3">
@@ -219,7 +299,7 @@ $def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[])
                 <select name="docente" class="form-select border-0 fw-semibold p-0 shadow-none">
                     <option value="" $('selected' if docente_sel == '' else '')>Todos</option>
                     $for doc in lista_docentes:
-                        <option value="$doc['id_docente']" $('selected' if doc['id_docente'] == docente_sel else '')>$doc['nombre']</option>
+                        <option value="$doc['id_docente']" $('selected' if '%s' % doc['id_docente'] == docente_sel else '')>$doc['nombre']</option>
                 </select>
             </div>
             <div class="col-md-4">
@@ -269,9 +349,12 @@ $def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[])
                                         <span class="text-muted">Sin asignar</span>
                                 </td>
                                 <td>
-                                    <a href="#" class="link-editar me-2">Editar</a>
+                                    <a href="/administrativo/alumnos/editar?id=$a['id']" class="link-editar me-2">Editar</a>
                                     <span class="text-muted">·</span>
-                                    <a href="#" class="link-eliminar ms-2">Eliminar</a>
+                                    <button type="button"
+                                            class="link-eliminar ms-2 boton-eliminar"
+                                            data-id="$a['id']"
+                                            data-nombre="$a['nombre']">Eliminar</button>
                                 </td>
                             </tr>
                     $else:
@@ -283,3 +366,47 @@ $def with (alumnos, total=0, docente_sel='', grado_sel='', lista_docentes=[])
         </div>
     </div>
 </main>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <div class="icono-alerta mx-auto mb-3">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">¿Eliminar a este alumno?</h5>
+                <p class="text-muted small mb-0">
+                    Estás por eliminar a <strong id="nombreAlumnoEliminar"></strong>.
+                    Se borrará su registro junto con la información asociada a su seguimiento.
+                    Esta acción no se puede deshacer.
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center gap-2 pb-4">
+                <button type="button" class="btn-cancelar-modal" data-bs-dismiss="modal">Cancelar</button>
+                <form method="POST" action="/administrativo/alumnos/eliminar" class="d-inline m-0">
+                    <input type="hidden" name="id" id="idAlumnoEliminar" value="">
+                    <button type="submit" class="btn-confirmar-eliminar">Sí, eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var modalEliminar = new bootstrap.Modal(document.getElementById('modalEliminar'));
+        var campoId = document.getElementById('idAlumnoEliminar');
+        var campoNombre = document.getElementById('nombreAlumnoEliminar');
+        var botones = document.querySelectorAll('.boton-eliminar');
+
+        botones.forEach(function (boton) {
+            boton.addEventListener('click', function () {
+                campoId.value = boton.getAttribute('data-id');
+                campoNombre.textContent = boton.getAttribute('data-nombre');
+                modalEliminar.show();
+            });
+        });
+    });
+</script>

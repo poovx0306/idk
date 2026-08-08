@@ -17,6 +17,14 @@ class InicioPadres:
 
         id_padre = session.id_referencia
 
+        cur.execute("SELECT correo, nombre FROM usuario WHERE rol = 'padre' AND id_referencia = ?", (id_padre,))
+        usuario = cur.fetchone()
+        nombre_completo = usuario["nombre"] if usuario else (session.nombre or "Familia")
+        correo = usuario["correo"] if usuario else ""
+
+        partes_nombre = nombre_completo.split()
+        apellidos_familia = " ".join(partes_nombre[1:]) if len(partes_nombre) > 1 else nombre_completo
+
         cur.execute("SELECT id_infante, nombre FROM infantes WHERE id_padres = ?", (id_padre,))
         ninos = cur.fetchall()
         total_ninos = len(ninos)
@@ -28,16 +36,19 @@ class InicioPadres:
         """, (id_padre,))
         total_cuestionarios = cur.fetchone()["total"]
 
+        cur.execute("SELECT COUNT(*) AS total FROM actividad_casa")
+        total_actividades_casa = cur.fetchone()["total"] or 0
+
         cur.execute("""
-            SELECT COUNT(*) AS total, SUM(CASE WHEN estado = 'Completada' THEN 1 ELSE 0 END) AS completadas
-            FROM actividad_asignada aa
-            JOIN infantes i ON i.id_infante = aa.id_infante
+            SELECT COUNT(*) AS hechas
+            FROM actividad_casa_realizada acr
+            JOIN infantes i ON i.id_infante = acr.id_infante
             WHERE i.id_padres = ?
         """, (id_padre,))
-        fila_prog = cur.fetchone()
-        total_act = fila_prog["total"] or 0
-        completadas_act = fila_prog["completadas"] or 0
-        progreso_pct = round((completadas_act / total_act) * 100) if total_act > 0 else 0
+        hechas_casa = cur.fetchone()["hechas"] or 0
+
+        total_posible = total_actividades_casa * total_ninos
+        progreso_pct = round((hechas_casa / total_posible) * 100) if total_posible > 0 else 0
 
         cur.execute("""
             SELECT r.id_resultado, r.fecha, r.nivel_riesgo, i.nombre AS nombre_infante
@@ -61,6 +72,6 @@ class InicioPadres:
         conn.close()
 
         return render.inicio_padres(
-            "inicio", session.nombre, total_cuestionarios, total_ninos,
+            "inicio", apellidos_familia, nombre_completo, correo, total_cuestionarios, total_ninos,
             progreso_pct, historial, alerta, consejo_hoy
         )

@@ -66,6 +66,8 @@ urls = (
 
     #nueva ruta
     '/administrativo/cuestionarios/editar_pregunta', 'administrativos.controllers.editar_pregunta.EditarPregunta',
+    #2da nueva ruta
+    '/administrativo/cuestionarios/toggle', 'administrativos.controllers.cuestionarios.ToggleEstadoCuestionario',
 
     '/inicio', 'Inicio',
     '/docente/inicio', 'InicioDocente',
@@ -80,7 +82,7 @@ urls = (
     '/deteccion-temprana/cuestionario', 'DeteccionTemprana',
     '/api/preguntas', 'deteccion_temprana.controllers.api_preguntas.ApiPreguntas',
     '/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
-#no mover esta linea ni la de arriba alv
+#no mover esta linea ni la de arriba 
     '/deteccion-temprana/resultado', 'deteccion_temprana.controllers.resultado.Resultado',
 
     '/estrategias-didacticas', 'EstrategiasDidacticas',

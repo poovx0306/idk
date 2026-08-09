@@ -48,9 +48,9 @@ def cargar_preguntas_veanme():
     ]
 
     cursor.executemany('''
-        INSERT INTO preguntas 
-        (numero_pregunta, seccion, texto, puntos_casi_nunca, puntos_a_veces, puntos_casi_siempre)
-        VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO preguntas
+    (numero_pregunta, seccion, texto, puntos_casi_nunca, puntos_a_veces, puntos_casi_siempre, cuestionario_id)
+    VALUES (?, ?, ?, ?, ?, ?, 1)
     ''', preguntas)
 
     conn.commit()

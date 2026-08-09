@@ -196,3 +196,18 @@ class ToggleEstadoCuestionario:
             conn.close()
 
         raise web.seeother('/administrativo/cuestionarios')
+ #nueva funcion   
+class EliminarPregunta:
+    def POST(self):
+        data = web.input()
+        pregunta_id = data.get('id')
+        cuestionario_id = data.get('cuestionario_id')
+
+        if pregunta_id:
+            conn = conectar_bd()
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM preguntas WHERE id = ?", (pregunta_id,))
+            conn.commit()
+            conn.close()
+
+        raise web.seeother('/administrativo/cuestionarios/ver_preguntas?id=' + str(cuestionario_id))

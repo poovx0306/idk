@@ -73,6 +73,8 @@ urls = (
     '/administrativo/cuestionarios/editar_pregunta', 'administrativos.controllers.editar_pregunta.EditarPregunta',
     #2da nueva ruta
     '/administrativo/cuestionarios/toggle', 'administrativos.controllers.cuestionarios.ToggleEstadoCuestionario',
+    #3cera nueva ruta
+    '/administrativo/cuestionarios/eliminar_pregunta', 'administrativos.controllers.cuestionarios.EliminarPregunta',
 
     '/inicio', 'Inicio',
     '/docente/inicio', 'InicioDocente',

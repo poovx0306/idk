@@ -175,11 +175,19 @@ $if preguntas:
                         </div>
                     </div>
                     <!-- Botón de edición individual para esta pregunta -->
+                <div class="d-flex gap-1 align-items-start">
                     <a href="/administrativo/cuestionarios/editar_pregunta?id=$p['id']" class="btn btn-sm btn-outline-secondary" title="Editar esta pregunta">
                         <i class="bi bi-pencil"></i>
                     </a>
+                    <form action="/administrativo/cuestionarios/eliminar_pregunta" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta pregunta?');">
+                        <input type="hidden" name="id" value="$p['id']">
+                        <input type="hidden" name="cuestionario_id" value="$cuestionario['id']">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar esta pregunta">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </div>
                 </div>
     $else:
         <div class="empty-state p-4 text-center">
-
         </div>

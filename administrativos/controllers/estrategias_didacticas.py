@@ -65,18 +65,60 @@ class NuevaEstrategiaAdmin:
         import datetime
         fecha = datetime.date.today().isoformat()
 
-        conn = conectar_bd()
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO actividad_asignada 
-            (titulo, descripcion, objetivo, materiales, paso_a_paso, materia, grado, fecha_asignacion, estado)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-            (titulo, descripcion, objetivo, materiales, paso_a_paso, materia, grado, fecha, estado)
-        )
-        conn.commit()
-        conn.close()
+        if not titulo:
+            return render.confirmacion(
+                titulo='Faltan datos',
+                mensaje='El titulo de la estrategia es obligatorio.',
+                volver_url='/administrativo/estrategias/nueva',
+                volver_texto='Regresar al formulario',
+                tipo='error'
+            )
 
-        raise web.seeother('/administrativo/estrategias')
+        conn = None
+        try:
+            conn = conectar_bd()
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO actividad_asignada
+                (titulo, descripcion, objetivo, materiales, paso_a_paso, materia, grado, fecha_asignacion, estado)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (titulo, descripcion, objetivo, materiales, paso_a_paso, materia, grado, fecha, estado)
+            )
+            conn.commit()
+
+        except sqlite3.Error as e:
+            print("Error de base de datos al crear estrategia:", e)
+            return render.confirmacion(
+                titulo='No se pudo guardar',
+                mensaje='Ocurrio un problema al guardar la estrategia en la base de datos.',
+                volver_url='/administrativo/estrategias/nueva',
+                volver_texto='Regresar al formulario',
+                tipo='error'
+            )
+        except Exception as e:
+            print("Error inesperado al crear estrategia:", e)
+            return render.confirmacion(
+                titulo='Ocurrio un error',
+                mensaje='Sucedio algo inesperado al guardar la estrategia.',
+                volver_url='/administrativo/estrategias/nueva',
+                volver_texto='Regresar al formulario',
+                tipo='error'
+            )
+        finally:
+            if conn:
+                conn.close()
+
+        if estado == 'Publicada':
+            mensaje = '"%s" se publico y ya es visible para los docentes.' % titulo
+        else:
+            mensaje = '"%s" se guardo como borrador. Todavia no la ven los docentes.' % titulo
+
+        return render.confirmacion(
+            titulo='Estrategia guardada',
+            mensaje=mensaje,
+            volver_url='/administrativo/estrategias',
+            volver_texto='Volver a la lista'
+        )
     
 class EditarEstrategiaAdmin:
     def GET(self):
@@ -90,7 +132,13 @@ class EditarEstrategiaAdmin:
         conn.close()
 
         if not actividad:
-            raise web.seeother('/administrativo/estrategias')
+            return render.confirmacion(
+                titulo='Estrategia no encontrada',
+                mensaje='No existe una estrategia con ese identificador.',
+                volver_url='/administrativo/estrategias',
+                volver_texto='Volver a la lista',
+                tipo='error'
+            )
 
         return render.editar_estrategia(actividad=actividad)
 
@@ -107,57 +155,52 @@ class EditarEstrategiaAdmin:
         grupo = data.get('grupo')
         estado = data.get('estado')
 
-        conn = conectar_bd()
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE actividad_asignada
-            SET titulo=?, descripcion=?, objetivo=?, materiales=?,
-                paso_a_paso=?, materia=?, grado=?, grupo=?, estado=?
-            WHERE id=?
-        """, (titulo, descripcion, objetivo, materiales, paso_a_paso, materia, grado, grupo, estado, id))
-        conn.commit()
-        conn.close()
+        if not id:
+            return render.confirmacion(
+                titulo='No se indico la estrategia',
+                mensaje='No se recibio el identificador de la estrategia a editar.',
+                volver_url='/administrativo/estrategias',
+                volver_texto='Volver a la lista',
+                tipo='error'
+            )
 
-        raise web.seeother('/administrativo/estrategias')
+        conn = None
+        try:
+            conn = conectar_bd()
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE actividad_asignada
+                SET titulo=?, descripcion=?, objetivo=?, materiales=?,
+                    paso_a_paso=?, materia=?, grado=?, grupo=?, estado=?
+                WHERE id=?
+            """, (titulo, descripcion, objetivo, materiales, paso_a_paso, materia, grado, grupo, estado, id))
+            conn.commit()
 
-def GET(self):
-        data = web.input(materia='', grado='', buscar='')
-        materia = data.get('materia', '').strip()
-        grado = data.get('grado', '').strip()
-        buscar = data.get('buscar', '').strip()
+        except sqlite3.Error as e:
+            print("Error de base de datos al editar estrategia:", e)
+            return render.confirmacion(
+                titulo='No se guardaron los cambios',
+                mensaje='Ocurrio un problema al actualizar la estrategia.',
+                volver_url='/administrativo/estrategias/editar?id=%s' % id,
+                volver_texto='Regresar al formulario',
+                tipo='error'
+            )
+        except Exception as e:
+            print("Error inesperado al editar estrategia:", e)
+            return render.confirmacion(
+                titulo='Ocurrio un error',
+                mensaje='Sucedio algo inesperado al editar la estrategia.',
+                volver_url='/administrativo/estrategias/editar?id=%s' % id,
+                volver_texto='Regresar al formulario',
+                tipo='error'
+            )
+        finally:
+            if conn:
+                conn.close()
 
-        conn = conectar_bd()
-        cursor = conn.cursor()
-
-        query = "SELECT * FROM actividad_asignada WHERE 1=1"
-        params = []
-
-        if buscar:
-            query += " AND LOWER(titulo) LIKE LOWER(?)"
-            params.append(f"%{buscar}%")
-
-        if materia:
-            query += " AND LOWER(materia) = LOWER(?)"
-            params.append(materia)
-
-        if grado:
-            query += " AND grado = ?"
-            params.append(grado)
-
-        query += " ORDER BY id DESC"
-
-        cursor.execute(query, params)
-        estrategias = cursor.fetchall()
-
-        cursor.execute("SELECT COUNT(*) as total FROM actividad_asignada")
-        total_estrategias = cursor.fetchone()['total']
-
-        conn.close()
-
-        return render.estrategias_didacticas(
-            estrategias=estrategias,
-            total=total_estrategias,
-            materia_sel=materia,
-            grado_sel=grado,
-            buscar_sel=buscar
+        return render.confirmacion(
+            titulo='Cambios guardados',
+            mensaje='Los datos de "%s" se actualizaron correctamente.' % titulo,
+            volver_url='/administrativo/estrategias',
+            volver_texto='Volver a la lista'
         )

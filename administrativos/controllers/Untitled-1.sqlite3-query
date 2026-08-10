@@ -2,16 +2,138 @@
 
 -- Presione el botón ▷ en la esquina superior derecha de la ventana para ejecutar todo el archivo.
 
--- 1. Crear la tabla de cuestionarios
-CREATE TABLE IF NOT EXISTS cuestionarios (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    titulo TEXT NOT NULL,
-    estado TEXT DEFAULT 'Activo'
-);
+-- database: ../../sql/conaap.db
 
--- 2. Insertar los cuestionarios iniciales
-INSERT INTO cuestionarios (id, titulo, estado) VALUES (1, 'Tamizaje conductual TEA', 'Activo');
-INSERT INTO cuestionarios (id, titulo, estado) VALUES (2, 'Tamizaje de seguimiento (6-12 meses)', 'Borrador');
+-- 1. Columnas nuevas -------------------------------------------------------
 
--- 3. Vincular las preguntas existentes al primer cuestionario
-ALTER TABLE preguntas ADD COLUMN cuestionario_id INTEGER DEFAULT 1;
+ALTER TABLE infantes ADD COLUMN apellido_paterno TEXT;
+ALTER TABLE infantes ADD COLUMN apellido_materno TEXT;
+
+ALTER TABLE docente  ADD COLUMN apellido_paterno TEXT;
+ALTER TABLE docente  ADD COLUMN apellido_materno TEXT;
+
+ALTER TABLE padres   ADD COLUMN apellido_paterno TEXT;
+ALTER TABLE padres   ADD COLUMN apellido_materno TEXT;
+
+
+-- 2. Quitar espacios dobles y sobrantes ------------------------------------
+
+UPDATE infantes SET nombre =
+    trim(replace(replace(replace(coalesce(nombre, ''), '  ', ' '), '  ', ' '), '  ', ' '));
+
+UPDATE docente SET nombre =
+    trim(replace(replace(replace(coalesce(nombre, ''), '  ', ' '), '  ', ' '), '  ', ' '));
+
+UPDATE padres SET nombre =
+    trim(replace(replace(replace(coalesce(nombre, ''), '  ', ' '), '  ', ' '), '  ', ' '));
+
+
+-- 3. Repartir el nombre en las tres columnas -------------------------------
+-- Convencion mexicana: nombre(s) + apellido paterno + apellido materno.
+-- 1 palabra  -> solo nombre
+-- 2 palabras -> nombre + paterno
+-- 3 o mas    -> las ultimas dos son los apellidos, el resto es el nombre
+
+UPDATE infantes SET
+    apellido_materno = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) >= 2
+        THEN substr(nombre, length(rtrim(nombre, replace(nombre, ' ', ''))) + 1)
+        ELSE '' END,
+
+    apellido_paterno = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 0 THEN ''
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 1
+        THEN substr(nombre, length(rtrim(nombre, replace(nombre, ' ', ''))) + 1)
+        ELSE substr(
+                rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                length(rtrim(
+                    rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                    replace(rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))), ' ', '')
+                )) + 1)
+        END,
+
+    nombre = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 0 THEN nombre
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 1
+        THEN rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', '')))))
+        ELSE rtrim(substr(
+                rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                1,
+                length(rtrim(
+                    rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                    replace(rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))), ' ', '')
+                ))))
+        END;
+
+
+UPDATE docente SET
+    apellido_materno = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) >= 2
+        THEN substr(nombre, length(rtrim(nombre, replace(nombre, ' ', ''))) + 1)
+        ELSE '' END,
+
+    apellido_paterno = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 0 THEN ''
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 1
+        THEN substr(nombre, length(rtrim(nombre, replace(nombre, ' ', ''))) + 1)
+        ELSE substr(
+                rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                length(rtrim(
+                    rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                    replace(rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))), ' ', '')
+                )) + 1)
+        END,
+
+    nombre = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 0 THEN nombre
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 1
+        THEN rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', '')))))
+        ELSE rtrim(substr(
+                rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                1,
+                length(rtrim(
+                    rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                    replace(rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))), ' ', '')
+                ))))
+        END;
+
+
+UPDATE padres SET
+    apellido_materno = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) >= 2
+        THEN substr(nombre, length(rtrim(nombre, replace(nombre, ' ', ''))) + 1)
+        ELSE '' END,
+
+    apellido_paterno = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 0 THEN ''
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 1
+        THEN substr(nombre, length(rtrim(nombre, replace(nombre, ' ', ''))) + 1)
+        ELSE substr(
+                rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                length(rtrim(
+                    rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                    replace(rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))), ' ', '')
+                )) + 1)
+        END,
+
+    nombre = CASE
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 0 THEN nombre
+        WHEN length(nombre) - length(replace(nombre, ' ', '')) = 1
+        THEN rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', '')))))
+        ELSE rtrim(substr(
+                rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                1,
+                length(rtrim(
+                    rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))),
+                    replace(rtrim(substr(nombre, 1, length(rtrim(nombre, replace(nombre, ' ', ''))))), ' ', '')
+                ))))
+        END;
+
+
+-- 4. Verificar como quedo --------------------------------------------------
+
+SELECT 'infantes' AS tabla, id_infante AS id, nombre, apellido_paterno, apellido_materno FROM infantes
+UNION ALL
+SELECT 'docente',  id_docente, nombre, apellido_paterno, apellido_materno FROM docente
+UNION ALL
+SELECT 'padres',   id,         nombre, apellido_paterno, apellido_materno FROM padres;

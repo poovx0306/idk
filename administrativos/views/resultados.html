@@ -1,4 +1,4 @@
-$def with (resultados, riesgo_sel='', cuestionario_sel='')
+$def with (resultados, riesgo_sel='', cuestionario_sel='', buscar_sel='')
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -194,34 +194,31 @@ body {
 
     <!-- Barra de Filtros -->
     <div class="card-filtros mb-4">
-        <form method="GET" action="/administrativo/resultados" class="row align-items-center g-3">
-            <div class="col-md-3">
-                <label class="form-label text-muted small mb-1">Nivel de riesgo</label>
-                <select name="riesgo" class="form-select border-0 fw-semibold p-0 shadow-none">
-                    <option value="" ${'selected' if riesgo_sel == '' else ''}>Todos</option>
-                    <option value="Alto" ${'selected' if riesgo_sel == 'Alto' else ''}>Alto</option>
-                    <option value="Medio" ${'selected' if riesgo_sel == 'Medio' else ''}>Medio</option>
-                    <option value="Bajo" ${'selected' if riesgo_sel == 'Bajo' else ''}>Bajo</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label text-muted small mb-1">Cuestionario</label>
-                <select name="cuestionario" class="form-select border-0 fw-semibold p-0 shadow-none">
-                    <option value="" ${'selected' if cuestionario_sel == '' else ''}>Todos</option>
-                    <option value="TEA" ${'selected' if cuestionario_sel == 'TEA' else ''}>Tamizaje conductual TEA</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label text-muted small mb-1">Rango de fecha</label>
-                <select class="form-select border-0 fw-semibold p-0 shadow-none">
-                    <option value="30">Últimos 30 días</option>
-                    <option value="60">Últimos 60 días</option>
-                </select>
-            </div>
-            <div class="col-md-3 text-end">
-                <button type="submit" class="btn btn-filtrar">Filtrar</button>
-            </div>
-        </form>
+            <form method="GET" action="/administrativo/resultados" class="row align-items-center g-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small mb-1">Buscar alumno</label>
+                    <input type="text" name="buscar" class="form-control border-0 fw-semibold p-0 shadow-none" placeholder="Nombre del alumno..." value="$buscar_sel">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small mb-1">Nivel de riesgo</label>
+                    <select name="riesgo" class="form-select border-0 fw-semibold p-0 shadow-none">
+                        <option value="" ${'selected' if riesgo_sel == '' else ''}>Todos</option>
+                        <option value="Alto" ${'selected' if riesgo_sel == 'Alto' else ''}>Alto</option>
+                        <option value="Medio" ${'selected' if riesgo_sel == 'Medio' else ''}>Medio</option>
+                        <option value="Bajo" ${'selected' if riesgo_sel == 'Bajo' else ''}>Bajo</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small mb-1">Cuestionario</label>
+                    <select name="cuestionario" class="form-select border-0 fw-semibold p-0 shadow-none">
+                        <option value="" ${'selected' if cuestionario_sel == '' else ''}>Todos</option>
+                        <option value="TEA" ${'selected' if cuestionario_sel == 'TEA' else ''}>Tamizaje conductual TEA</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-filtrar">Filtrar</button>
+                </div>
+            </form>
     </div>
 
     <!-- Tabla de Resultados -->
@@ -234,8 +231,7 @@ body {
                         <th>Cuestionario</th>
                         <th>Puntaje</th>
                         <th>Nivel de riesgo</th>
-                        <th>Fecha</th>
-                        <th>Acciones</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -253,14 +249,11 @@ body {
                                     $else:
                                         <span class="badge-riesgo-bajo">Bajo</span>
                                 </td>
-                                <td>$r['fecha']</td>
-                                <td>
-                                    <a href="#" class="btn-detalle">Ver detalle</a>
-                                </td>
+
                             </tr>
                     $else:
                         <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">No hay resultados que coincidan con el filtro.</td>
+                            <td colspan="4" class="text-center py-4 text-muted">No hay resultados que coincidan con el filtro.</td>
                         </tr>
                 </tbody>
             </table>

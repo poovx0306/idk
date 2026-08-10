@@ -20,7 +20,7 @@ class EstrategiasDidacticasAdmin:
         conn = conectar_bd()
         cursor = conn.cursor()
 
-        query = "SELECT * FROM estrategias_didacticas WHERE 1=1"
+        query = "SELECT * FROM actividad_asignada WHERE 1=1"
         params = []
 
         if materia:
@@ -36,7 +36,7 @@ class EstrategiasDidacticasAdmin:
         cursor.execute(query, params)
         estrategias = cursor.fetchall()
 
-        cursor.execute("SELECT COUNT(*) as total FROM estrategias_didacticas")
+        cursor.execute("SELECT COUNT(*) as total FROM actividad_asignada")
         total_estrategias = cursor.fetchone()['total']
 
         conn.close()

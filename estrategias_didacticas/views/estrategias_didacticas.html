@@ -1,10 +1,10 @@
-$def with (id_docente, nombre_docente, correo_docente, estrategias, condicion, materia, grado)
+$def with (id_docente, nombre_docente, correo_docente, estrategias, condicion, materia, grado, lista_materias, lista_grados)
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>CONAAP - Estrategias</title>
+  <title>CONAAP - Temas</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, Helvetica, sans-serif; background: #f1f5f9; }
@@ -103,7 +103,7 @@ $def with (id_docente, nombre_docente, correo_docente, estrategias, condicion, m
       </a>
       <a href="/estrategias-didacticas?id=$id_docente" class="nav-item active">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
-        Estrategias
+        Temas
       </a>
       <a href="/actividades-guardadas?id=$id_docente" class="nav-item">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
@@ -120,7 +120,7 @@ $def with (id_docente, nombre_docente, correo_docente, estrategias, condicion, m
     <div class="content">
       <header class="header">
         <div>
-          <h1>Estrategias</h1>
+          <h1>Temas</h1>
           <p>Encuentra actividades para adaptar tu clase</p>
         </div>
 
@@ -165,32 +165,25 @@ $def with (id_docente, nombre_docente, correo_docente, estrategias, condicion, m
             </select>
           </div>
           <div class="filter-group">
-            <label>Materia</label>
+            <label>Campo formativo</label>
             <select name="materia">
-              <option value="">Todas</option>
-              $if materia == 'Matematicas':
-                <option value="Matematicas" selected>Matemáticas</option>
-              $else:
-                <option value="Matematicas">Matemáticas</option>
-              $if materia == 'Habilidades sociales':
-                <option value="Habilidades sociales" selected>Habilidades sociales</option>
-              $else:
-                <option value="Habilidades sociales">Habilidades sociales</option>
-              $if materia == 'Comunicacion':
-                <option value="Comunicacion" selected>Comunicación</option>
-              $else:
-                <option value="Comunicacion">Comunicación</option>
-              $if materia == 'Regulacion sensorial':
-                <option value="Regulacion sensorial" selected>Regulación sensorial</option>
-              $else:
-                <option value="Regulacion sensorial">Regulación sensorial</option>
+              <option value="">Todos</option>
+              $for m in lista_materias:
+                $if materia == m:
+                  <option value="$m" selected>$m</option>
+                $else:
+                  <option value="$m">$m</option>
             </select>
           </div>
           <div class="filter-group">
             <label>Grado</label>
             <select name="grado">
               <option value="">Todos</option>
-              <option value="2°">2° de primaria</option>
+              $for g in lista_grados:
+                $if grado == g:
+                  <option value="$g" selected>$g</option>
+                $else:
+                  <option value="$g">$g</option>
             </select>
           </div>
           <button type="submit" class="filter-btn">Buscar</button>
@@ -205,7 +198,7 @@ $def with (id_docente, nombre_docente, correo_docente, estrategias, condicion, m
           <div class="cards">
             $for estrategia in estrategias:
               <a href="/estrategias-didacticas/ficha?id_estrategia=$estrategia['id']&id=$id_docente" class="card">
-                $if estrategia['materia'] == 'Habilidades sociales':
+                $if estrategia['materia'] in ('Lenguaje y comunicación', 'Historia, geografía y convivencia', 'Habilidades sociales'):
                   <div class="card-icon social">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                   </div>

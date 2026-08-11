@@ -25,7 +25,7 @@ class InicioDocente:
         nombre_docente = docente["nombre"] if docente else "Docente"
         correo_docente = docente["correo"] if docente else "sin-correo@conafe.gob.mx"
 
-        cursor.execute("SELECT COUNT(*) FROM estrategias_didacticas")
+        cursor.execute("SELECT COUNT(*) FROM temas WHERE estado = 'Publicada'")
         total_estrategias = cursor.fetchone()[0]
 
         cursor.execute("SELECT COUNT(*) FROM infantes WHERE id_docente1 = ?", (id_docente,))

@@ -28,7 +28,7 @@ class EstrategiasDidacticas:
 
         nombre_docente, correo_docente = obtener_docente(cursor, id_docente)
 
-        consulta = "SELECT * FROM estrategias_didacticas WHERE estado = 'Publicada'"
+        consulta = "SELECT * FROM temas WHERE estado = 'Publicada'"
         parametros = []
 
         if datos.condicion:
@@ -41,14 +41,31 @@ class EstrategiasDidacticas:
             consulta += " AND grado = ?"
             parametros.append(datos.grado)
 
+        consulta += " ORDER BY materia, titulo"
+
         cursor.execute(consulta, parametros)
         estrategias = cursor.fetchall()
+
+        cursor.execute(
+            "SELECT DISTINCT materia FROM temas "
+            "WHERE estado = 'Publicada' AND materia IS NOT NULL AND materia <> '' "
+            "ORDER BY materia"
+        )
+        lista_materias = [fila["materia"] for fila in cursor.fetchall()]
+
+        cursor.execute(
+            "SELECT DISTINCT grado FROM temas "
+            "WHERE estado = 'Publicada' AND grado IS NOT NULL AND grado <> '' "
+            "ORDER BY grado"
+        )
+        lista_grados = [fila["grado"] for fila in cursor.fetchall()]
 
         conexion.close()
 
         return render.estrategias_didacticas(
             id_docente, nombre_docente, correo_docente, estrategias,
-            datos.condicion, datos.materia, datos.grado
+            datos.condicion, datos.materia, datos.grado,
+            lista_materias, lista_grados
         )
 
 
@@ -64,7 +81,7 @@ class FichaActividad:
         nombre_docente, correo_docente = obtener_docente(cursor, id_docente)
 
         cursor.execute(
-            "SELECT * FROM estrategias_didacticas WHERE id = ?",
+            "SELECT * FROM temas WHERE id = ?",
             (datos.id_estrategia,)
         )
         estrategia = cursor.fetchone()

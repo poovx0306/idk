@@ -97,18 +97,20 @@
                 <input type="text" name="condicion" class="form-control" value="Autismo (TEA)">
             </div>
             <div class="col-md-4">
-                <label class="form-label">Materia</label>
+                <label class="form-label">Campo formativo</label>
                 <select name="materia" class="form-select">
-                    <option value="Matemáticas">Matemáticas</option>
-                    <option value="Hab. sociales">Hab. sociales</option>
-                    <option value="Español">Español</option>
+                    <option value="Lenguaje y comunicación">Lenguaje y comunicación</option>
+                    <option value="Pensamiento matemático">Pensamiento matemático</option>
+                    <option value="Exploración del mundo natural y social">Exploración del mundo natural y social</option>
+                    <option value="Historia, geografía y convivencia">Historia, geografía y convivencia</option>
                 </select>
             </div>
             <div class="col-md-3">
                 <label class="form-label">Grado</label>
                 <select name="grado" class="form-select">
+                    <option value="Preescolar y primaria" selected>Preescolar y primaria</option>
                     <option value="1°">1°</option>
-                    <option value="2°" selected>2°</option>
+                    <option value="2°">2°</option>
                     <option value="3°">3°</option>
                 </select>
             </div>
@@ -117,7 +119,7 @@
         <!-- Objetivo -->
         <div class="mb-3">
             <label class="form-label">Objetivo</label>
-            <textarea name="objetivo" class="form-control" rows="2" placeholder="Describe qué logrará el alumno con esta actividad..."></textarea>
+            <textarea name="objetivo" class="form-control" rows="2" placeholder="Describe qué logrará el aprendiente con este tema..."></textarea>
         </div>
 
         <!-- Materiales necesarios -->
@@ -129,13 +131,13 @@
         <!-- Paso a paso -->
         <div class="mb-4">
             <label class="form-label">Paso a paso</label>
-            <textarea name="pasos" class="form-control" rows="3" placeholder="1. Escribe el primer paso de la dinámica..."></textarea>
+            <textarea name="pasos" class="form-control" rows="3" placeholder="Separa cada etapa con | — Elección del tema: ... | Explicación del tema: ... | Actividades de comprensión: ... | Evaluación: ..."></textarea>
         </div>
 
         <!-- Botones de Acción -->
         <div class="d-flex justify-content-between align-items-center">
             <button type="submit" name="accion" value="Borrador" class="btn btn-borrador">Guardar como borrador</button>
-            <button type="submit" name="accion" value="Publicar" class="btn btn-publicar">Publicar estrategia</button>
+            <button type="submit" name="accion" value="Publicar" class="btn btn-publicar">Publicar tema</button>
         </div>
     </form>
 </div>

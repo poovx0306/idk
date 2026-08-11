@@ -87,8 +87,8 @@ $def with (actividad)
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Descripción</label>
-                    <textarea name="descripcion" class="form-control" rows="3">$(actividad['descripcion'] or '')</textarea>
+                    <label class="form-label fw-semibold">Condición</label>
+                    <input type="text" name="condicion" class="form-control" value="$(actividad['condicion'] or '')">
                 </div>
 
                 <div class="mb-3">
@@ -108,33 +108,30 @@ $def with (actividad)
 
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Materia</label>
+                        <label class="form-label fw-semibold">Campo formativo</label>
                         <select name="materia" class="form-select">
-                            <option value="Matematicas" ${'selected' if actividad['materia'] == 'Matematicas' else ''}>Matemáticas</option>
-                            <option value="Español" ${'selected' if actividad['materia'] == 'Español' else ''}>Español</option>
-                            <option value="Habilidades sociales" ${'selected' if actividad['materia'] == 'Habilidades sociales' else ''}>Habilidades sociales</option>
-                            <option value="Motricidad" ${'selected' if actividad['materia'] == 'Motricidad' else ''}>Motricidad</option>
+                            <option value="Lenguaje y comunicación" ${'selected' if actividad['materia'] == 'Lenguaje y comunicación' else ''}>Lenguaje y comunicación</option>
+                            <option value="Pensamiento matemático" ${'selected' if actividad['materia'] == 'Pensamiento matemático' else ''}>Pensamiento matemático</option>
+                            <option value="Exploración del mundo natural y social" ${'selected' if actividad['materia'] == 'Exploración del mundo natural y social' else ''}>Exploración del mundo natural y social</option>
+                            <option value="Historia, geografía y convivencia" ${'selected' if actividad['materia'] == 'Historia, geografía y convivencia' else ''}>Historia, geografía y convivencia</option>
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Grado</label>
                         <select name="grado" class="form-select">
+                            <option value="Preescolar y primaria" ${'selected' if actividad['grado'] == 'Preescolar y primaria' else ''}>Preescolar y primaria</option>
                             <option value="1°" ${'selected' if actividad['grado'] == '1°' else ''}>1°</option>
                             <option value="2°" ${'selected' if actividad['grado'] == '2°' else ''}>2°</option>
                             <option value="3°" ${'selected' if actividad['grado'] == '3°' else ''}>3°</option>
                         </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold">Grupo</label>
-                        <input type="text" name="grupo" class="form-control" value="$(actividad['grupo'] or '')">
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Estado</label>
                     <select name="estado" class="form-select">
-                        <option value="Pendiente" ${'selected' if actividad['estado'] == 'Pendiente' else ''}>Pendiente</option>
-                        <option value="Completada" ${'selected' if actividad['estado'] == 'Completada' else ''}>Completada</option>
+                        <option value="Publicada" ${'selected' if actividad['estado'] == 'Publicada' else ''}>Publicada</option>
+                        <option value="Borrador" ${'selected' if actividad['estado'] == 'Borrador' else ''}>Borrador</option>
                     </select>
                 </div>
 

@@ -88,16 +88,8 @@ $def with (actividad, criterios=[])
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Condición</label>
-                    <select name="condicion" class="form-select">
-                        <option value="">Selecciona una condición</option>
-                        <option value="Autismo (TEA)" ${'selected' if actividad['condicion'] == 'Autismo (TEA)' else ''}>Autismo (TEA)</option>
-                        <option value="TDAH" ${'selected' if actividad['condicion'] == 'TDAH' else ''}>TDAH</option>
-                        <option value="Discapacidad intelectual" ${'selected' if actividad['condicion'] == 'Discapacidad intelectual' else ''}>Discapacidad intelectual</option>
-                        <option value="Discapacidad auditiva" ${'selected' if actividad['condicion'] == 'Discapacidad auditiva' else ''}>Discapacidad auditiva</option>
-                        <option value="Discapacidad visual" ${'selected' if actividad['condicion'] == 'Discapacidad visual' else ''}>Discapacidad visual</option>
-                        <option value="Discapacidad motriz" ${'selected' if actividad['condicion'] == 'Discapacidad motriz' else ''}>Discapacidad motriz</option>
-                        <option value="Otra condición" ${'selected' if actividad['condicion'] == 'Otra condición' else ''}>Otra condición</option>
-                        <option value="Sin condición identificada" ${'selected' if actividad['condicion'] == 'Sin condición identificada' else ''}>Sin condición identificada</option>
+                    <select name="condicion" class="form-select" required>
+                        <option value="Autismo (TEA)" selected>Autismo (TEA)</option>
                     </select>
                 </div>
 

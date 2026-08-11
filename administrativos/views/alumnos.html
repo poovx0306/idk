@@ -325,6 +325,7 @@ body {
                         <th>Edad</th>
                         <th>Condición</th>
                         <th>Docente asignado</th>
+                            <th class="text-muted small fw-normal py-3">Familia</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -346,6 +347,14 @@ body {
                                     $else:
                                         <span class="text-muted">Sin asignar</span>
                                 </td>
+                                <td class="py-3">
+                                    $if a['familia_nombre']:
+                                        $a['familia_nombre']
+                                    $elif a['familia_correo']:
+                                        $a['familia_correo']
+                                    $else:
+                                        <span class="text-muted">Sin asignar</span>
+                                </td>
                                 <td>
                                     <a href="/administrativo/alumnos/editar?id=$a['id']" class="link-editar me-2">Editar</a>
                                     <span class="text-muted">·</span>
@@ -357,7 +366,7 @@ body {
                             </tr>
                     $else:
                         <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">No hay alumnos registrados con estos filtros.</td>
+                            <td colspan="6" class="text-center py-4 text-muted">No hay alumnos registrados con estos filtros.</td>
                         </tr>
                 </tbody>
             </table>

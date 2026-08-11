@@ -36,9 +36,12 @@ class AlumnosAdmin:
                        i.condicion,
                        i.grado,
                        i.id_docente1,
-                       d.nombre AS docente_asignado
+                       d.nombre AS docente_asignado,
+                       p.nombre AS familia_nombre,
+                       p.correo AS familia_correo
                 FROM infantes i
                 LEFT JOIN docente d ON d.id_docente = i.id_docente1
+                LEFT JOIN padres p ON p.id = i.id_padres
                 WHERE 1=1
             """
             params = []

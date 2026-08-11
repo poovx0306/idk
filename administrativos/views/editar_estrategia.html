@@ -1,4 +1,4 @@
-$def with (actividad)
+$def with (actividad, criterios=[])
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -135,6 +135,33 @@ $def with (actividad)
                     </select>
                 </div>
 
+
+                <hr class="my-4">
+
+                <div class="mb-2">
+                    <label class="form-label fw-semibold">Criterios de evaluación</label>
+                    <p class="text-muted small mb-3">
+                        Son los checkboxes que el docente palomea al evaluar a cada alumno en este tema.
+                    </p>
+                </div>
+
+                $if criterios:
+                    <ul class="list-group mb-3">
+                        $for c in criterios:
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>$c['texto']</span>
+                                <button type="submit" form="formEliminarCriterio$c['id']" class="btn btn-sm btn-outline-danger">Quitar</button>
+                            </li>
+                    </ul>
+                $else:
+                    <p class="text-muted small mb-3">Este tema todavía no tiene criterios. Agrega el primero abajo.</p>
+
+                <div class="input-group mb-2">
+                    <input type="text" name="texto" form="formNuevoCriterio" class="form-control"
+                           placeholder="Ej. Resolvió correctamente las sumas">
+                    <button type="submit" form="formNuevoCriterio" class="btn btn-burgundy">Agregar criterio</button>
+                </div>
+
                 <div class="d-flex justify-content-end gap-2 mt-4">
                     <a href="/administrativo/estrategias" class="btn btn-light border">Cancelar</a>
                     <button type="submit" class="btn btn-burgundy">Guardar cambios</button>
@@ -144,3 +171,12 @@ $def with (actividad)
     </main>
 </body>
 </html>
+
+<form id="formNuevoCriterio" method="POST" action="/administrativo/estrategias/criterio/nuevo">
+    <input type="hidden" name="id_tema" value="$actividad['id']">
+</form>
+$for c in criterios:
+    <form id="formEliminarCriterio$c['id']" method="POST" action="/administrativo/estrategias/criterio/eliminar">
+        <input type="hidden" name="id" value="$c['id']">
+        <input type="hidden" name="id_tema" value="$actividad['id']">
+    </form>

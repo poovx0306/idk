@@ -1,4 +1,4 @@
-$def with (id_docente, nombre_docente, correo_docente, estrategia, pasos)
+$def with (id_docente, nombre_docente, correo_docente, estrategia, pasos, criterios, alumnos, id_alumno_sel, marcados, observaciones, fecha_previa, guardado)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -34,6 +34,19 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos)
     .ficha-title { font-size: 21px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
 
     .objetivo-box { background: #f0fdfa; border-radius: 14px; padding: 16px 18px; margin: 18px 0 26px; }
+    .retro-card { background: #fff; border-radius: 18px; padding: 28px 30px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); margin-top: 22px; }
+    .retro-titulo { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+    .retro-sub { font-size: 13px; color: #64748b; margin-bottom: 20px; }
+    .retro-label { font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; margin-bottom: 8px; display: block; }
+    .retro-select { border: 1px solid #e2e8f0; border-radius: 10px; padding: 11px 12px; font-size: 14px; color: #1e293b; width: 100%; max-width: 380px; font-family: Arial, Helvetica, sans-serif; }
+    .criterio { display: flex; align-items: flex-start; gap: 12px; padding: 12px 4px; border-bottom: 1px solid #f1f5f9; }
+    .criterio input[type=checkbox] { width: 19px; height: 19px; margin-top: 1px; accent-color: #0d9488; flex-shrink: 0; cursor: pointer; }
+    .criterio label { font-size: 14px; color: #1e293b; cursor: pointer; line-height: 1.45; }
+    .retro-obs { width: 100%; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; font-size: 14px; font-family: Arial, Helvetica, sans-serif; color: #1e293b; resize: vertical; }
+    .retro-btn { background: #0d9488; color: #fff; border: none; font-size: 14px; font-weight: bold; padding: 12px 26px; border-radius: 10px; cursor: pointer; font-family: Arial, Helvetica, sans-serif; margin-top: 18px; }
+    .retro-aviso { background: #f0fdfa; color: #0f766e; border-radius: 10px; padding: 11px 14px; font-size: 13px; margin-bottom: 18px; }
+    .retro-previa { background: #fefce8; color: #854d0e; border-radius: 10px; padding: 11px 14px; font-size: 13px; margin-bottom: 18px; }
+    .retro-vacio { color: #64748b; font-size: 14px; padding: 10px 0; }
     .objetivo-label { font-size: 11px; font-weight: bold; color: #0f766e; letter-spacing: 0.5px; margin-bottom: 6px; }
     .objetivo-text { font-size: 13.5px; color: #115e59; line-height: 1.5; }
 
@@ -107,7 +120,7 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos)
       </a>
       <a href="/estrategias-didacticas?id=$id_docente" class="nav-item active">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
-        Temas
+        Estrategias
       </a>
       <a href="/actividades-guardadas?id=$id_docente" class="nav-item">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
@@ -196,6 +209,58 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos)
             <div class="celebracion-icon">&#10003;</div>
             <div>¡Actividad completada! Marcaste los $len(pasos) pasos.</div>
           </div>
+        </div>
+
+        <div class="retro-card">
+          <div class="retro-titulo">Evaluación del alumno</div>
+          <div class="retro-sub">Registra qué logró y qué le costó durante este tema.</div>
+
+          $if guardado:
+            <div class="retro-aviso">La evaluación se guardó correctamente.</div>
+
+          $if not alumnos:
+            <div class="retro-vacio">Todavía no tienes alumnos asignados. Pídele al administrador que te asigne alumnos para poder registrar evaluaciones.</div>
+          $elif not criterios:
+            <div class="retro-vacio">Este tema todavía no tiene criterios de evaluación. El administrador puede agregarlos desde el panel.</div>
+          $else:
+            <form method="get" action="/estrategias-didacticas/ficha" style="margin-bottom: 22px;">
+              <input type="hidden" name="id_estrategia" value="$estrategia['id']">
+              <input type="hidden" name="id" value="$id_docente">
+              <label class="retro-label">ALUMNO</label>
+              <select name="id_alumno" class="retro-select" onchange="this.form.submit()">
+                <option value="">Selecciona un alumno...</option>
+                $for a in alumnos:
+                  $if id_alumno_sel == a['id_infante']:
+                    <option value="$a['id_infante']" selected>$a['nombre']</option>
+                  $else:
+                    <option value="$a['id_infante']">$a['nombre']</option>
+              </select>
+            </form>
+
+            $if id_alumno_sel:
+              $if fecha_previa:
+                <div class="retro-previa">Última evaluación registrada el $fecha_previa. Si guardas de nuevo se agrega un registro nuevo y se conserva el anterior.</div>
+
+              <form method="post" action="/estrategias-didacticas/retroalimentacion">
+                <input type="hidden" name="id_estrategia" value="$estrategia['id']">
+                <input type="hidden" name="id" value="$id_docente">
+                <input type="hidden" name="id_alumno" value="$id_alumno_sel">
+
+                <label class="retro-label">CRITERIOS LOGRADOS</label>
+                $for c in criterios:
+                  <div class="criterio">
+                    $if c['id'] in marcados:
+                      <input type="checkbox" name="criterio" value="$c['id']" id="c$c['id']" checked>
+                    $else:
+                      <input type="checkbox" name="criterio" value="$c['id']" id="c$c['id']">
+                    <label for="c$c['id']">$c['texto']</label>
+                  </div>
+
+                <label class="retro-label" style="margin-top: 22px;">OBSERVACIONES</label>
+                <textarea name="observaciones" class="retro-obs" rows="3" placeholder="Ej. Realizó las sumas sin ayuda, pero le costó la resta. Requiere más apoyo visual.">$observaciones</textarea>
+
+                <button type="submit" class="retro-btn">Guardar evaluación</button>
+              </form>
         </div>
       </main>
     </div>

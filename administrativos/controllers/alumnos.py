@@ -62,6 +62,11 @@ class AlumnosAdmin:
             cursor.execute("SELECT id_docente, nombre FROM docente ORDER BY nombre")
             lista_docentes = cursor.fetchall()
 
+            cursor.execute(
+                "SELECT id, nombre, correo FROM padres ORDER BY nombre, correo"
+            )
+            lista_padres = cursor.fetchall()
+
         except sqlite3.Error as e:
             print("Error de base de datos en AlumnosAdmin:", e)
         except Exception as e:
@@ -85,6 +90,7 @@ class NuevoAlumnoAdmin:
     def GET(self):
         datos = web.input(error='')
         lista_docentes = []
+        lista_padres = []
         conn = None
 
         try:
@@ -92,6 +98,11 @@ class NuevoAlumnoAdmin:
             cursor = conn.cursor()
             cursor.execute("SELECT id_docente, nombre FROM docente ORDER BY nombre")
             lista_docentes = cursor.fetchall()
+
+            cursor.execute(
+                "SELECT id, nombre, correo FROM padres ORDER BY nombre, correo"
+            )
+            lista_padres = cursor.fetchall()
         except sqlite3.Error as e:
             print("Error de base de datos en NuevoAlumnoAdmin:", e)
         except Exception as e:
@@ -100,14 +111,15 @@ class NuevoAlumnoAdmin:
             if conn:
                 conn.close()
 
-        return render.nuevo_alumno(lista_docentes=lista_docentes, error=datos.error)
+        return render.nuevo_alumno(lista_docentes=lista_docentes, lista_padres=lista_padres, error=datos.error)
 
     def POST(self):
-        datos = web.input(nombre='', edad='', condicion='', id_docente1='', grado='')
+        datos = web.input(nombre='', edad='', condicion='', id_docente1='', grado='', id_padres='')
         nombre = datos.nombre.strip()
         condicion = datos.condicion.strip()
         grado = datos.grado.strip()
         id_docente1 = datos.id_docente1.strip()
+        id_padres = datos.id_padres.strip()
         conn = None
 
         try:
@@ -115,10 +127,10 @@ class NuevoAlumnoAdmin:
         except ValueError:
             edad = 0
 
-        if not nombre or not id_docente1:
+        if not nombre or not id_docente1 or not id_padres:
             return render.confirmacion(
                 titulo='Faltan datos',
-                mensaje='El nombre y el docente asignado son obligatorios.',
+                mensaje='El nombre, el docente asignado y la familia son obligatorios.',
                 volver_url='/administrativo/alumnos/nuevo',
                 volver_texto='Regresar al formulario',
                 tipo='error'
@@ -128,8 +140,8 @@ class NuevoAlumnoAdmin:
             conn = conectar_bd()
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO infantes (nombre, edad, id_docente1, condicion, grado) VALUES (?, ?, ?, ?, ?)",
-                (nombre, edad, id_docente1, condicion, grado)
+                "INSERT INTO infantes (nombre, edad, id_docente1, id_padres, condicion, grado) VALUES (?, ?, ?, ?, ?, ?)",
+                (nombre, edad, id_docente1, id_padres, condicion, grado)
             )
             conn.commit()
 
@@ -189,6 +201,11 @@ class EditarAlumnoAdmin:
             cursor.execute("SELECT id_docente, nombre FROM docente ORDER BY nombre")
             lista_docentes = cursor.fetchall()
 
+            cursor.execute(
+                "SELECT id, nombre, correo FROM padres ORDER BY nombre, correo"
+            )
+            lista_padres = cursor.fetchall()
+
         except sqlite3.Error as e:
             print("Error de base de datos en EditarAlumnoAdmin:", e)
         except Exception as e:
@@ -215,6 +232,7 @@ class EditarAlumnoAdmin:
         condicion = datos.condicion.strip()
         grado = datos.grado.strip()
         id_docente1 = datos.id_docente1.strip()
+        id_padres = datos.id_padres.strip()
         conn = None
 
         try:
@@ -222,10 +240,10 @@ class EditarAlumnoAdmin:
         except ValueError:
             edad = 0
 
-        if not nombre or not id_docente1:
+        if not nombre or not id_docente1 or not id_padres:
             return render.confirmacion(
                 titulo='Faltan datos',
-                mensaje='El nombre y el docente asignado son obligatorios.',
+                mensaje='El nombre, el docente asignado y la familia son obligatorios.',
                 volver_url='/administrativo/alumnos/editar?id=%s' % id_alumno,
                 volver_texto='Regresar al formulario',
                 tipo='error'

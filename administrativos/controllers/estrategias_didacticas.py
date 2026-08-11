@@ -156,6 +156,14 @@ class EditarEstrategiaAdmin:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM temas WHERE id = ?", (id,))
         tema = cursor.fetchone()
+
+        criterios = []
+        if tema:
+            cursor.execute(
+                "SELECT * FROM criterio_tema WHERE id_tema = ? ORDER BY id", (id,)
+            )
+            criterios = cursor.fetchall()
+
         conn.close()
 
         if not tema:
@@ -167,7 +175,7 @@ class EditarEstrategiaAdmin:
                 tipo='error'
             )
 
-        return render.editar_estrategia(actividad=tema)
+        return render.editar_estrategia(actividad=tema, criterios=criterios)
 
     def POST(self):
         data = web.input()
@@ -285,3 +293,99 @@ class BajaEstrategiaAdmin:
             volver_url='/administrativo/estrategias',
             volver_texto='Volver a la lista'
         )
+
+
+class NuevoCriterioAdmin:
+    def POST(self):
+        data = web.input(id_tema='', texto='')
+        id_tema = data.get('id_tema')
+        texto = data.get('texto', '').strip()
+
+        volver = '/administrativo/estrategias/editar?id=%s' % id_tema
+
+        if not id_tema or not texto:
+            return render.confirmacion(
+                titulo='Faltan datos',
+                mensaje='Escribe el texto del criterio antes de agregarlo.',
+                volver_url=volver,
+                volver_texto='Regresar al tema',
+                tipo='error'
+            )
+
+        conn = None
+        try:
+            conn = conectar_bd()
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO criterio_tema (id_tema, texto) VALUES (?, ?)",
+                (id_tema, texto)
+            )
+            conn.commit()
+
+        except sqlite3.Error as e:
+            print("Error de base de datos al agregar criterio:", e)
+            return render.confirmacion(
+                titulo='No se pudo agregar',
+                mensaje='Ocurrio un problema al guardar el criterio.',
+                volver_url=volver,
+                volver_texto='Regresar al tema',
+                tipo='error'
+            )
+        except Exception as e:
+            print("Error inesperado al agregar criterio:", e)
+            return render.confirmacion(
+                titulo='Ocurrio un error',
+                mensaje='Sucedio algo inesperado al guardar el criterio.',
+                volver_url=volver,
+                volver_texto='Regresar al tema',
+                tipo='error'
+            )
+        finally:
+            if conn:
+                conn.close()
+
+        raise web.HTTPError('303 See Other', {'Location': volver})
+
+
+class EliminarCriterioAdmin:
+    def POST(self):
+        data = web.input(id='', id_tema='')
+        id_criterio = data.get('id')
+        id_tema = data.get('id_tema')
+
+        volver = '/administrativo/estrategias/editar?id=%s' % id_tema
+
+        conn = None
+        try:
+            conn = conectar_bd()
+            cursor = conn.cursor()
+            cursor.execute(
+                "DELETE FROM retroalimentacion_criterio WHERE id_criterio = ?",
+                (id_criterio,)
+            )
+            cursor.execute("DELETE FROM criterio_tema WHERE id = ?", (id_criterio,))
+            conn.commit()
+
+        except sqlite3.Error as e:
+            print("Error de base de datos al eliminar criterio:", e)
+            return render.confirmacion(
+                titulo='No se pudo eliminar',
+                mensaje='Ocurrio un problema al eliminar el criterio.',
+                volver_url=volver,
+                volver_texto='Regresar al tema',
+                tipo='error'
+            )
+        except Exception as e:
+            print("Error inesperado al eliminar criterio:", e)
+            return render.confirmacion(
+                titulo='Ocurrio un error',
+                mensaje='Sucedio algo inesperado al eliminar el criterio.',
+                volver_url=volver,
+                volver_texto='Regresar al tema',
+                tipo='error'
+            )
+        finally:
+            if conn:
+                conn.close()
+
+        raise web.HTTPError('303 See Other', {'Location': volver})

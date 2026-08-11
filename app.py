@@ -97,6 +97,9 @@ urls = (
 
     '/estrategias-didacticas', 'EstrategiasDidacticas',
     '/estrategias-didacticas/ficha', 'FichaActividad',
+    '/estrategias-didacticas/retroalimentacion', 'estrategias_didacticas.controllers.estrategias_didacticas.GuardarRetroalimentacion',
+    '/administrativo/estrategias/criterio/nuevo', 'administrativos.controllers.estrategias_didacticas.NuevoCriterioAdmin',
+    '/administrativo/estrategias/criterio/eliminar', 'administrativos.controllers.estrategias_didacticas.EliminarCriterioAdmin',
     '/actividades-guardadas', 'ActividadesGuardadas',
     '/actividades-guardadas/ficha', 'FichaActividadAsignada',
     '/actividades-guardadas/completar', 'MarcarActividad',

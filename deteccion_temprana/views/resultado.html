@@ -233,6 +233,46 @@ $def with (es_padre)
             .semaforo-img {
                 max-height: 250px !important;
             }
+                        .semaforo-img-container {
+                display: none !important;
+            }
+        /* Resumen de respuestas */
+            .resumen-print {
+                display: block !important;
+                margin-top: 20px;
+                page-break-before: auto;
+            }
+            .resumen-print h2 {
+                font-size: 18px;
+                margin-bottom: 15px;
+                color: #333;
+            }
+            .seccion-titulo-print {
+                font-size: 14px;
+                color: #7b2d42;
+                margin: 15px 0 8px;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 4px;
+            }
+            .pregunta-resumen {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 6px 0;
+                border-bottom: 1px solid #eee;
+                font-size: 12px;
+            }
+            .respuesta-badge {
+                background: #f0f0f0;
+                padding: 2px 10px;
+                border-radius: 10px;
+                font-size: 11px;
+                white-space: nowrap;
+                margin-left: 10px;
+            }
+        }
+                .resumen-print {
+            display: none;
         }
     </style>
 </head>
@@ -289,6 +329,11 @@ $def with (es_padre)
                 <div class="nota-medica">
                     Este resultado no es un diagnóstico médico.
                 </div>
+                                <!-- Resumen de respuestas (solo se ve al imprimir) -->
+                <div id="resumen-respuestas" class="resumen-print">
+                    <h2>Resumen de respuestas</h2>
+                    <div id="lista-respuestas"></div>
+                </div>
             </div>
 
         </div>
@@ -308,7 +353,7 @@ $def with (es_padre)
         var txtTitulo = document.getElementById('txt-titulo');
         var txtDesc = document.getElementById('txt-descripcion');
 
-        if (puntaje >= 65) {
+        if (puntaje >= 35) {
             // ROJO
             imgSemaforo.src = "/static/images/semaforo-rojo.svg";
             txtTitulo.innerText = "Atención prioritaria";
@@ -326,6 +371,29 @@ $def with (es_padre)
             txtTitulo.innerText = "Desarrollo adecuado";
             txtTitulo.className = "titulo-resultado verde";
             txtDesc.innerText = "El desarrollo de tu peque se encuentra dentro del rango esperado para su edad. Te sugerimos continuar estimulando su aprendizaje cotidiano.";
+        }
+         // Construir resumen de respuestas
+        if (data && data.respuestas) {
+            var htmlResumen = '';
+            var seccionActual = '';
+            var respuestas = data.respuestas;
+            var ids = Object.keys(respuestas).sort(function(a, b) {
+                return (respuestas[a].numero || 0) - (respuestas[b].numero || 0);
+            });
+            
+            ids.forEach(function(id) {
+                var r = respuestas[id];
+                if (r.seccion && r.seccion !== seccionActual) {
+                    seccionActual = r.seccion;
+                    htmlResumen += '<h3 class="seccion-titulo-print">' + seccionActual + '</h3>';
+                }
+                htmlResumen += '<div class="pregunta-resumen">' +
+                    '<strong>' + r.numero + '. ' + r.texto + '</strong>' +
+                    '<span class="respuesta-badge">' + r.opcion + '</span>' +
+                    '</div>';
+            });
+            
+            document.getElementById('lista-respuestas').innerHTML = htmlResumen;
         }
     });
 </script>

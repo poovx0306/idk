@@ -26,7 +26,7 @@ class InicioAdministrativo:
             total_cuestionarios = 0
 
         try:
-            total_estrategias = db.query('SELECT COUNT(*) as total FROM estrategias_didacticas')[0].total
+            total_estrategias = db.query('SELECT COUNT(*) as total FROM temas')[0].total
         except Exception as e:
             print("Error al contar estrategias:", e)
             total_estrategias = 0

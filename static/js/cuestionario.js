@@ -122,9 +122,21 @@ function finalizarEvaluacion() {
         puntajeTotal += respuestasUsuario[id].puntos;
     });
 
+    var respuestasDetalladas = {};
+    Object.keys(respuestasUsuario).forEach(function(id) {
+        var pregunta = preguntas.find(function(p) { return p.id == id; });
+        respuestasDetalladas[id] = {
+            numero: pregunta ? pregunta.numero : '',
+            texto: pregunta ? pregunta.texto : '',
+            seccion: pregunta ? pregunta.seccion : '',
+            opcion: respuestasUsuario[id].opcion,
+            puntos: respuestasUsuario[id].puntos
+        };
+    });
+
     var resultadoData = {
         puntajeTotal: puntajeTotal,
-        respuestas: respuestasUsuario
+        respuestas: respuestasDetalladas
     };
 
     localStorage.setItem('veanme_resultado', JSON.stringify(resultadoData));

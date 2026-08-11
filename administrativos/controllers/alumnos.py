@@ -180,6 +180,7 @@ class EditarAlumnoAdmin:
         datos = web.input(id='', error='')
         alumno = None
         lista_docentes = []
+        lista_padres = []
         conn = None
 
         try:
@@ -192,7 +193,8 @@ class EditarAlumnoAdmin:
                        edad,
                        condicion,
                        grado,
-                       id_docente1
+                       id_docente1,
+                       id_padres
                 FROM infantes
                 WHERE id_infante = ?
             """, (datos.id,))
@@ -223,10 +225,10 @@ class EditarAlumnoAdmin:
                 tipo='error'
             )
 
-        return render.editar_alumno(alumno=alumno, lista_docentes=lista_docentes, error=datos.error)
+        return render.editar_alumno(alumno=alumno, lista_docentes=lista_docentes, lista_padres=lista_padres, error=datos.error)
 
     def POST(self):
-        datos = web.input(id='', nombre='', edad='', condicion='', id_docente1='', grado='')
+        datos = web.input(id='', nombre='', edad='', condicion='', id_docente1='', grado='', id_padres='')
         id_alumno = datos.id
         nombre = datos.nombre.strip()
         condicion = datos.condicion.strip()
@@ -253,8 +255,8 @@ class EditarAlumnoAdmin:
             conn = conectar_bd()
             cursor = conn.cursor()
             cursor.execute(
-                "UPDATE infantes SET nombre = ?, edad = ?, id_docente1 = ?, condicion = ?, grado = ? WHERE id_infante = ?",
-                (nombre, edad, id_docente1, condicion, grado, id_alumno)
+                "UPDATE infantes SET nombre = ?, edad = ?, id_docente1 = ?, id_padres = ?, condicion = ?, grado = ? WHERE id_infante = ?",
+                (nombre, edad, id_docente1, id_padres, condicion, grado, id_alumno)
             )
             conn.commit()
 

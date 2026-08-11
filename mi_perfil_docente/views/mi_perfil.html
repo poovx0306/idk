@@ -1,4 +1,4 @@
-$def with (id_docente, nombre_docente, clave_docente, correo_docente, total_alumnos, total_asignadas, total_completadas, total_guardadas, total_crisis)
+$def with (id_docente, nombre_docente, clave_docente, correo_docente, total_alumnos, total_evaluaciones, total_alumnos_evaluados, total_dominados, total_crisis)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -100,9 +100,9 @@ $def with (id_docente, nombre_docente, clave_docente, correo_docente, total_alum
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
         Temas
       </a>
-      <a href="/actividades-guardadas?id=$id_docente" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-        Actividades
+      <a href="/avance-alumno?id=$id_docente" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.1-2.8-2.8L7 14.1"></path></svg>
+        Avance
       </a>
       <a href="/mi-perfil?id=$id_docente" class="nav-item active">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -134,9 +134,6 @@ $def with (id_docente, nombre_docente, clave_docente, correo_docente, total_alum
             </div>
 
             <div class="dd-list">
-              <a href="/actividades-guardadas/guardadas?id=$id_docente" class="dd-item">
-                <span class="dd-ico">&#128278;</span> Actividades guardadas
-              </a>
               <a href="/docente/inicio?id=$id_docente" class="dd-item">
                 <span class="dd-ico">&#127968;</span> Ir al inicio
               </a>
@@ -179,16 +176,16 @@ $def with (id_docente, nombre_docente, clave_docente, correo_docente, total_alum
         <div class="section-label">RESUMEN DE ACTIVIDAD</div>
         <div class="stats">
           <div class="stat-card">
-            <div class="stat-icon" style="background:#eef2ff;color:#4f46e5;">&#128100;</div>
-            <div><div class="stat-num">$total_alumnos</div><div class="stat-label">Alumnos con seguimiento</div></div>
+            <div class="stat-icon" style="background:#f3e8ff;color:#7e1232;">&#128203;</div>
+            <div><div class="stat-num">$total_evaluaciones</div><div class="stat-label">Evaluaciones registradas</div></div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon" style="background:#f3e8ff;color:#7e1232;">&#128203;</div>
-            <div><div class="stat-num">$total_asignadas</div><div class="stat-label">Actividades asignadas</div></div>
+            <div class="stat-icon" style="background:#eef2ff;color:#4f46e5;">&#128100;</div>
+            <div><div class="stat-num">$total_alumnos_evaluados</div><div class="stat-label">Alumnos evaluados</div></div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="background:#d1fae5;color:#047857;">&#10003;</div>
-            <div><div class="stat-num">$total_completadas</div><div class="stat-label">Actividades completadas</div></div>
+            <div><div class="stat-num">$total_dominados</div><div class="stat-label">Temas dominados al 100%</div></div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="background:#fde3df;color:#f86a5e;">&#9888;</div>
@@ -200,19 +197,15 @@ $def with (id_docente, nombre_docente, clave_docente, correo_docente, total_alum
         <div class="accesos">
           <a href="/estrategias-didacticas?id=$id_docente" class="acceso-card">
             <div class="acceso-icon" style="background:#f0fdfa;color:#0f766e;">&#128269;</div>
-            <div class="acceso-title">Buscar estrategias</div>
+            <div class="acceso-title">Buscar temas</div>
           </a>
-          <a href="/guias-rapidas?id=$id_docente" class="acceso-card">
-            <div class="acceso-icon" style="background:#f3e8ff;color:#7e1232;">&#128214;</div>
-            <div class="acceso-title">Guías rápidas</div>
+          <a href="/avance-alumno?id=$id_docente" class="acceso-card">
+            <div class="acceso-icon" style="background:#eef2ff;color:#4f46e5;">&#128200;</div>
+            <div class="acceso-title">Avance de alumnos</div>
           </a>
           <a href="/boton-crisis?id=$id_docente" class="acceso-card">
             <div class="acceso-icon" style="background:#fde3df;color:#f86a5e;">&#9888;</div>
             <div class="acceso-title">Botón de crisis</div>
-          </a>
-          <a href="/actividades-guardadas/guardadas?id=$id_docente" class="acceso-card">
-            <div class="acceso-icon" style="background:#fef3c7;color:#935205;">&#128278;</div>
-            <div class="acceso-title">Actividades guardadas &middot; $total_guardadas</div>
           </a>
         </div>
       </main>

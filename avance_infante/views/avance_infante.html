@@ -1,4 +1,4 @@
-$def with (seccion, nombre_infante, total_cuestionarios, progreso_pct, hechas_act, total_act, actividades_casa_hechas, analisis)
+$def with (seccion, nombre_infante, total_cuestionarios, progreso_pct, temas_dominados, total_temas_evaluados, actividades_casa_hechas, total_casa, secciones)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -79,21 +79,25 @@ $def with (seccion, nombre_infante, total_cuestionarios, progreso_pct, hechas_ac
         <div class="stats">
           <div class="stat-card">
             <div class="stat-num">$progreso_pct%</div>
-            <div class="stat-label">Actividades completadas ($hechas_act de $total_act)</div>
+            <div class="stat-label">Temas dominados ($temas_dominados de $total_temas_evaluados evaluados)</div>
           </div>
           <div class="stat-card">
             <div class="stat-num">$total_cuestionarios</div>
             <div class="stat-label">Cuestionario(s) respondido(s)</div>
           </div>
           <div class="stat-card">
-            <div class="stat-num">$actividades_casa_hechas</div>
+            <div class="stat-num">$actividades_casa_hechas de $total_casa</div>
             <div class="stat-label">Actividad(es) en casa realizadas</div>
           </div>
         </div>
 
         <div class="history-card" style="background: #f0fdfa;">
           <h2 style="color: #0f766e;">Análisis del avance</h2>
-          <p style="font-size: 13.5px; color: #115e59; line-height: 1.6;">$analisis</p>
+          $for parte in secciones:
+            <div style="margin-top: 14px;">
+              <h3 style="font-size: 12.5px; color: #0f766e; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;">$parte['etiqueta']</h3>
+              <p style="font-size: 13.5px; color: #115e59; line-height: 1.6;">$parte['texto']</p>
+            </div>
         </div>
       </main>
     </div>

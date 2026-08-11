@@ -108,6 +108,13 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos, criter
     .dd-ico { width: 32px; height: 32px; border-radius: 50%; background: #f0fdfa; color: #0f766e; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
     .dd-item.logout { color: #7e1232; }
     .dd-item.logout .dd-ico { background: #fce8ee; color: #7e1232; }
+    .pantallazo-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); display: none; align-items: center; justify-content: center; z-index: 100; }
+    .pantallazo-overlay.visible { display: flex; }
+    .pantallazo-card { background: #fff; border-radius: 22px; padding: 42px 40px; max-width: 420px; text-align: center; box-shadow: 0 24px 60px rgba(15,23,42,0.25); }
+    .pantallazo-icon { width: 72px; height: 72px; border-radius: 50%; background: #0d9488; color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 34px; }
+    .pantallazo-title { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 8px; }
+    .pantallazo-text { font-size: 14px; color: #64748b; line-height: 1.5; margin-bottom: 24px; }
+    .pantallazo-btn { background: #0d9488; color: #fff; border: none; font-size: 14px; font-weight: bold; padding: 12px 26px; border-radius: 10px; cursor: pointer; font-family: Arial, Helvetica, sans-serif; }
   </style>
 </head>
 <body>
@@ -120,11 +127,11 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos, criter
       </a>
       <a href="/estrategias-didacticas?id=$id_docente" class="nav-item active">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
-        Estrategias
+        Temas
       </a>
-      <a href="/actividades-guardadas?id=$id_docente" class="nav-item">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-        Actividades
+      <a href="/avance-alumno?id=$id_docente" class="nav-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.1-2.8-2.8L7 14.1"></path></svg>
+        Avance
       </a>
       <a href="/mi-perfil?id=$id_docente" class="nav-item">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -136,7 +143,7 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos, criter
     <div class="content">
       <header class="header">
         <div>
-          <h1>Estrategia</h1>
+          <h1>Actividad</h1>
           <p>Sigue los pasos mientras das la actividad</p>
         </div>
 
@@ -154,9 +161,6 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos, criter
             </div>
 
             <div class="dd-list">
-              <a href="/actividades-guardadas/guardadas?id=$id_docente" class="dd-item">
-                <span class="dd-ico">&#128278;</span> Actividades guardadas
-              </a>
               <a href="/docente/inicio?id=$id_docente" class="dd-item">
                 <span class="dd-ico">&#127968;</span> Ir al inicio
               </a>
@@ -277,7 +281,13 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos, criter
       const completados = pasos.filter(p => p.classList.contains('completado')).length;
       progresoTexto.textContent = completados + ' de ' + total + ' pasos completados';
       progresoFill.style.width = (total ? (completados / total) * 100 : 0) + '%';
-      celebracion.classList.toggle('visible', total > 0 && completados === total);
+      const listo = total > 0 && completados === total;
+      celebracion.classList.toggle('visible', listo);
+      if (listo) {
+        sessionStorage.setItem('pasos_completos_$estrategia['id']', '1');
+      } else {
+        sessionStorage.removeItem('pasos_completos_$estrategia['id']');
+      }
     }
 
     pasos.forEach(function (paso) {
@@ -306,6 +316,29 @@ $def with (id_docente, nombre_docente, correo_docente, estrategia, pasos, criter
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') dropdown.classList.remove('open');
     });
+  </script>
+  <div class="pantallazo-overlay" id="pantallazoOverlay">
+    <div class="pantallazo-card">
+      <div class="pantallazo-icon">&#10003;</div>
+      <div class="pantallazo-title">¡Todo listo!</div>
+      <div class="pantallazo-text">Completaste los pasos de la actividad y la evaluación se registró correctamente.</div>
+      <button type="button" class="pantallazo-btn" id="pantallazoCerrar">Entendido</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const key = 'pasos_completos_$estrategia['id']';
+      const overlay = document.getElementById('pantallazoOverlay');
+      const cerrarBtn = document.getElementById('pantallazoCerrar');
+      const guardado = '$guardado';
+      if (guardado === '1' && sessionStorage.getItem(key) === '1') {
+        overlay.classList.add('visible');
+        sessionStorage.removeItem(key);
+      }
+      cerrarBtn.addEventListener('click', function () {
+        overlay.classList.remove('visible');
+      });
+    })();
   </script>
 </body>
 </html>

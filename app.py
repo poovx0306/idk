@@ -26,6 +26,7 @@ from inicios_sesion.recuperar.controllers.index import RecuperarContrasena
 from inicios_sesion.cerrar_sesion import CerrarSesion
 
 from estrategias_didacticas.controllers.estrategias_didacticas import EstrategiasDidacticas, FichaActividad
+from avance_alumno.controllers.avance_alumno import AvanceAlumno
 from mi_perfil_docente.controllers.mi_perfil import MiPerfil
 from deteccion_temprana.controllers.registro import RegistroPrevio
 from deteccion_temprana.controllers.deteccion import DeteccionTemprana
@@ -33,10 +34,9 @@ from deteccion_temprana.controllers.seleccionar_nino import SeleccionarNino, Ele
 from deteccion_temprana.controllers.guardar_resultado import GuardarResultadoAPI
 from boton_crisis.controllers.boton_crisis import BotonCrisis, ConfirmacionCrisis
 from guias_rapidas.controllers.guias_rapidas import GuiasRapidas
-from actividades_guardadas.controllers.actividades_guardadas import ActividadesGuardadas, FichaActividadAsignada, MarcarActividad, GuardarActividad, MisActividadesGuardadas
 from inicio_padres.controllers.inicio_padres import InicioPadres
 from guias_hogar.controllers.guias_hogar import GuiasHogar
-from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, MarcarActividadPostcrisis
+from actividades_postcrisis.controllers.actividades_postcrisis import ActividadesPostcrisis, RegistrarCrisis
 from avance_infante.controllers.avance_infante import AvanceInfante
 from mi_perfil_padre.controllers.mi_perfil import MiPerfilPadre
 from actividades_casa.controllers.actividades_casa import ActividadesCasa, MarcarActividadCasa
@@ -100,16 +100,12 @@ urls = (
     '/estrategias-didacticas/retroalimentacion', 'estrategias_didacticas.controllers.estrategias_didacticas.GuardarRetroalimentacion',
     '/administrativo/estrategias/criterio/nuevo', 'administrativos.controllers.estrategias_didacticas.NuevoCriterioAdmin',
     '/administrativo/estrategias/criterio/eliminar', 'administrativos.controllers.estrategias_didacticas.EliminarCriterioAdmin',
-    '/actividades-guardadas', 'ActividadesGuardadas',
-    '/actividades-guardadas/ficha', 'FichaActividadAsignada',
-    '/actividades-guardadas/completar', 'MarcarActividad',
-    '/actividades-guardadas/guardar', 'GuardarActividad',
-    '/actividades-guardadas/guardadas', 'MisActividadesGuardadas',
+    '/avance-alumno', 'AvanceAlumno',
 
     '/padre/inicio', 'InicioPadres',
     '/padre/guias', 'GuiasHogar',
     '/padre/postcrisis', 'ActividadesPostcrisis',
-    '/padre/postcrisis/marcar', 'MarcarActividadPostcrisis',
+    '/padre/postcrisis/registrar', 'RegistrarCrisis',
     '/padre/avance', 'AvanceInfante',
     '/padre/actividades-casa', 'ActividadesCasa',
     '/padre/actividades-casa/marcar', 'MarcarActividadCasa',

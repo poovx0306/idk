@@ -1,5 +1,4 @@
-$def with (seccion, id_infante, nombre_infante, actividades, hechas_hoy_ids)
-
+$def with (seccion, ninos, historial)
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,25 +18,34 @@ $def with (seccion, id_infante, nombre_infante, actividades, hechas_hoy_ids)
     .sidebar-footer { margin-top: auto; border-top: 1px solid #e2e8f0; padding: 18px 24px 0; }
     .sidebar-footer a { font-size: 13px; color: #64748b; text-decoration: none; }
     .content { flex: 1; }
-    .header { background: #fff; padding: 24px 36px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+    .header { background: #fff; padding: 24px 36px; border-bottom: 1px solid #e2e8f0; }
     .header h1 { font-size: 20px; color: #1e293b; }
     .header p { font-size: 13px; color: #64748b; margin-top: 2px; }
-    .cambiar-nino { font-size: 13px; color: #0f766e; text-decoration: none; font-weight: 600; }
-    .main { padding: 28px 36px; }
-    .guides-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .guide-card { background: #fff; border-radius: 16px; padding: 20px 22px; }
-    .guide-card h3 { font-size: 14.5px; color: #1e293b; margin-bottom: 8px; }
-    .guide-card p { font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 12px; }
-    .guide-card pre { white-space: pre-wrap; font-family: inherit; font-size: 12.5px; color: #475569; background: #f8fafc; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; line-height: 1.7; }
-    .btn-primary { width: 100%; text-align: center; background: #7e1232; color: #fff; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 11px; border: none; cursor: pointer; }
-    .hecha-badge { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: #065f46; background: #d1fae5; padding: 10px; border-radius: 10px; }
+    .main { padding: 28px 36px; max-width: 620px; }
+    .crisis-form-card { background: #fff; border-radius: 16px; padding: 22px 24px; margin-bottom: 28px; }
+    .crisis-form-card h2 { font-size: 16px; color: #1e293b; margin-bottom: 6px; }
+    .ayuda { font-size: 13px; color: #64748b; margin-bottom: 4px; line-height: 1.5; }
+    .campo-label { display: block; font-size: 12.5px; font-weight: 700; color: #1e293b; margin-bottom: 6px; margin-top: 16px; }
+    .campo-select, .campo-textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; font-size: 13.5px; font-family: inherit; color: #1e293b; }
+    .campo-textarea { resize: vertical; }
+    .btn-primary { margin-top: 18px; background: #7e1232; color: #fff; font-size: 13px; font-weight: 700; padding: 11px 20px; border-radius: 11px; border: none; cursor: pointer; }
+    .btn-primary:hover { opacity: 0.92; }
+    .historial-titulo { font-size: 15px; color: #1e293b; margin-bottom: 14px; }
+    .crisis-card { background: #fff; border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; }
+    .crisis-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .crisis-nino { font-weight: 700; font-size: 14px; color: #1e293b; }
+    .crisis-fecha { font-size: 12px; color: #94a3b8; }
+    .crisis-descripcion { font-size: 13px; color: #475569; font-style: italic; margin-bottom: 14px; line-height: 1.5; }
+    .crisis-seccion { margin-top: 10px; }
+    .crisis-seccion-label { font-size: 11px; font-weight: 800; color: #854d0e; letter-spacing: 0.4px; margin-bottom: 3px; text-transform: uppercase; }
+    .crisis-seccion-texto { font-size: 13px; color: #713f12; line-height: 1.55; background: #fefce8; border-radius: 10px; padding: 8px 10px; }
+    .empty { background: #fff; border-radius: 16px; padding: 30px; text-align: center; color: #64748b; font-size: 13.5px; }
   </style>
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
       <div class="logo"><img src="/static/images/conafe.jpg" alt="CONAFE"></div>
-
       <a href="/padre/inicio" class="nav-item $('active' if seccion=='inicio' else '')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M9 22V12h6v10"></path></svg>
         Inicio
@@ -66,33 +74,50 @@ $def with (seccion, id_infante, nombre_infante, actividades, hechas_hoy_ids)
         <a href="/cerrar-sesion">Cerrar sesión</a>
       </div>
     </aside>
-
     <div class="content">
       <header class="header">
-        <div>
-          <h1>Actividades post-crisis &mdash; $nombre_infante</h1>
-          <p>Qué hacer con tu hijo después de una crisis o meltdown</p>
-        </div>
-        <a href="/padre/postcrisis" class="cambiar-nino">Cambiar de niño</a>
+        <h1>Actividades post-crisis</h1>
+        <p>Describe qué pasó y recibe recomendaciones específicas para ese momento</p>
       </header>
-
       <main class="main">
-        <div class="guides-grid">
-          $for a in actividades:
-            <div class="guide-card">
-              <h3>$a['titulo'] &middot; $a['duracion_min'] min</h3>
-              <p>$a['descripcion']</p>
-              <pre>$a['pasos']</pre>
-              $if a['id_actividad'] in hechas_hoy_ids:
-                <div class="hecha-badge">&#10003; Ya la realizaste hoy</div>
+        <div class="crisis-form-card">
+          <h2>¿Qué pasó?</h2>
+          <p class="ayuda">Cuéntanos con tus palabras qué pasó durante la crisis; entre más detalle des, más específicas serán las recomendaciones.</p>
+          $if ninos:
+            <form method="POST" action="/padre/postcrisis/registrar">
+              $if len(ninos) > 1:
+                <label class="campo-label">Niño o niña</label>
+                <select name="id_infante" class="campo-select" required>
+                  $for nino in ninos:
+                    <option value="$nino['id_infante']">$nino['nombre']</option>
+                </select>
               $else:
-                <form method="POST" action="/padre/postcrisis/marcar">
-                  <input type="hidden" name="id_actividad" value="$a['id_actividad']">
-                  <input type="hidden" name="id_infante" value="$id_infante">
-                  <button type="submit" class="btn-primary">Ya la realicé</button>
-                </form>
-            </div>
+                <input type="hidden" name="id_infante" value="$ninos[0]['id_infante']">
+              <label class="campo-label">Describe qué pasó</label>
+              <textarea name="descripcion" class="campo-textarea" rows="5" placeholder="Ej. Se puso a llorar y a taparse los oídos cuando sonó la alarma de la cocina, no quería que lo tocara..." required></textarea>
+              <button type="submit" class="btn-primary">Generar recomendaciones</button>
+            </form>
+          $else:
+            <p class="ayuda">Todavía no tienes niños registrados.</p>
         </div>
+
+        <h2 class="historial-titulo">Historial de crisis registradas</h2>
+        $if historial:
+          $for h in historial:
+            <div class="crisis-card">
+              <div class="crisis-card-header">
+                <span class="crisis-nino">$h['nombre_infante']</span>
+                <span class="crisis-fecha">$h['fecha']</span>
+              </div>
+              <p class="crisis-descripcion">"$h['descripcion']"</p>
+              $for parte in h['recomendaciones']:
+                <div class="crisis-seccion">
+                  <div class="crisis-seccion-label">$parte['etiqueta']</div>
+                  <div class="crisis-seccion-texto">$parte['texto']</div>
+                </div>
+            </div>
+        $else:
+          <div class="empty">Todavía no hay crisis registradas.</div>
       </main>
     </div>
   </div>

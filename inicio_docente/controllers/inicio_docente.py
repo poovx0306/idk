@@ -32,10 +32,10 @@ class InicioDocente:
         total_alumnos = cursor.fetchone()[0]
 
         cursor.execute(
-            "SELECT COUNT(*) FROM actividad_asignada WHERE id_docente = ? AND DATE(fecha_asignacion) = DATE('now')",
+            "SELECT COUNT(*) FROM retroalimentacion WHERE id_docente = ? AND fecha = DATE('now')",
             (id_docente,),
         )
-        total_actividades = cursor.fetchone()[0]
+        total_evaluaciones_hoy = cursor.fetchone()[0]
 
         cursor.execute("SELECT contenido FROM guia_rapida ORDER BY id")
         consejos = cursor.fetchall()
@@ -49,5 +49,5 @@ class InicioDocente:
 
         return render.inicio_docente(
             id_docente, nombre_docente, correo_docente,
-            total_estrategias, total_alumnos, total_actividades, consejo_dia
+            total_estrategias, total_alumnos, total_evaluaciones_hoy, consejo_dia
         )

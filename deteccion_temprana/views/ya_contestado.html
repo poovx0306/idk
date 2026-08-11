@@ -1,0 +1,34 @@
+$def with (nombre_infante, nivel_riesgo, fecha, id_infante)
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CONAAP - Cuestionario ya contestado</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; background: #6a1c32; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+        .card { background: #fff; border-radius: 20px; padding: 40px; width: 100%; max-width: 420px; text-align: center; }
+        .icono { width: 56px; height: 56px; border-radius: 50%; background: #fef3c7; color: #92400e; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 18px; }
+        h1 { font-size: 19px; color: #1e293b; margin-bottom: 10px; }
+        p { font-size: 13.5px; color: #64748b; line-height: 1.6; margin-bottom: 6px; }
+        .nivel-badge { display: inline-block; margin: 14px 0 20px; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; }
+        .nivel-Alto { background: #fee2e2; color: #b91c1c; }
+        .nivel-Medio { background: #fef3c7; color: #92400e; }
+        .nivel-Bajo { background: #d1fae5; color: #065f46; }
+        .btn-primary { display: block; background: #7e1232; color: #fff; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 14px; margin-bottom: 10px; }
+        .btn-secundario { display: block; background: #f1f5f9; color: #1e293b; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+        .btn-forzar { display: block; background: none; color: #94a3b8; text-decoration: underline; padding: 4px; font-size: 12.5px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icono">&#9888;</div>
+        <h1>Ya contestaste este cuestionario</h1>
+        <p>$nombre_infante ya tiene un cuestionario registrado (el $fecha). Revisa el resultado que ya se guardó antes de contestar otro.</p>
+        <span class="nivel-badge nivel-$nivel_riesgo">Nivel de riesgo: $nivel_riesgo</span>
+        <a class="btn-primary" href="/resultado">Ver resultado guardado</a>
+        <a class="btn-secundario" href="/padre/inicio">Volver al inicio</a>
+        <a class="btn-forzar" href="/padre/elegir-nino?id_infante=$id_infante&destino=cuestionario&forzar=1">Contestar de nuevo de todas formas</a>
+    </div>
+</body>
+</html>

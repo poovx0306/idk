@@ -131,7 +131,17 @@ $def with (lista_docentes=[], lista_padres=[], error='')
         <div class="row mb-4">
             <div class="col-md-6">
                 <label class="form-label">Condición</label>
-                <input type="text" name="condicion" class="form-control" placeholder="Ej. Autismo (TEA)" required>
+                <select name="condicion" class="form-select" required>
+                    <option value="" selected disabled>Selecciona una condición</option>
+                    <option value="Autismo (TEA)">Autismo (TEA)</option>
+                    <option value="TDAH">TDAH</option>
+                    <option value="Discapacidad intelectual">Discapacidad intelectual</option>
+                    <option value="Discapacidad auditiva">Discapacidad auditiva</option>
+                    <option value="Discapacidad visual">Discapacidad visual</option>
+                    <option value="Discapacidad motriz">Discapacidad motriz</option>
+                    <option value="Otra condición">Otra condición</option>
+                    <option value="Sin condición identificada">Sin condición identificada</option>
+                </select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Docente asignado</label>

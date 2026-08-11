@@ -94,7 +94,17 @@
         <div class="row mb-3">
             <div class="col-md-5">
                 <label class="form-label">Condición</label>
-                <input type="text" name="condicion" class="form-control" value="Autismo (TEA)">
+                <select name="condicion" class="form-select">
+                    <option value="" selected disabled>Selecciona una condición</option>
+                    <option value="Autismo (TEA)" selected>Autismo (TEA)</option>
+                    <option value="TDAH">TDAH</option>
+                    <option value="Discapacidad intelectual">Discapacidad intelectual</option>
+                    <option value="Discapacidad auditiva">Discapacidad auditiva</option>
+                    <option value="Discapacidad visual">Discapacidad visual</option>
+                    <option value="Discapacidad motriz">Discapacidad motriz</option>
+                    <option value="Otra condición">Otra condición</option>
+                    <option value="Sin condición identificada">Sin condición identificada</option>
+                </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Campo formativo</label>

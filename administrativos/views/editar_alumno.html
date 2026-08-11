@@ -133,7 +133,17 @@ $def with (alumno, lista_docentes=[], error='')
         <div class="row mb-4">
             <div class="col-md-6">
                 <label class="form-label">Condición</label>
-                <input type="text" name="condicion" class="form-control" value="$(alumno['condicion'] or '')" placeholder="Ej. Autismo (TEA)">
+                <select name="condicion" class="form-select">
+                    <option value="">Selecciona una condición</option>
+                    <option value="Autismo (TEA)" ${'selected' if alumno['condicion'] == 'Autismo (TEA)' else ''}>Autismo (TEA)</option>
+                    <option value="TDAH" ${'selected' if alumno['condicion'] == 'TDAH' else ''}>TDAH</option>
+                    <option value="Discapacidad intelectual" ${'selected' if alumno['condicion'] == 'Discapacidad intelectual' else ''}>Discapacidad intelectual</option>
+                    <option value="Discapacidad auditiva" ${'selected' if alumno['condicion'] == 'Discapacidad auditiva' else ''}>Discapacidad auditiva</option>
+                    <option value="Discapacidad visual" ${'selected' if alumno['condicion'] == 'Discapacidad visual' else ''}>Discapacidad visual</option>
+                    <option value="Discapacidad motriz" ${'selected' if alumno['condicion'] == 'Discapacidad motriz' else ''}>Discapacidad motriz</option>
+                    <option value="Otra condición" ${'selected' if alumno['condicion'] == 'Otra condición' else ''}>Otra condición</option>
+                    <option value="Sin condición identificada" ${'selected' if alumno['condicion'] == 'Sin condición identificada' else ''}>Sin condición identificada</option>
+                </select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Docente asignado</label>

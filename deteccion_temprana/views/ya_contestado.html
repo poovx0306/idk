@@ -1,4 +1,4 @@
-$def with (nombre_infante, nivel_riesgo, fecha, id_infante)
+$def with (nombre_infante, nivel_riesgo, fecha, id_infante, id_resultado)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -26,7 +26,7 @@ $def with (nombre_infante, nivel_riesgo, fecha, id_infante)
         <h1>Ya contestaste este cuestionario</h1>
         <p>$nombre_infante ya tiene un cuestionario registrado (el $fecha). Revisa el resultado que ya se guardó antes de contestar otro.</p>
         <span class="nivel-badge nivel-$nivel_riesgo">Nivel de riesgo: $nivel_riesgo</span>
-        <a class="btn-primary" href="/resultado">Ver resultado guardado</a>
+        <a class="btn-primary" href="/resultado?id=$id_resultado">Ver resultado guardado</a>
         <a class="btn-secundario" href="/padre/inicio">Volver al inicio</a>
         <a class="btn-forzar" href="/padre/elegir-nino?id_infante=$id_infante&destino=cuestionario&forzar=1">Contestar de nuevo de todas formas</a>
     </div>

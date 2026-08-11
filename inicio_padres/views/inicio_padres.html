@@ -140,7 +140,7 @@ $def with (seccion, nombre_familia, nombre_completo, correo, total_cuestionarios
                   <div class="banner-sub">Atención requerida: algunas respuestas sugieren observar de cerca el desarrollo de tu hijo(a).</div>
                 </div>
               </div>
-              <a href="/resultado" class="banner-btn">Ver resultado</a>
+              <a href="/resultado?id=$historial[0]['id_resultado']" class="banner-btn">Ver resultado</a>
             </div>
           $elif nivel == 'Bajo':
             <div class="banner-alerta nivel-bajo">
@@ -151,7 +151,7 @@ $def with (seccion, nombre_familia, nombre_completo, correo, total_cuestionarios
                   <div class="banner-sub">Desarrollo adecuado: el desarrollo de tu hijo(a) está dentro del rango esperado.</div>
                 </div>
               </div>
-              <a href="/resultado" class="banner-btn">Ver resultado</a>
+              <a href="/resultado?id=$historial[0]['id_resultado']" class="banner-btn">Ver resultado</a>
             </div>
           $else:
             <div class="banner-alerta">
@@ -162,7 +162,7 @@ $def with (seccion, nombre_familia, nombre_completo, correo, total_cuestionarios
                   <div class="banner-sub">Tu último resultado sugiere compartirlo con un especialista de CONAFE</div>
                 </div>
               </div>
-              <a href="/resultado" class="banner-btn">Ver resultado</a>
+              <a href="/resultado?id=$historial[0]['id_resultado']" class="banner-btn">Ver resultado</a>
             </div>
 
         <div class="stats">

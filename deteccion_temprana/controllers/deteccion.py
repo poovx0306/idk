@@ -7,6 +7,10 @@ render = web.template.render('deteccion_temprana/views/')
 
 class DeteccionTemprana:
     def GET(self):
+        session = web.config._session
+        datos = web.input(origen=None)
+        if datos.origen == 'publico':
+            session.origen_cuestionario = 'publico'
         return render.cuestionario()
 
     def POST(self):

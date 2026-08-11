@@ -1,24 +1,29 @@
 """
-Evita que se duplique el cuestionario del mismo dia para el mismo nino.
+Corrige que la pagina de resultado siempre mostraba lo ultimo guardado en
+localStorage del navegador, sin importar a cual resultado le dabas clic
+(desde el historial, desde la alerta de "ya contestaste", o desde el banner
+de inicio). Ahora, cuando se entra con ?id=<id_resultado> en la URL, se
+consulta ese resultado exacto en la base de datos y se muestra ese.
 
-Como funciona el flujo actual:
-  seleccionar-nino -> elegir-nino (guarda id_infante_actual en sesion y
-  redirige a /cuestionario si destino='cuestionario') -> /cuestionario
-  (DeteccionTemprana.GET, solo pinta la pagina) -> el JS
-  (static/js/cuestionario.js) hace fetch a /api/guardar-resultado, que
-  inserta en la tabla "resultados" usando session.id_infante_actual.
+IMPORTANTE: esto NO toca el calculo de puntaje ni los umbrales de riesgo.
+- cuestionario.js: no se toca la suma de puntos (puntajeTotal), solo se
+  cambia a donde redirige despues de guardar (ahora incluye el id).
+- guardar_resultado.py: no se tocan los umbrales (>=35 Alto, >=18 Medio,
+  si no Bajo), solo se agrega el id del registro insertado a la respuesta.
 
-El lugar correcto para frenar la duplicacion es ElegirNino.GET: justo antes
-de redirigir a /cuestionario, revisa si ya existe un resultado de HOY para
-ese nino. Si ya existe, en vez de mandarlo al cuestionario le muestra una
-alerta con el nivel de riesgo que ya obtuvo hoy y un boton para ver el
-resultado completo, en vez de dejarlo contestar de nuevo y duplicar el
-registro.
+Cambios:
+1. guardar_resultado.py -> devuelve el id_resultado insertado.
+2. static/js/cuestionario.js -> redirige a /resultado?id=<id>.
+3. resultado.py -> si viene ?id=, consulta ese resultado real en la BD.
+4. resultado.html -> si el servidor mando el resultado real, lo usa en vez
+   de localStorage.
+5. seleccionar_nino.py -> la alerta de "ya contestado" tambien manda el id
+   real del resultado guardado.
+6. ya_contestado.html -> el boton "Ver resultado guardado" ya usa ese id.
+7. inicio_padres.html -> el boton "Ver resultado" del banner tambien usa el
+   id del resultado mas reciente.
 
-Si el nino contesto en un dia anterior (no hoy), no se bloquea: retomar el
-cuestionario en otro dia sigue funcionando igual que ahora.
-
-Correr desde la raiz del repo: python3 alerta_cuestionario_repetido.py
+Correr desde la raiz del repo: python3 corregir_resultado_real.py
 """
 import os
 
@@ -52,11 +57,194 @@ def reemplazar(ruta, viejo, nuevo, nombre_paso):
 
 
 # =================================================================
-# 1. deteccion_temprana/controllers/seleccionar_nino.py - reescritura completa
+# 1. guardar_resultado.py - devolver el id_resultado insertado
+# =================================================================
+print("== Reescribiendo deteccion_temprana/controllers/guardar_resultado.py ==")
+
+NUEVO_GUARDAR = '''import web
+import sqlite3
+import json
+from datetime import date
+render = web.template.render('deteccion_temprana/views/')
+class GuardarResultadoAPI:
+    def POST(self):
+        session = web.config._session
+        id_infante = session.id_infante_actual
+        web.header('Content-Type', 'application/json')
+        if not id_infante:
+            return json.dumps({"ok": False, "error": "no_hay_infante_seleccionado"})
+        try:
+            datos = json.loads(web.data())
+            puntaje = int(datos.get("puntaje", 0))
+        except Exception:
+            return json.dumps({"ok": False, "error": "datos_invalidos"})
+        print("DATOS RECIBIDOS:", datos)
+        print("PUNTAJE CONVERTIDO:", puntaje)
+        if puntaje >= 35:
+            nivel_riesgo = "Alto"
+        elif puntaje >= 18:
+            nivel_riesgo = "Medio"
+        else:
+            nivel_riesgo = "Bajo"
+        try:
+            conn = sqlite3.connect("sql/conaap.db")
+            cur = conn.cursor()
+            cur.execute(
+                "INSERT INTO resultados (puntaje, fecha, nivel_riesgo, numero_de_especialista, id_infante1) VALUES (?, ?, ?, ?, ?)",
+                (puntaje, str(date.today()), nivel_riesgo, "Pendiente de asignar", id_infante)
+            )
+            id_resultado = cur.lastrowid
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            return json.dumps({"ok": False, "error": str(e)})
+        return json.dumps({"ok": True, "id_resultado": id_resultado})
+'''
+ruta_guardar = os.path.join(RAIZ, "deteccion_temprana", "controllers", "guardar_resultado.py")
+escribir(ruta_guardar, NUEVO_GUARDAR)
+print(f"  [ok] reescrito: {ruta_guardar}")
+
+# =================================================================
+# 2. static/js/cuestionario.js - redirigir con el id
+# =================================================================
+print("== Editando static/js/cuestionario.js ==")
+ruta_js = os.path.join(RAIZ, "static", "js", "cuestionario.js")
+
+JS_VIEJO = '''    fetch('/api/guardar-resultado', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ puntaje: puntajeTotal })
+    })
+    .then(response => response.json())
+    .then(data => {
+        window.location.href = '/resultado';
+    })
+    .catch(error => {
+        console.error("Error al guardar:", error);
+        window.location.href = '/resultado';
+    });'''
+JS_NUEVO = '''    fetch('/api/guardar-resultado', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ puntaje: puntajeTotal })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok && data.id_resultado) {
+            window.location.href = '/resultado?id=' + data.id_resultado;
+        } else {
+            window.location.href = '/resultado';
+        }
+    })
+    .catch(error => {
+        console.error("Error al guardar:", error);
+        window.location.href = '/resultado';
+    });'''
+reemplazar(ruta_js, JS_VIEJO, JS_NUEVO, "redirigir con id_resultado")
+
+# =================================================================
+# 3. resultado.py - leer ?id= y consultar la BD
+# =================================================================
+print("== Reescribiendo deteccion_temprana/controllers/resultado.py ==")
+
+NUEVO_RESULTADO = '''import web
+import sqlite3
+
+render = web.template.render('deteccion_temprana/views/')
+
+
+class Resultado:
+    def GET(self):
+        session = web.config._session
+        origen = getattr(session, 'origen_cuestionario', None)
+        if origen == 'publico':
+            es_padre = False
+        elif origen == 'padre':
+            es_padre = True
+        else:
+            es_padre = getattr(session, 'rol', None) == 'padre'
+
+        datos = web.input(id=None)
+        hay_resultado_servidor = False
+        puntaje_servidor = 0
+        nivel_riesgo_servidor = ""
+        if datos.id:
+            conn = sqlite3.connect("sql/conaap.db")
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT puntaje, nivel_riesgo FROM resultados WHERE id_resultado = ?",
+                (int(datos.id),),
+            )
+            fila = cur.fetchone()
+            conn.close()
+            if fila:
+                hay_resultado_servidor = True
+                puntaje_servidor = fila["puntaje"]
+                nivel_riesgo_servidor = fila["nivel_riesgo"]
+
+        return render.resultado(es_padre, hay_resultado_servidor, puntaje_servidor, nivel_riesgo_servidor)
+'''
+ruta_resultado = os.path.join(RAIZ, "deteccion_temprana", "controllers", "resultado.py")
+escribir(ruta_resultado, NUEVO_RESULTADO)
+print(f"  [ok] reescrito: {ruta_resultado}")
+
+# =================================================================
+# 4. resultado.html - usar el resultado real cuando venga del servidor
+# =================================================================
+print("== Editando deteccion_temprana/views/resultado.html ==")
+ruta_resultado_html = os.path.join(RAIZ, "deteccion_temprana", "views", "resultado.html")
+
+DEF_VIEJO = "$def with (es_padre)"
+DEF_NUEVO = "$def with (es_padre, hay_resultado_servidor, puntaje_servidor, nivel_riesgo_servidor)"
+reemplazar(ruta_resultado_html, DEF_VIEJO, DEF_NUEVO, "$def with")
+
+SCRIPT_VIEJO = '''<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var dataRaw = localStorage.getItem('veanme_resultado');
+        var puntaje = 0;
+
+        if (dataRaw) {
+            var data = JSON.parse(dataRaw);
+            puntaje = data.puntajeTotal || 0;
+        }
+
+        var imgSemaforo = document.getElementById('img-semaforo');'''
+SCRIPT_NUEVO = '''<script>
+    $if hay_resultado_servidor:
+        var HAY_RESULTADO_SERVIDOR = true;
+        var PUNTAJE_SERVIDOR = $puntaje_servidor;
+    $else:
+        var HAY_RESULTADO_SERVIDOR = false;
+        var PUNTAJE_SERVIDOR = null;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var data = null;
+        var puntaje = 0;
+
+        if (HAY_RESULTADO_SERVIDOR) {
+            puntaje = PUNTAJE_SERVIDOR;
+        } else {
+            var dataRaw = localStorage.getItem('veanme_resultado');
+            if (dataRaw) {
+                data = JSON.parse(dataRaw);
+                puntaje = data.puntajeTotal || 0;
+            }
+        }
+
+        var imgSemaforo = document.getElementById('img-semaforo');'''
+reemplazar(ruta_resultado_html, SCRIPT_VIEJO, SCRIPT_NUEVO, "usar resultado real del servidor si viene por id")
+
+# =================================================================
+# 5. seleccionar_nino.py - incluir id_resultado en la alerta de "ya contestado"
 # =================================================================
 print("== Reescribiendo deteccion_temprana/controllers/seleccionar_nino.py ==")
 
-NUEVO_CONTROLLER = '''import web
+NUEVO_SELECCIONAR = '''import web
 import sqlite3
 from datetime import date
 
@@ -85,6 +273,7 @@ class ElegirNino:
         session.id_infante_actual = id_infante
 
         if datos.destino == 'cuestionario':
+            session.origen_cuestionario = 'padre'
             if datos.forzar == '1':
                 raise web.HTTPError('303 See Other', {'Location': '/cuestionario'})
 
@@ -92,7 +281,7 @@ class ElegirNino:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute(
-                "SELECT nivel_riesgo, fecha FROM resultados WHERE id_infante1 = ? ORDER BY id_resultado DESC LIMIT 1",
+                "SELECT id_resultado, nivel_riesgo, fecha FROM resultados WHERE id_infante1 = ? ORDER BY id_resultado DESC LIMIT 1",
                 (id_infante,),
             )
             ya_contestado = cur.fetchone()
@@ -102,59 +291,65 @@ class ElegirNino:
 
             if ya_contestado:
                 nombre_infante = infante["nombre"] if infante else "este niño"
-                return render.ya_contestado(nombre_infante, ya_contestado["nivel_riesgo"], ya_contestado["fecha"], id_infante)
+                return render.ya_contestado(
+                    nombre_infante, ya_contestado["nivel_riesgo"], ya_contestado["fecha"],
+                    id_infante, ya_contestado["id_resultado"]
+                )
 
             raise web.HTTPError('303 See Other', {'Location': '/cuestionario'})
         else:
             raise web.HTTPError('303 See Other', {'Location': '/padre/inicio'})
 '''
-ruta_controller = os.path.join(RAIZ, "deteccion_temprana", "controllers", "seleccionar_nino.py")
-escribir(ruta_controller, NUEVO_CONTROLLER)
-print(f"  [ok] reescrito: {ruta_controller}")
+ruta_seleccionar = os.path.join(RAIZ, "deteccion_temprana", "controllers", "seleccionar_nino.py")
+escribir(ruta_seleccionar, NUEVO_SELECCIONAR)
+print(f"  [ok] reescrito: {ruta_seleccionar}")
 
 # =================================================================
-# 2. deteccion_temprana/views/ya_contestado.html - vista nueva
+# 6. ya_contestado.html - usar el id real en "Ver resultado guardado"
 # =================================================================
-print("== Creando deteccion_temprana/views/ya_contestado.html ==")
+print("== Editando deteccion_temprana/views/ya_contestado.html ==")
+ruta_ya_contestado = os.path.join(RAIZ, "deteccion_temprana", "views", "ya_contestado.html")
 
-NUEVA_VISTA = '''$def with (nombre_infante, nivel_riesgo, fecha, id_infante)
+DEF_YA_VIEJO = "$def with (nombre_infante, nivel_riesgo, fecha, id_infante)"
+DEF_YA_NUEVO = "$def with (nombre_infante, nivel_riesgo, fecha, id_infante, id_resultado)"
+reemplazar(ruta_ya_contestado, DEF_YA_VIEJO, DEF_YA_NUEVO, "$def with")
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>CONAAP - Cuestionario ya contestado</title>
-    <style>
-        body { font-family: Arial, Helvetica, sans-serif; background: #6a1c32; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
-        .card { background: #fff; border-radius: 20px; padding: 40px; width: 100%; max-width: 420px; text-align: center; }
-        .icono { width: 56px; height: 56px; border-radius: 50%; background: #fef3c7; color: #92400e; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 18px; }
-        h1 { font-size: 19px; color: #1e293b; margin-bottom: 10px; }
-        p { font-size: 13.5px; color: #64748b; line-height: 1.6; margin-bottom: 6px; }
-        .nivel-badge { display: inline-block; margin: 14px 0 20px; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; }
-        .nivel-Alto { background: #fee2e2; color: #b91c1c; }
-        .nivel-Medio { background: #fef3c7; color: #92400e; }
-        .nivel-Bajo { background: #d1fae5; color: #065f46; }
-        .btn-primary { display: block; background: #7e1232; color: #fff; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 14px; margin-bottom: 10px; }
-        .btn-secundario { display: block; background: #f1f5f9; color: #1e293b; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 600; font-size: 14px; margin-bottom: 10px; }
-        .btn-forzar { display: block; background: none; color: #94a3b8; text-decoration: underline; padding: 4px; font-size: 12.5px; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <div class="icono">&#9888;</div>
-        <h1>Ya contestaste este cuestionario</h1>
-        <p>$nombre_infante ya tiene un cuestionario registrado (el $fecha). Revisa el resultado que ya se guardó antes de contestar otro.</p>
-        <span class="nivel-badge nivel-$nivel_riesgo">Nivel de riesgo: $nivel_riesgo</span>
-        <a class="btn-primary" href="/resultado">Ver resultado guardado</a>
-        <a class="btn-secundario" href="/padre/inicio">Volver al inicio</a>
-        <a class="btn-forzar" href="/padre/elegir-nino?id_infante=$id_infante&destino=cuestionario&forzar=1">Contestar de nuevo de todas formas</a>
-    </div>
-</body>
-</html>
-'''
-ruta_vista = os.path.join(RAIZ, "deteccion_temprana", "views", "ya_contestado.html")
-escribir(ruta_vista, NUEVA_VISTA)
-print(f"  [ok] creado: {ruta_vista}")
+LINK_YA_NUEVO = '<a class="btn-primary" href="/resultado?id=$id_resultado">Ver resultado guardado</a>'
+LINK_YA_VIEJO_A = '<a class="btn-primary" href="/resultado">Ver resultado de hoy</a>'
+LINK_YA_VIEJO_B = '<a class="btn-primary" href="/resultado">Ver resultado guardado</a>'
+contenido_ya = leer(ruta_ya_contestado) if os.path.exists(ruta_ya_contestado) else ""
+if LINK_YA_NUEVO in contenido_ya:
+    print(f"  [sin cambios] link con id_resultado ya estaba en {ruta_ya_contestado}")
+elif LINK_YA_VIEJO_B in contenido_ya:
+    reemplazar(ruta_ya_contestado, LINK_YA_VIEJO_B, LINK_YA_NUEVO, "link con id_resultado")
+elif LINK_YA_VIEJO_A in contenido_ya:
+    reemplazar(ruta_ya_contestado, LINK_YA_VIEJO_A, LINK_YA_NUEVO, "link con id_resultado")
+else:
+    print(f"  [AVISO] no se encontro el link esperado de 'Ver resultado' en {ruta_ya_contestado}")
 
-print("\\nListo. Prueba: contesta un cuestionario con un niño, y luego intenta contestarlo otra vez con el mismo")
-print("niño el mismo día -> debe salir la alerta en vez de dejarte contestar de nuevo.")
+# =================================================================
+# 7. inicio_padres.html - el boton del banner tambien manda el id real
+# =================================================================
+print("== Editando inicio_padres/views/inicio_padres.html ==")
+ruta_inicio_padres = os.path.join(RAIZ, "inicio_padres", "views", "inicio_padres.html")
+
+if os.path.exists(ruta_inicio_padres):
+    contenido = leer(ruta_inicio_padres)
+    viejo_link = '''<a href="/resultado" class="banner-btn">Ver resultado</a>'''
+    nuevo_link = '''<a href="/resultado?id=$historial[0]['id_resultado']" class="banner-btn">Ver resultado</a>'''
+    ocurrencias = contenido.count(viejo_link)
+    if ocurrencias:
+        contenido = contenido.replace(viejo_link, nuevo_link)
+        escribir(ruta_inicio_padres, contenido)
+        print(f"  [ok] {ocurrencias} enlace(s) 'Ver resultado' actualizados en {ruta_inicio_padres}")
+    elif nuevo_link in contenido:
+        print(f"  [sin cambios] ya estaba en {ruta_inicio_padres}")
+    else:
+        print(f"  [AVISO] no se encontro el link esperado en {ruta_inicio_padres}")
+else:
+    print(f"  [omitido] no existe: {ruta_inicio_padres}")
+
+print("\\nListo. Si salio algun [AVISO], pega aqui esa parte del archivo para ajustarlo a mano.")
+print("Prueba: entra al historial reciente o dale 'Ver resultado' en el banner de inicio, y confirma que")
+print("muestra el semaforo y nivel de riesgo que de verdad corresponde a ese resultado, no el ultimo que")
+print("contestaste en el navegador.")

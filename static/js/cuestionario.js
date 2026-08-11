@@ -150,7 +150,11 @@ function finalizarEvaluacion() {
     })
     .then(response => response.json())
     .then(data => {
-        window.location.href = '/resultado';
+        if (data.ok && data.id_resultado) {
+            window.location.href = '/resultado?id=' + data.id_resultado;
+        } else {
+            window.location.href = '/resultado';
+        }
     })
     .catch(error => {
         console.error("Error al guardar:", error);

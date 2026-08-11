@@ -27,6 +27,7 @@ class ElegirNino:
         session.id_infante_actual = id_infante
 
         if datos.destino == 'cuestionario':
+            session.origen_cuestionario = 'padre'
             if datos.forzar == '1':
                 raise web.HTTPError('303 See Other', {'Location': '/cuestionario'})
 
@@ -34,7 +35,7 @@ class ElegirNino:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute(
-                "SELECT nivel_riesgo, fecha FROM resultados WHERE id_infante1 = ? ORDER BY id_resultado DESC LIMIT 1",
+                "SELECT id_resultado, nivel_riesgo, fecha FROM resultados WHERE id_infante1 = ? ORDER BY id_resultado DESC LIMIT 1",
                 (id_infante,),
             )
             ya_contestado = cur.fetchone()
@@ -44,7 +45,10 @@ class ElegirNino:
 
             if ya_contestado:
                 nombre_infante = infante["nombre"] if infante else "este niño"
-                return render.ya_contestado(nombre_infante, ya_contestado["nivel_riesgo"], ya_contestado["fecha"], id_infante)
+                return render.ya_contestado(
+                    nombre_infante, ya_contestado["nivel_riesgo"], ya_contestado["fecha"],
+                    id_infante, ya_contestado["id_resultado"]
+                )
 
             raise web.HTTPError('303 See Other', {'Location': '/cuestionario'})
         else:

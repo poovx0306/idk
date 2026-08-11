@@ -1,4 +1,4 @@
-$def with (es_padre)
+$def with (es_padre, hay_resultado_servidor, puntaje_servidor, nivel_riesgo_servidor)
 
 <!DOCTYPE html>
 <html lang="es">
@@ -340,13 +340,25 @@ $def with (es_padre)
     </div>
 
 <script>
+    $if hay_resultado_servidor:
+        var HAY_RESULTADO_SERVIDOR = true;
+        var PUNTAJE_SERVIDOR = $puntaje_servidor;
+    $else:
+        var HAY_RESULTADO_SERVIDOR = false;
+        var PUNTAJE_SERVIDOR = null;
+
     document.addEventListener("DOMContentLoaded", function() {
-        var dataRaw = localStorage.getItem('veanme_resultado');
+        var data = null;
         var puntaje = 0;
 
-        if (dataRaw) {
-            var data = JSON.parse(dataRaw);
-            puntaje = data.puntajeTotal || 0;
+        if (HAY_RESULTADO_SERVIDOR) {
+            puntaje = PUNTAJE_SERVIDOR;
+        } else {
+            var dataRaw = localStorage.getItem('veanme_resultado');
+            if (dataRaw) {
+                data = JSON.parse(dataRaw);
+                puntaje = data.puntajeTotal || 0;
+            }
         }
 
         var imgSemaforo = document.getElementById('img-semaforo');
